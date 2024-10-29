@@ -1,0 +1,197 @@
+.contact-section {
+    background-color: #38A3F1;
+    color: #fff;
+}
+
+.contact-section h3 {
+    color: #fff;
+}
+
+.contact-section hr {
+    border-top: 2px solid #fff;
+    width: 50px;
+}
+
+.contact-section p,
+.contact-section li {
+    color: #fff;
+}
+
+.contact-section .form-control {
+    border-radius: 10px;
+}
+
+.contact-section .btn-primary {
+    background-color: #fff;
+    color: #38A3F1;
+    border-radius: 10px;
+    border: 1px solid #fff;
+}
+
+.contact-section .btn-primary:hover {
+    background-color: #1192e2;
+    color: #fff;
+}
+
+.contact-section .list-unstyled i {
+    color: #fff;
+}
+
+.form-control::placeholder {
+    color: #ccc;
+}
+
+
+/* skdakjsdh */
+.company-link {
+    text-decoration: none;
+    color: #333;
+}
+
+.company-list {
+    float: right;
+    margin-bottom: 30px;
+
+}
+
+.company-link {
+    text-decoration: none;
+    color: #585858;
+}
+
+.name-company {
+    margin: 20px 0 20px 0;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.company-detail {
+    padding: 5px;
+    width: 100%;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgb(226, 226, 226);
+}
+
+.company-detail:hover {
+    box-shadow: 0 5px 10px rgb(211, 211, 211);
+}
+
+.img-company {
+    width: 100%;
+    height: 310px;
+    display: block;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+
+.border-radius-top-left-right {
+    border-top-left-radius: 9999px;
+    border-top-right-radius: 9999px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 1.00);
+    margin-top: -60px;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.banner-thumb {
+    position: absolute;
+    top: 130px;
+    margin-right: 0;
+}
+
+.banner-slogan {
+    color: #fff;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.banner-slogan .title-banner {
+    width: 100%;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.content {
+    font-size: 18px;
+    text-align: justify;
+}
+
+.nav-tabs .nav-link.active {
+    border-radius: 9999px;
+    margin-bottom: 8px;
+}
+
+.nav-tabs .nav-link.active svg path {
+    fill: #000;
+    stroke: #000;
+}
+
+.nav-tabs .nav-link {
+    color: #fff;
+    font-weight: 700;
+    margin: 0 10px 0 10px;
+    border-radius: 9999px;
+}
+
+.nav-tabs .nav-link:hover {
+    border-radius: 9999px;
+}
+
+.register-member {
+    padding: 10px;
+    background-color: #3EAEF4;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.register-member a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.register-member:hover {
+    background-color: #1192e2;
+}
+
+.title-b2b {
+    color: #3EAEF4;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.line-title {
+    background-color: #0d6fac;
+    width: 150px;
+    height: 2px;
+    padding-left: 8px;
+    border: none;
+}
+
+.see-more {
+    width: 150px;
+    border-radius: 12px;
+    background-color: #3EAEF4;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.see-more:hover {
+    background-color: #1192e2;
+}
+
+.see-more a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.community-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
