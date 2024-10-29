@@ -108,14 +108,17 @@
 
     <div class="row">
         @for ($i = 0; $i < 12; $i++)
-            <div class="col-6 col-sm-3 col-md-3 d-flex product-list">
-                <div class="product-detail" align="center" data-aos="fade-up">
-                    <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-product" loading="lazy">
-                    <p class="name-product">VietSunCo</p>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <span class="me-2" style="font-size: 13px">1231212đ</span>
+            <div class="col-6 col-sm-3 col-md-3 d-flex company-list">
+                <a href="{{ route('company.detail') }}" class="company-link">
+                    <div class="company-detail" align="center" data-aos="fade-up">
+                        <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company"
+                            loading="lazy">
+                        <p class="name-company">VietSunCo</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2" style="font-size: 13px">1231212đ</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         @endfor
     </div>
