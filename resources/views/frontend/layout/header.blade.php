@@ -49,7 +49,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Về chúng tôi</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown dropdown-field">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 Lĩnh vực
@@ -85,7 +85,7 @@
                                 <i class="fas fa-search"></i>
                             </a>
                         </form>
-                        <a href="" style="color: #3EAEF4;"><i class="fa-solid fa-user"
+                        <a href="{{ route('auth.login') }}" style="color: #3EAEF4;"><i class="fa-solid fa-user"
                                 style="font-size: 20px;"></i></a>
                     </div>
                 </div>
