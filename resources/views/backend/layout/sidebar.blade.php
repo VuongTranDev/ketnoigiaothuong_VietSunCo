@@ -3,19 +3,32 @@
         <div class="sidebar-brand">
             <a href="{{ route('dashboard') }}" style="color: #6777ef;">Ketnoigiaothuong.com</a>
         </div>
-        <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{ route('dashboard') }}">||</a>
+        <div class="sidebar-brand sidebar-brand-sm"><a href="{{ route('dashboard') }}" style="color: #6777ef;">Ketnoigiaothuong.com</a>
+            <a href="">||</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class="dropdown {{ setActive(['dashboard']) }}">
+            <li class="dropdown active">
                 <a href="" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+
             </li>
-            <li class="menu-header">Mamager</li>
+            <li class="menu-header">Kết nối giao thương</li>
+
+            <li
+                class="dropdown {{ setActive(['admin.category.*', 'admin.sub-category.*', 'admin.child-category.*']) }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>
+                    <span>Danh bạ</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ setActive(['admin.category.*']) }}"><a class="nav-link" href="">Công ty</a>
+                    </li>
+
+                </ul>
+            </li>
+
             <li
                 class="dropdown {{ setActive([
-                    'brands.*',
-                    'products.*',
+                    'admin.brand.*',
+                    'admin.products.*',
                     'admin.products-image-gallery.*',
                     'admin.products-variant.*',
                     'admin.products-variant-item.*',
@@ -23,33 +36,38 @@
                     'admin.seller-pending-products.*',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
-                    <span>Manage Products</span></a>
+                    <span>Lĩnh vực </span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ setActive(['brands.index']) }}"><a class="nav-link" href="">Brands</a></li>
+                    <li class="{{ setActive(['admin.brand.*']) }}"><a class="nav-link" href="">Ecommerce</a></li>
                     <li
                         class="{{ setActive([
-                            'products.*',
+                            'admin.products.*',
                             'admin.products-image-gallery.*',
                             'admin.products-variant.*',
                             'admin.products-variant-item.*',
                             'admin.reviews.*',
                         ]) }}">
-                        <a class="nav-link" href="">Products</a>
+                        <a class="nav-link" href="">Analytics</a>
                     </li>
                     <li class="{{ setActive(['admin.seller-products.*']) }}"><a class="nav-link" href="">Seller
                             Products</a></li>
                     <li class="{{ setActive(['admin.seller-pending-products.*']) }}"><a class="nav-link"
-                            href="">Seller Pending Products</a></li>
+                            href="{}">Website Development</a>
+                    </li>
 
-                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="">Product
-                            Reviews</a></li>
+                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="{}">SEO agency</a>
+                    </li>
+                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="{}">Digital agency</a>
+                    </li>
+                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="{}">Call Center</a>
+                    </li>
 
                 </ul>
             </li>
 
 
 
-            <li
+            {{-- <li
                 class="dropdown {{ setActive([
                     'admin.order.*',
                     'admin.pending-orders',
@@ -66,12 +84,10 @@
                     <li class="{{ setActive(['admin.order.*']) }}"><a class="nav-link" href="">All Orders</a>
                     </li>
                     <li class="{{ setActive(['admin.pending-orders']) }}"><a class="nav-link" href="">All
-                            Pending
-                            Orders</a></li>
-                    <li class="{{ setActive(['admin.processed-orders']) }}"><a class="nav-link" href="">All
+                            Pending Orders</a></li>
+                    <li class="{{ setActive(['admin.processed-orders']) }}"><a class="nav-link" href="{}">All
                             processed Orders</a></li>
-                    <li class="{{ setActive(['admin.dropped-off']) }}"><a class="nav-link" href="">All Dropped
-                            Off Orders</a></li>
+                    <li class=""><a class="nav-link" href="{}">All Dropped Off Orders</a></li>
 
                     <li class="{{ setActive(['admin.shipped-orders']) }}"><a class="nav-link" href="">All
                             Shipped Orders</a></li>
@@ -86,14 +102,14 @@
                             Canceled Orders</a></li>
 
                 </ul>
-            </li>
+            </li> --}}
 
-            <li class="{{ setActive(['admin.transaction']) }}"><a class="nav-link" href=""><i
+            {{-- <li class="{{ setActive(['admin.transaction']) }}"><a class="nav-link" href=""><i
                         class="fas fa-money-bill-alt"></i>
                     <span>Transactions</span></a>
-            </li>
+            </li> --}}
 
-            <li
+            {{-- <li
                 class="dropdown {{ setActive([
                     'admin.vendor-profile.*',
                     'admin.coupons.*',
@@ -112,21 +128,21 @@
                     <li class="{{ setActive(['admin.vendor-profile.*']) }}"><a class="nav-link" href="">Vendor
                             Profile</a></li>
                     <li class="{{ setActive(['admin.payment-settings.*']) }}"><a class="nav-link"
-                            href="">Payment Settings</a></li>
+                            href="{}">Payment Settings</a></li>
 
                 </ul>
-            </li>
+            </li> --}}
 
             <li class="dropdown {{ setActive(['admin.withdraw-method.*', 'admin.withdraw.index']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
-                    <span>Withdraw Payments</span></a>
+                    <span>Quản lý thành viên</span></a>
                 <ul class="dropdown-menu">
 
                     <li class="{{ setActive(['admin.withdraw-method.*']) }}"><a class="nav-link"
                             href="">Withdraw Mehtod</a></li>
 
-                    <li class="{{ setActive(['admin.withdraw.index']) }}"><a class="nav-link" href="">Withdraw
-                            List</a></li>
+                    <li class="{{ setActive(['admin.withdraw.index']) }}"><a class="nav-link"
+                            href="{}">Withdraw List</a></li>
 
                 </ul>
             </li>
@@ -157,25 +173,26 @@
                 </ul>
             </li>
 
-            <li><a class="nav-link {{ setActive(['admin.advertisement.*']) }}" href=""><i
+            {{-- <li><a class="nav-link {{ setActive(['admin.advertisement.*']) }}" href=""><i
                         class="fas fa-ad"></i>
-                    <span>Advertisement</span></a></li>
+                    <span>Advertisement</span></a>
+                </li> --}}
 
             <li
                 class="dropdown {{ setActive(['admin.blog-category.*', 'admin.blog.*', 'admin.blog-comments.index']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
-                        class="fab fa-blogger-b"></i> <span>Manage Blog</span></a>
+                        class="fab fa-blogger-b"></i> <span>Quản lý Blog</span></a>
                 <ul class="dropdown-menu">
 
                     <li class="{{ setActive(['admin.blog-category.*']) }}"><a class="nav-link"
                             href="">Categories</a></li>
-                    <li class="{{ setActive(['admin.blog.*']) }}"><a class="nav-link" href="">Blogs</a></li>
+                    <li class="{{ setActive(['admin.blog.*']) }}"><a class="nav-link" href="{}">Blogs</a></li>
                     <li class="{{ setActive(['admin.blog-comments.index']) }}"><a class="nav-link"
-                            href="">Blog Comments</a></li>
+                            href="{}">Blog Comments</a></li>
                 </ul>
             </li>
 
-            <li><a class="nav-link {{ setActive(['admin.messages.index']) }}" href=""><i
+            <li><a class="nav-link {{ setActive(['admin.messages.index']) }}" href="{}"><i
                         class="fas fa-user"></i>
                     <span>Messages</span></a></li>
 
@@ -195,20 +212,20 @@
                         class="fas fa-th-large"></i><span>Footer</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.footer-info.index']) }}"><a class="nav-link"
-                            href="">Footer Info</a></li>
+                            href="{}">Footer Info</a></li>
 
                     <li class="{{ setActive(['admin.footer-socials.*']) }}"><a class="nav-link"
-                            href="">Footer Socials</a></li>
+                            href="{ }">Footer Socials</a></li>
 
                     <li class="{{ setActive(['admin.footer-grid-two.*']) }}"><a class="nav-link"
-                            href="">Footer Grid Two</a></li>
+                            href="}">Footer Grid Two</a></li>
 
                     <li class="{{ setActive(['admin.footer-grid-three.*']) }}"><a class="nav-link"
                             href="">Footer Grid Three</a></li>
 
                 </ul>
             </li>
-            <li
+            {{-- <li
                 class="dropdown {{ setActive([
                     'admin.vendor-requests.index',
                     'admin.customer.index',
@@ -221,7 +238,8 @@
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.customer.index']) }}"><a class="nav-link"
                             href="">Customer list</a></li>
-                    <li class=""><a class="nav-link" href="">Vendor list</a></li>
+                    <li class="{{ setActive(['admin.vendor-list.index']) }}"><a class="nav-link"
+                            href="">Vendor list</a></li>
 
                     <li class="{{ setActive(['admin.vendor-requests.index']) }}"><a class="nav-link"
                             href="">Pending vendors</a></li>
@@ -233,14 +251,14 @@
                             href="">Manage user</a></li>
 
                 </ul>
-            </li>
+            </li> --}}
 
 
-            <li><a class="nav-link {{ setActive(['admin.subscribers.*']) }}" href=""><i
+            <li><a class="nav-link {{ setActive(['admin.subscribers.*']) }}" href="{}"><i
                         class="fas fa-user"></i>
                     <span>Subscribers</span></a></li>
 
-            <li><a class="nav-link" href=""><i class="fas fa-wrench"></i>
+            <li><a class="nav-link" href="{}"><i class="fas fa-wrench"></i>
                     <span>Settings</span></a></li>
 
         </ul>

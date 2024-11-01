@@ -37,5 +37,7 @@ Route::get('/showData', [HomeController::class, 'showData']);
 Route::get('/company-detail', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
 
 Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');;
+
+    Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');
+    
 });
