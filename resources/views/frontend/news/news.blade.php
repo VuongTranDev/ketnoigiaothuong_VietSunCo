@@ -13,13 +13,13 @@
             <div class="col-lg-9 col-9" style="color: #777;">
                 @for ($i = 1; $i < 10; $i++)
                     <div class="news-group">
-                        <a href="#ádas" data-aos="fade-up">
+                        <a href="{{ route('news.detail') }}">
                             <img class="img-news" src="{{ asset('frontend/image/media.jpg') }}" alt="">
                         </a>
                         <div class="group-content">
-                            <a href="#ádas" data-aos="fade-up">
+                            <a href="#ádas">
                                 <h4>Lorem, ipsum dolor sit amet</h4>
-                                <p class="author-news"><b><a href="#">VietSunCo</a></b> - 02/10/2024</p>
+                                <p class="author-news"><b><a href="{{ route('news.detail') }}">VietSunCo</a></b> - 02/10/2024</p>
                                 <p class="content-news">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                     Sapiente
                                     maiores

@@ -11,4 +11,9 @@ class CompaniesController extends Controller
     {
         return view('frontend.company.company-detail');
     }
+
+    public function companyList()
+    {
+        return view('frontend.company.list-company');
+    }
 }

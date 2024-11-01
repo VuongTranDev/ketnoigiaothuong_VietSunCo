@@ -77,8 +77,8 @@
     color: #3EAEF4;
 }
 
-.dropdown:hover>.dropdown-menu,
-.dropend:hover>.dropdown-menu {
+.dropdown-field:hover>.dropdown-menu,
+.dropdown-field:hover>.dropdown-menu {
     display: block;
     margin-top: 2px;
 }

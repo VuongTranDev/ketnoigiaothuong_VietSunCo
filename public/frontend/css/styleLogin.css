@@ -1,0 +1,144 @@
+.login-container {
+    width: 500px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(53, 53, 53, 0.3);
+    text-align: center;
+}
+
+.title-login {
+    color: #339af0;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.login-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.title-inp {
+    display: block;
+    font-size: 14px;
+    color: #777777;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.inp-login::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #339af0;
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.login-button:hover {
+    background-color: #228be6;
+}
+
+.links {
+    display: flex;
+    margin-top: 10px;
+    font-size: 14px;
+    justify-content: space-between;
+}
+
+.links a {
+    color: #339af0;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.divider span {
+    padding: 0 10px;
+    color: #777;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.google-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.google-login img {
+    width: 30px;
+    height: 30px;
+}
+
+.inp-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inp-group i {
+    position: absolute;
+    left: 8px;
+    color: #777;
+    font-size: 16px;
+}
+
+.inp-group::after {
+    position: absolute;
+    bottom: 0;
+    left: 49%;
+    z-index: 1;
+    content: "";
+    width: 2%;
+    height: 2px;
+    visibility: hidden;
+    background-color: #2196F3;
+    transition-duration: .4s;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+.inp-group.is-focused::after {
+    left: 0;
+    width: 100%;
+    visibility: visible;
+}
+
+.inp-login {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    font-family: 'Open Sans', sans-serif;
+    color: #666;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding-left: 35px;
+}
+
+.inp-login:focus {
+    border-color: #ccc;
+    outline: none;
+}
