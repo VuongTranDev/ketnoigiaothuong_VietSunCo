@@ -141,6 +141,7 @@
             <hr class="line-title ">
         </div>
 
+        @include('frontend.company.component.company-same-field')
 
     </div>
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CompaniesController;
+use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\backend\HomeController as BackendHomeController;
 use App\Http\Controllers\frontend\CompaniesController as FrontendCompaniesController;
 use App\Http\Controllers\frontend\NewsController;
@@ -25,6 +26,7 @@ Route::get('/', [
 ]);
 
 Route::get('/news', [NewsController::class, 'news']);
+Route::get('/news-detail', [NewsController::class, 'newsDetail'])->name('news.detail');
 
 Route::get('/showData', [HomeController::class, 'showData']);
 
@@ -34,10 +36,14 @@ Route::get('/showData', [HomeController::class, 'showData']);
 // });
 
 
-Route::get('/company-detail', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
+Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
 
 Route::prefix('admin')->group(function () {
 
     Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');
     
 });
+
+Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
+Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
+Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');

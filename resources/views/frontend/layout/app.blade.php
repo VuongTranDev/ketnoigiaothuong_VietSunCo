@@ -13,16 +13,20 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
     {{-- link css --}}
+    <link rel="stylesheet" href="{{ asset('frontend/css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleLoading.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleHeader.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleFooter.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleNews.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleHomePage.css') }}">
-
-    {{-- <link rel="stylesheet" href="../../css/style.css"> --}}
-
+    <link rel="stylesheet" href="{{ asset('frontend/css/styleLogin.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/styleBlog.css') }}">
 </head>
 
 <body>
@@ -36,13 +40,17 @@
 
     @include('frontend.layout.component.loadingPage')
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script>
         AOS.init();
     </script>
+
+    @stack('script')
 </body>
 
 </html>
