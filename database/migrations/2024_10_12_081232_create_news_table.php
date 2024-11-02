@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('title',255);
-            $table->string('tag_name');
-            $table->string('content');
+            $table->string('title',255)->nullable();
+            $table->string('tag_name')->nullable();
+            $table->string('content')->nullable();
             $table->foreignId('cate_id')->constrained('categories','id')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users','id')->cascadeOnDelete();
             $table->timestamps();

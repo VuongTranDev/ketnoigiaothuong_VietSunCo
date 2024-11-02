@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('addresses')) {
-            Schema::create('addresses', function (Blueprint $table) {
-                $table->id();
-                $table->string('details', 255);
-                $table->string('addresses', 255);
-                $table->foreignId('provinces_id')->constrained('provinces', 'id')->cascadeOnDelete();
-                $table->timestamps();
-            });
-        }
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->id();
+            $table->string('details',255)->nullable();
+            $table->string('address',255)->nullable();
+            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('address');
     }
 };
