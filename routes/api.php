@@ -1,17 +1,36 @@
 <?php
 
-use App\Http\Controllers\Api\CompaniesController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\NewsController;
-use App\Models\News;
+use App\Http\Controllers\api\CommentAPIController;
+use App\Http\Controllers\api\ReportAPIController;
+use App\Http\Controllers\api\AddressController;
+use App\Http\Controllers\api\CategoriesController;
+use App\Http\Controllers\api\CompaniesController;
+use App\Http\Controllers\api\CompanyCategoryController;
+use App\Http\Controllers\api\NewsController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 
-Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getInfo']);
 
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::apiResource('comments',CommentAPIController::class);
+
+Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember') ;
+
 
 Route::fallback(function () {
     return response()->json([
@@ -20,21 +39,8 @@ Route::fallback(function () {
     ], 404);
 });
 
-// Route::prefix('companies')->group(function () {
-//     Route::apiResource('/', CompaniesController::class);
-//     Route::get('/', [CompaniesController::class, 'index']);
-//     Route::get('/{id}', [CompaniesController::class, 'show']);
-//     Route::post('/store', [CompaniesController::class, 'store']);
-// });
-
-Route::prefix('companies')->group(function () {
-    Route::apiResource('/', CompaniesController::class);
-    Route::get('/{id}', [CompaniesController::class, 'show']);
-});
-
-Route::prefix('news')->group(function () {
-    Route::apiResource('/', NewsController::class);
-    Route::get('/', [NewsController::class, 'index']);
-    Route::get('/{id}', [NewsController::class, 'show']);
-});
-
+Route::apiResource('/company', CompaniesController::class);
+Route::apiResource('/new', NewsController::class);
+Route::apiResource('/category', CategoriesController::class);
+Route::apiResource('/company-category', CompanyCategoryController::class);
+Route::apiResource('/address', AddressController::class);

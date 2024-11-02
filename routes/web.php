@@ -39,9 +39,12 @@ Route::get('/showData', [HomeController::class, 'showData']);
 Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
 
 Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');;
+    Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');
 });
 
 Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
 Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
 Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');
+
+
+Route::get('showData', [HomeController::class, 'showData'])->name('news.show');
