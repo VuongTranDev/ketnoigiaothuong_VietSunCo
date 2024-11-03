@@ -22,9 +22,26 @@ class NewsController extends BaseController
      */
     public function index(Request $request)
     {
-        $data = $this->newsService->showData($request);
-        return $this->success($data, 200, 'News retrieved successfully');
+        try {
+            $limit = $request->input('limit', 12);
+            $page = $request->input('page', 1);
+
+            $news = $this->newsService->show($page, $limit);
+
+            $formattedData = collect($news->items())->map(function ($item) {
+                return $this->newsService->formatData($item);
+            })->toArray();
+
+            $formattedPagination = $this->newsService->formatPaginate($news);
+            return $this->successWithPagination($formattedPagination, $formattedData, 200);
+        } catch (ModelNotFoundException $e) {
+            return $this->failed('News not found', 404);
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving news', $e->getMessage(), 500);
+        }
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -32,139 +49,59 @@ class NewsController extends BaseController
     public function store(Request $request)
     {
         $validator = $this->newsService->validateData($request);
-
         if ($validator->fails()) {
-            $this->failedValidation( $validator->errors(), 400);
+            return $this->failed($validator->errors(), 400);
         }
 
         $news = $this->newsService->create($request);
-
-        $format = $this->formatData($news);
-        return $this->success($format, 201, 'News created successfully');
+        return $this->success($this->newsService->formatData($news), 201, 'news created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        $news = News::with('users', 'categories')->find($id);
+        $news = $this->newsService->showById($id);
 
-        if ($news == null) {
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Id news not found!'
-            ], 500);
+        if (!$news) {
+            return $this->failed('news not found', 404);
         }
 
-        $format =  [
-            'id' => $news->id,
-            'title' => $news->title,
-            'tag_name' => $news->tag_name,
-            'content' => $news->content,
-            'categorie' => $news->categories,
-            'user' => $news->users,
-            'created_at' => $news->created_at,
-            'updated_at' => $news->updated_at
-        ];
-
-        if ($news == null) {
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'News not found!'
-            ], 404);
-            $this->failed('News not found', 404);
-        } else {
-            return response()->json([
-                'status' => 'Succes',
-                'data' => $format
-            ], 200);
-        }
+        return $this->success($this->newsService->formatData($news), 200, 'news retrieved successfully');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
+        $validator = $this->newsService->validateData($request);
+
+        if ($validator->fails()) {
+            return $this->failed($validator->errors(), 422);
+        }
+
         try {
-            // Validate data
-            $validatedData = $request->validate([
-                'title' => 'required|string|max:255',
-                'tag_name' => 'required|string|max:255',
-                'content' => 'required|string',
-                'cate_id' => 'required|exists:categories,id',
-                'user_id' => 'required|exists:users,id',
-            ]);
-
-            $news = News::findOrFail($id);
-            $news->update($validatedData);
-
-            $format =  [
-                'id' => $news->id,
-                'title' => $news->title,
-                'tag_name' => $news->tag_name,
-                'content' => $news->content,
-                'categorie' => $news->categories,
-                'user' => $news->users,
-                'created_at' => $news->created_at,
-                'updated_at' => $news->updated_at
-            ];
-
-            return response()->json([
-                'status' => "Success",
-                'message' => "Update news success",
-                'data' => $format
-            ]);
-        } catch (ValidationException $e) {
-            // Handling authentication errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => $e->validator->errors()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            $news = $this->newsService->update($request, $id);
+            return $this->success($this->newsService->formatData($news), 200, 'news updated successfully');
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the company is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'News not found',
-                'error' => $e->getMessage()
-            ], Response::HTTP_NOT_FOUND);
-        } catch (\Exception $e) {
-            // Handle other errors (e.g. database errors)
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->failed('news not found', 404);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         try {
-            $news = News::findOrFail($id);
-
-            $news->delete();
-
-            return response()->json([
-                'status' => "Success",
-                'message' => 'News deleted successfully'
-            ], Response::HTTP_OK);
+            $this->newsService->delete($id);
+            return $this->success([], 200, 'news deleted successfully');
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the company is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'News not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('news not found', 404);
         } catch (\Exception $e) {
-            // Handle other errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred', 'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('an error occurred', $e->getMessage(), 500);
         }
     }
 }

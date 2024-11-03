@@ -32,4 +32,12 @@ class BaseController extends Controller
         ], $code);
     }
 
+    public function successWithPagination($paginate ,$data, $code)
+    {
+        return response()->json([
+            'status' => 'success',
+            'paginate' => $paginate,
+            'data' => $data,
+        ], $code);
+    }
 }

@@ -2,74 +2,48 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Models\Companies;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Services\CompanyService;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class CompaniesController extends Controller
+class CompaniesController extends BaseController
 {
+    protected $companyService;
+
+    public function __construct(CompanyService $companyService)
+    {
+        $this->companyService = $companyService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'page' => 'min:1|max:1000|integer',
-            'size' => 'min:1|max:2000|integer'
-        ]);
+        try {
+            $limit = $request->input('limit', 12);
+            $page = $request->input('page', 1);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'data' => $validator->errors(),
-                'status' => false,
+            $companies = $this->companyService->show($page, $limit);
 
-            ], 400);
-        }
+            $formattedData = collect($companies->items())->map(function ($item) {
+                return $this->companyService->formatData($item);
+            })->toArray();
 
-        $companies = Companies::with('user')->get();
+            $formattedPagination = $this->companyService->formatPaginate($companies);
 
-        $validatorRelationship = Validator::make(['companied' => $companies], [
-            'companies.*.user' => 'required|exists:users,id',
-        ]);
-
-        if ($validatorRelationship->fails()) {
-            return response()->json([
-                'errors' => $validatorRelationship->errors(),
-                'message' => "Error relationship"
-            ], 422);}
-
-        $format = $companies->map(function($companies) {
-            return [
-                'id' => $companies->id,
-                'representative' => $companies->representative,
-                'company_name' => $companies->company_name,
-                'short_name' => $companies->short_name,
-                'phone_number' =>  $companies->phone_number,
-                'slug' => $companies->slug,
-                'content' => $companies->content,
-                'link' => $companies->link,
-                'user' => $companies->user,
-                'created_at' => $companies->created_at,
-                'updated_at' => $companies->updated_at
-            ];
-        });
-
-        if($companies == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Company not found!'
-            ], 404);
-        }
-        else
-        {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
+            return $this->successWithPagination(
+                $formattedPagination,
+                $formattedData,
+                200,
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->failed('Companies not found', 404);
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving companies', $e->getMessage(), 500);
         }
     }
 
@@ -78,57 +52,19 @@ class CompaniesController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'representative' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
-            'short_name' => 'required|string|max:100',
-            'phone_number' => 'required|string|max:20',
-            'slug' => 'required|string|max:100',
-            'content' => 'nullable|string',
-            'link' => 'nullable|url',
-        ]);
+        $validator = $this->companyService->validateData($request);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Validation failed',
-                'data' => $validator->errors(),
-
-            ], 400);
+            return $this->failed($validator->errors(), 422);
         }
 
-        $companies = Companies::create([
-            'representative' => $request->representative,
-            'company_name' => $request->company_name,
-            'short_name' => $request->short_name,
-            'phone_number' => $request->phone_number,
-            'slug' => $request->slug,
-            'content' => $request->content,
-            'link' => $request->link,
-            'user_id' => $request->user_id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $company = $this->companyService->create($request);
 
-        $format = [
-            'id' => $companies->id,
-            'representative' => $companies->representative,
-            'company_name' => $companies->company_name,
-            'short_name' => $companies->short_name,
-            'phone_number' =>  $companies->phone_number,
-            'slug' => $companies->slug,
-            'content' => $companies->content,
-            'link' => $companies->link,
-            'user' => $companies->user,
-            'created_at' => $companies->created_at,
-            'updated_at' => $companies->updated_at
-        ];
-
-        return response()->json([
-            'status' => 'Success',
-            'message' => 'Company created successfully',
-            'data' => $format,
-        ], 201);
+        return $this->success(
+            $this->companyService->formatData($company),
+            201,
+            'company created successfully'
+        );
     }
 
     /**
@@ -136,91 +72,41 @@ class CompaniesController extends Controller
      */
     public function show(string $id)
     {
-        $companies = Companies::with('user')->find($id);
+        $company = $this->companyService->showById($id);
 
-        if($companies == null) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Company not found!'
-            ], 500);
+        if (!$company) {
+            return $this->failed('company not found!', 404);
         }
 
-        $format = [
-            'id' => $companies->id,
-            'representative' => $companies->representative,
-            'company_name' => $companies->company_name,
-            'short_name' => $companies->short_name,
-            'phone_number' =>  $companies->phone_number,
-            'slug' => $companies->slug,
-            'content' => $companies->content,
-            'link' => $companies->link,
-            'user' => $companies->user,
-            'created_at' => $companies->created_at,
-            'updated_at' => $companies->updated_at
-        ];
-
-        if($format == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Company not found!'
-            ], 404);
-        }
-        else
-        {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
-        }
+        return $this->success(
+            $this->companyService->formatData($company),
+            200,
+            'company retrieved successfully'
+        );
     }
-
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        try{
-            // Validate data
-            $validatedData = $request->validate([
-                'representative' => 'required|string|max:255',
-                'company_name' => 'required|string|max:255',
-                'short_name' => 'required|string|max:255',
-                'phone_number' => 'required|string|max:20',
-                'slug' => 'required|string|max:255|unique:companies,slug,' . $id,
-                'content' => 'nullable|string',
-                'link' => 'nullable|url',
-                'user_id' => 'required|exists:users,id',
-            ]);
+        $validator = $this->companyService->validateData($request);
 
-            $company = Companies::findOrFail($id);
-            $company->update($validatedData);
-
-            return response()->json([
-                'status' => "Success",
-                'message' => "Update company success",
-                'data' => $company
-            ]);
-        } catch (ValidationException $e) {
-            // Handling authentication errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => $e->validator->errors()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (ModelNotFoundException $e) {
-            // Handling cases where the company is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Company not found'
-            ], Response::HTTP_NOT_FOUND);
-        } catch (\Exception $e) {
-            // Handle other errors (e.g. database errors)
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred', 'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        if ($validator->fails()) {
+            return $this->failed('validation failed', 422);
         }
 
+        try {
+            $company = $this->companyService->update($request, $id);
+
+            return $this->success(
+                $this->companyService->formatData($company),
+                200,
+                'company updated successfully'
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->failed('company not found', 404);
+        }
     }
 
     /**
@@ -229,25 +115,13 @@ class CompaniesController extends Controller
     public function destroy(string $id)
     {
         try {
-            $company = Companies::findOrFail($id);
-            $company->delete();
+            $this->companyService->delete($id);
 
-            return response()->json([
-                'status' => "Success",
-                'message' => 'Company deleted successfully'
-            ], Response::HTTP_OK);
+            return $this->success([], 200, 'company deleted successfully');
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the company is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Company not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('company not found', 404);
         } catch (\Exception $e) {
-            // Handle other errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred', 'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('an error occurred', $e->getMessage(), 500);
         }
     }
 }
