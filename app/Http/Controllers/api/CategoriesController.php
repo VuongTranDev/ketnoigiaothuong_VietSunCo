@@ -3,41 +3,37 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\Categories;
+use App\Services\CategoryService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class CategoriesController extends Controller
+class CategoriesController extends BaseController
 {
+    public $categoryService;
+
+    /**
+     * Summary of __construct
+     * @param \App\Services\CategoryService $categoryService
+     */
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $category = Categories::get();
-
-        $format = $category->map(function ($category) {
-            return [
-                'id' => $category->id,
-                'name' => $category->name,
-                'slug' => $category->slug,
-                'created_at' => $category->created_at,
-                'updated_at' => $category->updated_at
-            ];
-        });
+        $category = $this->categoryService->show($request);
 
         if ($category == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Category not found!'
-            ], 404);
+            return $this->failed('category not found', 404);
         } else {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
+            return $this->success($category, 200, 'category retrieved successfully');
         }
     }
 
@@ -46,39 +42,15 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'slug' => 'required|string',
-        ]);
+        $validator = $this->categoryService->validateData($request);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Validation failed',
-                'data' => $validator->errors(),
-            ], 400);
+            return $this->failed($validator->errors(), 422);
         }
 
-        $category = Categories::create([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $category = $this->categoryService->create($request);
 
-        $format = [
-            'id' => $category->id,
-            'name' => $category->name,
-            'slug' => $category->slug,
-            'created_at' => $category->created_at,
-            'updated_at' => $category->updated_at
-        ];
-
-        return response()->json([
-            'status' => 'Success',
-            'message' => 'Category created successfully',
-            'data' => $format,
-        ], 201);
+        return $this->success($category, 201, 'category created successfully');
     }
 
     /**
@@ -86,34 +58,14 @@ class CategoriesController extends Controller
      */
     public function show(string $id)
     {
-        $category = Categories::find($id);
+
+        $category = $this->categoryService->showById($id);
 
         if ($category == null) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Category not found!'
-            ], 500);
+            $this->failed('category not found', 404);
         }
 
-        $format = [
-            'id' => $category->id,
-            'name' => $category->name,
-            'slug' => $category->slug,
-            'created_at' => $category->created_at,
-            'updated_at' => $category->updated_at
-        ];
-
-        if ($format == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Category not found!'
-            ], 404);
-        } else {
-            return response()->json([
-                'status' => 'Succe  ss',
-                'data' => $format,
-            ], 200);
-        }
+        return $this->success($category, 200, 'category retrieved successfully');
     }
 
     /**
@@ -121,48 +73,16 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validator = $this->categoryService->validateData($request);
+
+        if ($validator->fails()) {
+            return $this->failed($validator->errors(), 422);
+        }
         try {
-            // Validate data
-            $validatedData = $request->validate([
-                'name' => 'required|string',
-                'slug' => 'required|string',
-            ]);
-
-            $category = Categories::findOrFail($id);
-            $category->update($validatedData);
-
-            $format = [
-                'id' => $category->id,
-                'name' => $category->name,
-                'slug' => $category->slug,
-                'created_at' => $category->created_at,
-                'updated_at' => $category->updated_at
-            ];
-
-            return response()->json([
-                'status' => "Success",
-                'message' => "Update category success",
-                'data' => $format
-            ]);
-        } catch (ValidationException $e) {
-            // Handling authentication errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => $e->validator->errors()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            $category = $this->categoryService->update($request, $id);
+            return $this->success($category, 200, 'category updated successfully');
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the category is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'category not found'
-            ], Response::HTTP_NOT_FOUND);
-        } catch (\Exception $e) {
-            // Handle other errors (e.g. database errors)
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->failed('category not found!', 422);
         }
     }
 
@@ -172,26 +92,12 @@ class CategoriesController extends Controller
     public function destroy(string $id)
     {
         try {
-            $category = Categories::findOrFail($id);
-            $category->delete();
-
-            return response()->json([
-                'status' => "Success",
-                'message' => 'Category deleted successfully'
-            ], Response::HTTP_OK);
+            $this->categoryService->delete($id);
+            return $this->success([], 200, 'category deleted successfully');
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the category is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Category not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('category not found', 404);
         } catch (\Exception $e) {
-            // Handle other errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('an error occurred', $e->getMessage(), 500);
         }
     }
 }

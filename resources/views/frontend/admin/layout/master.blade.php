@@ -50,11 +50,11 @@
             <div class="navbar-bg"></div>
 
             <!-- Navbar Content -->
-            @include('backend.layout.navbar')
+            @include('frontend.admin.layout.navbar')
             <!-- Navbar Content End-->
 
             <!-- sidebar Content -->
-            @include('backend.layout.sidebar')
+            @include('frontend.admin.layout.sidebar')
             <!-- sidebar Content -->
 
             <!-- Main Content -->

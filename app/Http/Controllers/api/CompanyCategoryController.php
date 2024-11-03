@@ -3,87 +3,73 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\CompanyCategory;
+use App\Services\CompanyCategoryService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class CompanyCategoryController extends Controller
+class CompanyCategoryController extends BaseController
 {
+    public $companyCategoryService;
+
+    public function __construct(CompanyCategoryService $companyCategoryService)
+    {
+        $this->companyCategoryService = $companyCategoryService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companycategory = CompanyCategory::with('companies', 'categories')->get();
+        try {
+            $companycategory = $this->companyCategoryService->show($request);
 
-        $format = $companycategory->map(function ($companycategory) {
-            return [
-                'id' => $companycategory->id,
-                'category' => $companycategory->categories,
-                'company' => $companycategory->companies,
-                'description' => $companycategory->description,
-                'created_at' => $companycategory->created_at,
-                'updated_at' => $companycategory->updated_at
-            ];
-        });
+            if ($companycategory->isEmpty()) {
+                return $this->failed('Company category not found', 404);
+            }
 
-        if ($companycategory == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Company category not found!'
-            ], 404);
-        } else {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
+            return $this->success(
+                $companycategory->map(fn($category) => $this->companyCategoryService->formatData($category)),
+                200,
+                'Company categories retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving company categories', $e->getMessage(), 500);
         }
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'cate_id' => 'required',
-            'company_id' => 'required',
-            'description' => 'required',
-        ]);
+        try {
+            $validator = $this->companyCategoryService->validateData($request);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Validation failed',
-                'data' => $validator->errors(),
+            if ($validator->fails()) {
+                return $this->failed($validator->errors(), 422);
+            }
 
-            ], 400);
+            $companyCategory = $this->companyCategoryService->create($request);
+
+            return $this->success(
+                $this->companyCategoryService->formatData($companyCategory),
+                201,
+                'Company category created successfully'
+            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->errorInfo[1] == 1062) {
+                return $this->failed('Duplicate entry detected', 409);
+            }
+            return $this->exception('Database query error occurred', $e->getMessage(), 500);
+        } catch (ValidationException $e) {
+            return $this->failed($e->errors(), 422);
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while creating the company category', $e->getMessage(), 500);
         }
-
-        $companycategory = CompanyCategory::create([
-            'cate_id' => $request->cate_id,
-            'company_id' => $request->company_id,
-            'description' => $request->description,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $format = [
-            'id' => $companycategory->id,
-            'cate_id' => $companycategory->categories,
-            'company_id' => $companycategory->companies,
-            'description' => $companycategory->description,
-            'created_at' => $companycategory->created_at,
-            'updated_at' => $companycategory->updated_at
-        ];
-
-        return response()->json([
-            'status' => 'Success',
-            'message' => 'Company category created successfully',
-            'data' => $format,
-        ], 201);
     }
 
     /**
@@ -91,34 +77,20 @@ class CompanyCategoryController extends Controller
      */
     public function show(string $id)
     {
-        $companycategory = CompanyCategory::with('companies', 'categories')->find($id);
+        try {
+            $companycategory = $this->companyCategoryService->showById($id);
 
-        if ($companycategory == null) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Company category not found!'
-            ], 500);
-        }
+            if (!$companycategory) {
+                return $this->failed('Company category not found!', 404);
+            }
 
-        $format = [
-            'id' => $companycategory->id,
-            'cate_id' => $companycategory->categories,
-            'company_id' => $companycategory->companies,
-            'description' => $companycategory->description,
-            'created_at' => $companycategory->created_at,
-            'updated_at' => $companycategory->updated_at
-        ];
-
-        if ($format == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Company category not found!'
-            ], 404);
-        } else {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
+            return $this->success(
+                $this->companyCategoryService->formatData($companycategory),
+                200,
+                'Company category retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving the company category', $e->getMessage(), 500);
         }
     }
 
@@ -127,52 +99,27 @@ class CompanyCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validator = $this->companyCategoryService->validateData($request);
+
+        if ($validator->fails()) {
+            return $this->failed($validator->errors(), 422);
+        }
+
         try {
-            // Validate data
-            $validatedData = $request->validate([
-                'cate_id' => 'required',
-                'company_id' => 'required',
-                'description' => 'required',
-            ]);
+            $companycategory = $this->companyCategoryService->update($request, $id);
 
-            $companycategory = CompanyCategory::findOrFail($id);
-            $companycategory->update($validatedData);
-
-            $format = [
-                'id' => $companycategory->id,
-                'cate_id' => $companycategory->categories,
-                'company_id' => $companycategory->companies,
-                'description' => $companycategory->description,
-                'created_at' => $companycategory->created_at,
-                'updated_at' => $companycategory->updated_at
-            ];
-
-            return response()->json([
-                'status' => "Success",
-                'message' => "Update company category success",
-                'data' => $format
-            ]);
-        } catch (ValidationException $e) {
-            // Handling authentication errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => $e->validator->errors()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->success(
+                $this->companyCategoryService->formatData($companycategory),
+                201,
+                'Company category updated successfully'
+            );
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the company category is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Company category not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('Company category not found', 404);
         } catch (\Exception $e) {
-            // Handle other errors (e.g. database errors)
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('An error occurred while updating the company category', $e->getMessage(), 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -180,26 +127,13 @@ class CompanyCategoryController extends Controller
     public function destroy(string $id)
     {
         try {
-            $companycategory = CompanyCategory::findOrFail($id);
-            $companycategory->delete();
+            $companycategory = $this->companyCategoryService->delete($id);
 
-            return response()->json([
-                'status' => "Success",
-                'message' => 'Company category deleted successfully'
-            ], Response::HTTP_OK);
+            return $this->success([], 200, 'Company category deleted successfully');
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the company category is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Company category not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('Company category not found', 404);
         } catch (\Exception $e) {
-            // Handle other errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('An error occurred while deleting the company category', $e->getMessage(), 500);
         }
     }
 }

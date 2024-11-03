@@ -3,63 +3,53 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\Address;
+use App\Services\AddressService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
-class AddressController extends Controller
+class AddressController extends BaseController
 {
+    public $addressService;
+
+    public function __construct(AddressService $addressService)
+    {
+        $this->addressService = $addressService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $address = Address::with('companies')->get();
+        try {
+            $address = $this->addressService->show($request);
 
-        $format = $address->map(function ($address) {
-            return [
-                'id' => $address->id,
-                'details' => $address->details,
-                'address' => $address->address,
-                'company_id' => $address->companies,
-                'created_at' => $address->created_at,
-                'updated_at' => $address->updated_at
-            ];
-        });
+            if ($address->isEmpty()) {
+                return $this->failed('No addresses found', 404);
+            }
 
-        if ($address == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Address not found!'
-            ], 404);
-        } else {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
+            return $this->success(
+                $address->map(fn($addr) => $this->addressService->formatData($addr)),
+                200,
+                'Addresses retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving addresses', $e->getMessage(), 500);
         }
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'details' => 'required',
-            'address' => 'required',
-            'company_id' => 'required',
-        ]);
+        $validator = $this->addressService->validateData($request);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Validation failed',
-                'data' => $validator->errors(),
-
-            ], 400);
+            return $this->failed($validator->errors(), 422);
         }
 
         $address = Address::create([
