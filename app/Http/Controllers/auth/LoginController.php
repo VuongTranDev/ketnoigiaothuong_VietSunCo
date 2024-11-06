@@ -38,7 +38,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $client = new Client();
-        $token = "2Isc8V60tvLdW7LHdcOnT1bnhbQuim6tshlmTBqCaYwEbAbHOiPvjhxIvxhz";
+        $token = "";
 
         if (!$token) {
             return redirect()->back()->withErrors(['error' => 'Vui lòng đăng nhập'])->withInput();
