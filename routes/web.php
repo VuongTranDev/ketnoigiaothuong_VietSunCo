@@ -33,9 +33,10 @@ Route::get('/news-detail', [NewsController::class, 'newsDetail'])->name('news.de
 
 Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
 
-Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+// Route::prefix('admin')->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+//     Route::resource('news', NewsController::class);
+// });
 
 Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
 Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
