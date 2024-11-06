@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\auth\LoginController;
+use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\backend\HomeController as BackendHomeController;
 use App\Http\Controllers\frontend\CompaniesController as FrontendCompaniesController;
 use App\Http\Controllers\frontend\NewsController;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [
     HomeController::class,
     "index"
-]);
+])->name('/');
 
 Route::get('/news', [NewsController::class, 'news']);
 Route::get('/news-detail', [NewsController::class, 'newsDetail'])->name('news.detail');
@@ -41,9 +42,15 @@ Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDet
 Route::prefix('admin')->group(function () {
 
     Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');
-    
+
 });
 
-Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
-Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
+Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
+Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
+
+Route::get('/regis', [RegisterController::class, 'create'])->name('get.register');
+Route::post('/register/post', [RegisterController::class, 'store'])->name('auth.register');
+Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
+
 Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');
+Route::get('getsession',[LoginController::class,'someFunction']);

@@ -11,7 +11,7 @@ class Comments extends Model
     public function news(){
         return $this->belongsTo(News::class,'new_id','id');
     }
-    public function user(){
+    public function users(){
         return $this->belongsTo(User::class,'user_id','id');
     }
 }

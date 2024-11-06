@@ -4,14 +4,15 @@
     <div class="container-xl d-flex justify-content-center pt-5 pb-5">
         <div class="login-container">
             <h2 class="title-login">Đăng ký</h2>
-            <form>
+            <form action="{{ route('auth.register') }}" method="POST">
+                @csrf
                 <div class="login-group">
-                    <label class="title-inp" for="username">Username or Email</label>
+                    <label class="title-inp" for="username">Email</label>
                     <div class="wrapper">
                         <div class="inp-group">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="username" class="inp-login"
-                                placeholder="Nhập username hoặc email của bạn" />
+                            <input type="email" name="email" class="inp-login"
+                                placeholder="Nhập hoặc email của bạn" />
                         </div>
                     </div>
                 </div>
@@ -20,7 +21,7 @@
                     <div class="wrapper">
                         <div class="inp-group">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="text" id="password" class="inp-login" placeholder="Nhập mật khẩu của bạn" />
+                            <input type="password" name="password" class="inp-login" placeholder="Nhập mật khẩu của bạn" />
                         </div>
                     </div>
                 </div>
@@ -29,7 +30,7 @@
                     <div class="wrapper">
                         <div class="inp-group">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="text" id="confirm-password" class="inp-login" placeholder="Xác nhận mật khẩu của bạn" />
+                            <input type="password" id="confirm-password" class="inp-login" placeholder="Xác nhận mật khẩu của bạn" />
                         </div>
                     </div>
                 </div>
@@ -51,7 +52,6 @@
         <script>
             (function(window, document) {
                 'use strict';
-
                 var inputs = document.querySelectorAll('.inp-login');
                 inputs.forEach(function(input) {
                     input.addEventListener('focus', function() {
