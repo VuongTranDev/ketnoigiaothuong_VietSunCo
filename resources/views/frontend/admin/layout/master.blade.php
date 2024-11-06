@@ -54,7 +54,7 @@
             <!-- Navbar Content End-->
 
             <!-- sidebar Content -->
-            @include('frontend.admin.layout.sidebarr')
+            @include('frontend.admin.layout.sidebar')
             <!-- sidebar Content -->
 
             <!-- Main Content -->
