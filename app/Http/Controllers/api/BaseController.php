@@ -15,11 +15,12 @@ class BaseController extends Controller
 
         ], $code);
     }
-    public function failed($message, $code)
+    public function failed($message = "error", $error = [], $code = 500)
     {
         return response()->json([
             'status' => "error",
             'message' => $message,
+
         ], $code);
     }
 
@@ -38,6 +39,16 @@ class BaseController extends Controller
             'status' => 'success',
             'paginate' => $paginate,
             'data' => $data,
+            'error' => $error,
+        ], $code);
+    }
+
+    public function success($data = [], $message = "success", $code = 200)
+    {
+        return response()->json([
+            'status' => 'success',
+            'data' => $data,
+            'message' => $message,
         ], $code);
     }
 }
