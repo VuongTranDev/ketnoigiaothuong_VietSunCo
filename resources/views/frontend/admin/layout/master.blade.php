@@ -22,7 +22,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
     {{-- @if ($settings->layout === 'RTL')
         <link rel="stylesheet" href="{{ asset('backend/assets/css/rtl.css') }}">
@@ -54,7 +54,7 @@
             <!-- Navbar Content End-->
 
             <!-- sidebar Content -->
-            @include('frontend.admin.layout.sidebar')
+            @include('frontend.admin.layout.sidebarr')
             <!-- sidebar Content -->
 
             <!-- Main Content -->
@@ -86,6 +86,7 @@
     <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         @if ($errors->any())

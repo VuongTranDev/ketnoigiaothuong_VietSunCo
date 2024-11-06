@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-    public function success($data = [], $code, $message)
-    {
-        return response()->json([
-            'status' => 'success',
-            'message' => $message,
-            'data' => $data,
+    // public function success($data = [], $code, $message)
+    // {
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => $message,
+    //         'data' => $data,
 
-        ], $code);
-    }
+    //     ], $code);
+    // }
     public function failed($message = "error", $error = [], $code = 500)
     {
         return response()->json([
@@ -39,7 +39,6 @@ class BaseController extends Controller
             'status' => 'success',
             'paginate' => $paginate,
             'data' => $data,
-            'error' => $error,
         ], $code);
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\backend\HomeController as BackendHomeController;
 use App\Http\Controllers\frontend\CompaniesController as FrontendCompaniesController;
 use App\Http\Controllers\frontend\DashboardController;
+
 use App\Http\Controllers\frontend\NewsController;
 use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -41,9 +42,6 @@ Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDet
 //     Route::resource('news', NewsController::class);
 // });
 
-Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [BackendHomeController::class, 'index'])->name('dashboard');
-});
 
 Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
 Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
