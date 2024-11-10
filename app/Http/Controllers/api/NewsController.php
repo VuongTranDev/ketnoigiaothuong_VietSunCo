@@ -76,8 +76,8 @@ class NewsController extends BaseController
 
             return $this->success(
                 $this->newsService->formatData($companycategory),
-                200,
-                'news retrieved successfully'
+                'news retrieved successfully',
+                200
             );
         } catch (\Exception $e) {
             return $this->exception('An error occurred while retrieving the company category', $e->getMessage(), 500);
@@ -92,7 +92,7 @@ class NewsController extends BaseController
             return $this->failed('news not found', 404);
         }
 
-        return $this->success($this->newsService->formatData($news), 200, 'news retrieved successfully');
+        return $this->success($this->newsService->formatData($news),  'news retrieved successfully', 200);
     }
 
     /**

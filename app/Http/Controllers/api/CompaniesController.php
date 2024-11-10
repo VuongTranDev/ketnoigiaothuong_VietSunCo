@@ -62,8 +62,8 @@ class CompaniesController extends BaseController
 
         return $this->success(
             $this->companyService->formatData($company),
-            201,
-            'company created successfully'
+            'company created successfully',
+            201
         );
     }
 
@@ -80,8 +80,8 @@ class CompaniesController extends BaseController
 
         return $this->success(
             $this->companyService->formatData($company),
-            200,
-            'company retrieved successfully'
+            'company retrieved successfully',
+            200
         );
     }
 
@@ -101,8 +101,8 @@ class CompaniesController extends BaseController
 
             return $this->success(
                 $this->companyService->formatData($company),
-                200,
-                'company updated successfully'
+                'company updated successfully',
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->failed('company not found', 404);
@@ -117,7 +117,7 @@ class CompaniesController extends BaseController
         try {
             $this->companyService->delete($id);
 
-            return $this->success([], 200, 'company deleted successfully');
+            return $this->success([], 'company deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('company not found', 404);
         } catch (\Exception $e) {

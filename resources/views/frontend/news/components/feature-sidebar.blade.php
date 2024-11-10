@@ -10,12 +10,12 @@
         <h4>Các bài khác</h4>
         @foreach ($moreNews as $item)
             <div class="wsus__blog_post_single">
-                <a href="#" class="wsus__blog_post_img">
+                <a href="{{ route('news.detail', $item->slug) }}" class="wsus__blog_post_img">
                     <img style="height: 71px;" src="{{ asset('frontend/image/DaNang.png') }}" alt="blog"
                         class="imgofluid w-100">
                 </a>
                 <div class="wsus__blog_post_text">
-                    <a href="#">{{ $item->title }}</a>
+                    <a href="{{ route('news.detail', $item->slug) }}">{{ $item->title }}</a>
                     <p> <span>{{ date('d/m/Y', strtotime($item->created_at)) }}</span></p>
                 </div>
             </div>

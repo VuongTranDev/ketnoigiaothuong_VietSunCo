@@ -32,8 +32,8 @@ class AddressController extends BaseController
 
             return $this->success(
                 $address->map(fn($addr) => $this->addressService->formatData($addr)),
-                200,
-                'Addresses retrieved successfully'
+                'Addresses retrieved successfully',
+                200
             );
         } catch (\Exception $e) {
             return $this->exception('An error occurred while retrieving addresses', $e->getMessage(), 500);

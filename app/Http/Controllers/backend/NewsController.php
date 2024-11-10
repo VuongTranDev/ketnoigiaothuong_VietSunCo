@@ -68,6 +68,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $url = config('api.base_url') . "new/{$id}";
+
         $response = $this->client->request('GET', $url);
 
         $responseData = json_decode($response->getBody());
