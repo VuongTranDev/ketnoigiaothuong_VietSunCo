@@ -24,23 +24,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', [
-//     HomeController::class,
-//     "index"
-// ]);
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/news', [NewsController::class, 'news']);
-Route::get('/news-detail', [NewsController::class, 'newsDetail'])->name('news.detail');
+Route::get('/tin-tuc', [NewsController::class, 'news'])->name('news');
+Route::get('/tin-tuc/{slug}', [NewsController::class, 'newsDetail'])->name('news.detail');
 
 Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
-
-
-// Route::prefix('admin')->group(function () {
-//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-//     Route::resource('news', NewsController::class);
-// });
 
 
 Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
@@ -52,7 +41,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
 
 Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');
 
-Route::get('showData', [HomeController::class, 'showData'])->name('news.show');
-
 Route::get('getsession',[LoginController::class,'someFunction']);
 
+Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
+Route::get('/register', [LoginController::class, 'register'])->name('auth.register');

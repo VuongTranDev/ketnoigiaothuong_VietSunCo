@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class NewsService
 {
@@ -23,12 +24,17 @@ class NewsService
     /**
      * Retrieve a specific news item by its ID, including related categories and user data.
      *
-     * @param int $id
+     * @param string $slug
      * @return News|null
      */
+    public function showBySlug($slug)
+    {
+        return News::with('categories', 'users')->where('slug', $slug)->first();
+    }
+
     public function showById($id)
     {
-        return News::with('categories', 'users')->find($id);
+        return News::with('categories', 'users')->where('id', $id)->first();
     }
 
     /**
@@ -42,6 +48,7 @@ class NewsService
         return [
             'id' => $news->id,
             'title' => $news->title,
+            'slug' => $news->slug,
             'tag_name' => $news->tag_name,
             'content' => $news->content,
             'categorie' => $news->categories,
@@ -78,7 +85,7 @@ class NewsService
         return Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'tag_name' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'required',
             'cate_id' => 'required|exists:categories,id',
             'user_id' => 'exists:users,id',
         ]);
@@ -92,9 +99,16 @@ class NewsService
      */
     public function create($request)
     {
-        return News::create(
-            $request->only('title', 'tag_name', 'content', 'cate_id', 'user_id')
-        );
+        $slug = Str::slug($request->title);
+
+        return News::create([
+            'title' => $request->title,
+            'slug' => $slug,
+            'tag_name' => $request->tag_name,
+            'content' => $request->content,
+            'cate_id' => $request->cate_id,
+            'user_id' => $request->user_id,
+        ]);
     }
 
     /**
@@ -108,7 +122,18 @@ class NewsService
     public function update($request, $id)
     {
         $news = News::findOrFail($id);
-        $news->update($request->only('title', 'tag_name', 'content', 'cate_id', 'user_id'));
+
+        $slug = Str::slug($request->title);
+
+        $news->update([
+            'title' => $request->title,
+            'slug' => $slug,
+            'tag_name' => $request->tag_name,
+            'content' => $request->content,
+            'cate_id' => $request->cate_id,
+            'user_id' => $request->user_id,
+        ]);
+
         return $news;
     }
 

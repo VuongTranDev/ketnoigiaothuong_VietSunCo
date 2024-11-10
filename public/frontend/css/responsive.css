@@ -1,0 +1,17 @@
+@media (max-width: 768px) {
+    .app {
+        margin-top: 50px;
+    }
+
+    .banner-thumb {
+        top: 55px;
+    }
+
+    .banner-slogan .title-banner {
+        font-size: 30px;
+    }
+
+    .bg-main {
+        height: 450px;
+    }
+}
