@@ -14,6 +14,7 @@ class News extends Model
         'slug',
         'tag_name',
         'content',
+        'image',
         'cate_id',
         'user_id',
     ];

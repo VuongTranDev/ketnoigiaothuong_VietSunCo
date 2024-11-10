@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('slug')->nullable();
             $table->string('tag_name')->nullable();
             $table->longText('content')->nullable();
+            $table->text('image')->nullable();
             $table->foreignId('cate_id')->constrained('categories','id')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users','id')->cascadeOnDelete();
             $table->timestamps();
