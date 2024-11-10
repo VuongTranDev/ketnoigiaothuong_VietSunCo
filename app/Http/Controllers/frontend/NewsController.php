@@ -4,21 +4,57 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
-class NewsController extends Controller
+class NewsController extends BaseController
 {
-    public function news() {
-        return view('frontend.news.news');
+    protected $client;
+    protected $url;
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+        $this->url = env('API_URL');
     }
 
-    public function newsDetail() {
-        return view('frontend.news.new-detail');
+    /**
+     * Display the news
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function news()
+    {
+        try {
+            $news = $this->fetchDataFromApi("new");
+
+            $moreNews = $this->fetchDataFromApi("new/?limit=5");
+        } catch (RequestException $e) {
+            Log::error('API request failed: ' . $e->getMessage());
+            $news = [];
+            $moreNews = [];
+        }
+        return view('frontend.news.news', compact('news', 'moreNews'));
     }
 
-    public function showData() {
-        $client = new Client();
-        $respone = $client->request('GET', 'http://127.0.0.1:8000/api/new');
-        return view('frontend.news.show-data');
+    /**
+     * Display the details of a specific news item.
+     *
+     * @param string $slug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function newsDetail(string $slug)
+    {
+        try {
+            $news = $this->fetchDataSlugFromApi("new/slug/{$slug}");
+
+            $moreNews = $this->fetchDataFromApi("new?limit=5");
+        } catch (RequestException $e) {
+            Log::error('API request failed: ' . $e->getMessage());
+            $news = [];
+            $moreNews = [];
+        }
+        return view('frontend.news.new-detail', compact('news', 'moreNews'));
     }
 }

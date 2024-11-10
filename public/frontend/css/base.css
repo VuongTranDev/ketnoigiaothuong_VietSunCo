@@ -1,3 +1,28 @@
 a {
     text-decoration: none;
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3EAEF4;
+    ;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.breadcrumb-item a{
+    font-weight: 700;
+}
+
+.breadcrumb-item.active  {
+    color: #1380c4;
+}
