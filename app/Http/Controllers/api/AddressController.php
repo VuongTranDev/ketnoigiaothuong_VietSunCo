@@ -172,7 +172,6 @@ class AddressController extends BaseController
         try {
             $address = Address::findOrFail($id);
             $address->delete();
-
             return response()->json([
                 'status' => "Success",
                 'message' => 'Address deleted successfully'

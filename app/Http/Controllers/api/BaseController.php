@@ -15,7 +15,8 @@ class BaseController extends Controller
 
     //     ], $code);
     // }
-    public function failed($message = "error", $code = 500, $error = [])
+
+    public function failed($message = "error", $code, $error = [])
     {
         return response()->json([
             'status' => "error",

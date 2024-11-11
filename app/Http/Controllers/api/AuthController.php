@@ -27,41 +27,35 @@ class AuthController extends BaseController
     }
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
-        Log::info("auth". json_encode($request->all()));
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation error',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
+
         $user = Users::where('email', $request->email)->first();
 
-        Log::info("user ". json_encode($user->password));
-
-        if (!$user || !password_verify($request->password, $user->password)) {
+        if ($user && $user->remember_token) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid credentials',
-                'errors' => [
-                    'email' => ['The provided credentials are incorrect.'],
-                ],
-            ], 401);
+                'message' => 'User is already logged in. Please logout first.',
+                'status' => false
+            ], 403);
         }
 
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Unauthorized',
+                'errors' => 'The provided credentials are incorrect.',
+                'status' => false
+            ], 401);
+        }
         $token = $user->createToken('auth_token')->plainTextToken;
-        $user->remember_token = $token; // Optional: store the token
+        $user->remember_token = $token;
         $user->save();
-
         return response()->json([
-            'status' => 'success',
             'message' => 'Login success',
             'token' => $token,
-        ],201);
+            'status' => 'success'
+        ], 200);
     }
 
     public function getInfo(Request $request)
@@ -85,6 +79,5 @@ class AuthController extends BaseController
             return $this->failed('Change status failed',  400, $result['errors']);
         }
         return $this->success($result['data'], 'Change status success', 200);
-
     }
 }

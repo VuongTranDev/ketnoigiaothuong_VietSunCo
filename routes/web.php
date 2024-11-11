@@ -43,5 +43,8 @@ Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyLi
 
 Route::get('getsession',[LoginController::class,'someFunction']);
 
+Route::get('clearsession',[LoginController::class,'clearSession']);
+
+
 Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
 Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
