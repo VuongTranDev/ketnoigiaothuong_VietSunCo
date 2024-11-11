@@ -72,3 +72,5 @@ Route::middleware('auth:sanctum')->post('/messages/send', [MessageController::cl
 Route::middleware('auth:sanctum')->get('/messages/{userId}', [MessageController::class, 'getMessages'])->name('messages.get');
 Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
 
+//
+

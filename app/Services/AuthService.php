@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Log;
 
 class AuthService
 {
-
     public function register(Request $request)
     {
+        Log::info('Register user: ' . $request->email);
         $validator = Validator::make($request->all(), [
             'password' => 'required|string',
             'email' => 'required|email|unique:Users,email',
@@ -28,7 +28,7 @@ class AuthService
         }
         $user = new Users();
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        $user->password = $request->password;
         $user->status = 1;
         $user->role_id = 2;
         $user->save();
@@ -40,6 +40,7 @@ class AuthService
     }
     public function login(Request $request)
     {
+        
 
 
     }

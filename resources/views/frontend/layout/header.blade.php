@@ -88,10 +88,10 @@
                         {{-- <a href="{{ route('auth.login') }}" style="color: #3EAEF4;"><i class="fa-solid fa-user" style="font-size: 20px;"></i>
                         </a> --}}
                         <div class="btn-group">
-                            @if (Auth::check())
+                            @if (session('user'))
                                 <button type="button" style="background-color: #3EAEF4; color: white;"
                                     class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Session::get('user_name', 'Đăng nhập') }}
+                                    {{ session('user')->email }}
                                     <i class="fa-solid fa-user" style="font-size: 20px;"></i>
                                 </button>
                                 <ul class="dropdown-menu">

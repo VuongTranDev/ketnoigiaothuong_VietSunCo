@@ -55,4 +55,4 @@ Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyLi
 Route::get('showData', [HomeController::class, 'showData'])->name('news.show');
 
 Route::get('getsession',[LoginController::class,'someFunction']);
-
+Route::get('clearsession',[LoginController::class,'clearSession']);
