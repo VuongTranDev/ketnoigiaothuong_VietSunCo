@@ -28,12 +28,15 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/styleHomePage.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleLogin.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleBlog.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+
+    @stack('style')
 </head>
 
 <body>
     @include('frontend.layout.header')
 
-    <main style="margin-top: 85px;">
+    <main class="app">
         @yield('renderBody')
     </main>
 

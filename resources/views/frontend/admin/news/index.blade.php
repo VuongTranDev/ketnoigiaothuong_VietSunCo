@@ -12,48 +12,163 @@
                         <div class="card-header">
                             <h4>Tất cả tin tức</h4>
                             <div class="card-header-action">
-                                <a href="" class="btn btn-primary"><i class="fas fa-plus"></i>
-                                    Tạo mới</a>
+                                <a href="{{ route('admin.news.create') }}" class="btn btn-primary"><i
+                                        class="fas fa-plus"></i> Tạo mới</a>
                             </div>
                         </div>
                         <div class="card-body">
-                            {{ $dataTable->table() }}
+                            <table id="example" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tiêu đề</th>
+                                        <th>Tag</th>
+                                        <th>Nội dung</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Ngày cập nhật</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa tin tức</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">Tiêu đề</label>
+                            <input type="text" class="form-control" id="editTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editContent" class="form-label">Nội dung</label>
+                            <textarea class="form-control" id="editContent" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+
 @push('scripts')
-    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-
-    {{-- <script>
+    <script>
         $(document).ready(function() {
-            $('body').on('click', '.change-status', function() {
-                let isChecked = $(this).is(':checked');
-                let mablogtour = $(this).data('id');
+            var table = $('#example').DataTable({
 
-                console.log({
-                    mablogtour: mablogtour,
-                    trangthaiblog: isChecked ? 'true' : 'false'
-                });
+                ajax: {
+                    url: '{{ route('api.new') }}',
+                    dataSrc: 'data'
+                },
+                columns: [{
+                        data: null,
+                        className: "dt-center",
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    }, {
+                        data: 'title'
+                    },
+                    {
+                        data: 'tag_name'
+                    },
+                    {
+                        data: 'content',
+                        render: function(data, type, row) {
+                            let parser = new DOMParser();
+                            let doc = parser.parseFromString(data, 'text/html');
+                            let textContent = doc.body.textContent || "";
 
-                $.ajax({
-                    url: "{{ route('blog.change-status') }}",
-                    method: 'POST',
-                    data: {
-                        mablogtour: mablogtour,
-                        trangthaiblog: isChecked ? 'true' : 'false'
+                            return textContent.length > 50 ? textContent.substring(0, 50) + '...' :
+                                textContent;
+                        }
                     },
-                    success: function(data) {
-                        toastr.success(data.message);
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            return moment(data).format('DD-MM-YYYY');
+                        }
                     },
-                    error: function(xhr) {
-                        console.log(error);
+                    {
+                        data: 'updated_at',
+                        render: function(data, type, row) {
+                            return moment(data).format('DD-MM-YYYY');
+                        }
+                    },
+                    {
+                        data: null,
+                        className: "dt-center",
+                        orderable: false,
+                        render: function(data, type, row) {
+
+                            let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row
+                                .id);
+
+                            return `
+                                <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
+                                    <i class='far fa-edit'></i>
+                                </a>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
+                                    <i class='far fa-trash-alt'></i>
+                                </button>
+                            `;
+                        }
+                    }
+                ]
+            });
+
+            $('#example').on('click', '.btn-delete', function() {
+                var id = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn xóa mục này?',
+                    text: "Hành động này không thể hoàn tác!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/api/new/${id}`,
+                            type: 'DELETE',
+                            success: function(response) {
+                                table.ajax.reload();
+
+                                Swal.fire(
+                                    'Thành công!',
+                                    'Xóa tin tức thành công.',
+                                    'success'
+                                );
+                            },
+                            error: function(xhr) {
+                                Swal.fire(
+                                    'Lỗi!',
+                                    'Đã xảy ra lỗi khi xóa.',
+                                    'error'
+                                );
+                            }
+                        });
                     }
                 });
             });
         });
-    </script> --}}
+    </script>
 @endpush

@@ -70,7 +70,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/news">Tin tức</a>
+                            <a class="nav-link" href="{{ route('news') }}">Tin tức</a>
                         </li>
                     </ul>
                     {{-- <form action="" class="search-group me-4">

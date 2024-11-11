@@ -47,6 +47,7 @@ Route::fallback(function () {
 
 Route::apiResource('/company', CompaniesController::class);
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
+Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
 Route::apiResource('/category', CategoriesController::class);
 Route::apiResource('/company-category', CompanyCategoryController::class);
 Route::apiResource('/address', AddressController::class);

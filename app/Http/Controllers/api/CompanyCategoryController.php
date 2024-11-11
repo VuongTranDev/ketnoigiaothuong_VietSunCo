@@ -86,8 +86,8 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $this->companyCategoryService->formatData($companycategory),
-                200,
-                'Company category retrieved successfully'
+                'Company category retrieved successfully',
+                200
             );
         } catch (\Exception $e) {
             return $this->exception('An error occurred while retrieving the company category', $e->getMessage(), 500);
@@ -110,8 +110,8 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $this->companyCategoryService->formatData($companycategory),
-                201,
-                'Company category updated successfully'
+                'Company category updated successfully',
+                201
             );
         } catch (ModelNotFoundException $e) {
             return $this->failed('Company category not found', 404);
@@ -127,9 +127,9 @@ class CompanyCategoryController extends BaseController
     public function destroy(string $id)
     {
         try {
-            $companycategory = $this->companyCategoryService->delete($id);
+            $this->companyCategoryService->delete($id);
 
-            return $this->success([], 200, 'Company category deleted successfully');
+            return $this->success([],  'Company category deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('Company category not found', 404);
         } catch (\Exception $e) {

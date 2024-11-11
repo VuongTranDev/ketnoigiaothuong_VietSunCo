@@ -38,7 +38,7 @@ class NewsDatatables extends DataTable
      */
     public function query(News $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('id', 'asc');
+        return $model->with('categories', 'users')->newQuery();
     }
 
     /**
@@ -49,7 +49,7 @@ class NewsDatatables extends DataTable
         return $this->builder()
             ->setTableId('newsdatatables-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('api.new.index'))
+            ->minifiedAjax()
             //->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()
@@ -69,6 +69,7 @@ class NewsDatatables extends DataTable
     public function getColumns(): array
     {
         return [
+            // Column::make('id'),
             Column::computed('DT_RowIndex')
                 ->title('STT')
                 ->exportable(false)
@@ -83,7 +84,7 @@ class NewsDatatables extends DataTable
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }

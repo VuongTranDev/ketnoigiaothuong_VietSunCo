@@ -33,7 +33,7 @@ class CategoriesController extends BaseController
         if ($category == null) {
             return $this->failed('category not found', 404);
         } else {
-            return $this->success($category, 200, 'category retrieved successfully');
+            return $this->success($category,  'category retrieved successfully', 200);
         }
     }
 
@@ -50,7 +50,7 @@ class CategoriesController extends BaseController
 
         $category = $this->categoryService->create($request);
 
-        return $this->success($category, 201, 'category created successfully');
+        return $this->success($category,  'category created successfully', 201);
     }
 
     /**
@@ -65,7 +65,7 @@ class CategoriesController extends BaseController
             $this->failed('category not found', 404);
         }
 
-        return $this->success($category, 200, 'category retrieved successfully');
+        return $this->success($category, 'category retrieved successfully', 200);
     }
 
     /**
@@ -80,7 +80,7 @@ class CategoriesController extends BaseController
         }
         try {
             $category = $this->categoryService->update($request, $id);
-            return $this->success($category, 200, 'category updated successfully');
+            return $this->success($category,  'category updated successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('category not found!', 422);
         }
@@ -93,7 +93,7 @@ class CategoriesController extends BaseController
     {
         try {
             $this->categoryService->delete($id);
-            return $this->success([], 200, 'category deleted successfully');
+            return $this->success([],  'category deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('category not found', 404);
         } catch (\Exception $e) {

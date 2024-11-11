@@ -21,7 +21,7 @@ class AuthController extends BaseController
     {
         $result = $this->authService->register($request);
         if (!$result['status']) {
-            return $this->failed('Register failed', $result['errors'], 400);
+            return $this->failed('Register failed', 400, $result['errors']);
         }
         return $this->success($result['data'], 'Register success', 201);
     }
@@ -68,7 +68,7 @@ class AuthController extends BaseController
         $result = $this->authService->logout($request);
 
         if (!$result['status']) {
-            return $this->failed($result['message'], [], 403);
+            return $this->failed($result['message'], 403, []);
         }
         return $this->success([], $result['message']);
     }
@@ -76,7 +76,7 @@ class AuthController extends BaseController
     {
         $result = $this->authService->changeStatusUser($id);
         if (!$result['status']) {
-            return $this->failed('Change status failed', $result['errors'], 400);
+            return $this->failed('Change status failed',  400, $result['errors']);
         }
         return $this->success($result['data'], 'Change status success', 200);
     }
