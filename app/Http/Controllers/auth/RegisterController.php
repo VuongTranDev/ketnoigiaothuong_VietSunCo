@@ -26,7 +26,7 @@ class RegisterController extends Controller
             ]
         ]);
 
-        $data = json_decode($response->getBody(), true);
+        $data = json_decode($response->getBody());
 
         // if ($data['status'] == "success") {
         //     return response()->json([
@@ -35,7 +35,7 @@ class RegisterController extends Controller
         //         'status' => $data['status']
         //     ],  201);
         // }
-        if ($data['status'] == 'success') {
+        if ($data->status == 'success') {
             return redirect()->route('auth.login')->withSuccess('Đăng ký tài khoản thành công');
         } else {
             return redirect()->back()->withErrors($data['errors'])->withInput();

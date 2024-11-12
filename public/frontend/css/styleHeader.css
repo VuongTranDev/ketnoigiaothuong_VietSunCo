@@ -119,3 +119,82 @@
 .fas.fa-search {
     height: 16;
 }
+
+/* Căn giữa form theo chiều ngang và chiều dọc */
+.full-screen-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ cho toàn màn hình */
+    z-index: 1000; /* Đảm bảo form ở trên cùng */
+}
+
+/* Căn chỉnh form ra giữa */
+.form-container {
+    width: 60%; /* Điều chỉnh kích thước để form lớn hơn */
+    max-width: 800px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+/* Căn chỉnh tiêu đề */
+.form-container h2 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Định dạng các trường nhập liệu */
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    flex-basis: 100%;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.form-group input,
+.form-group textarea {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Thiết lập các trường theo hàng ngang */
+.form-group.half-width {
+    flex-basis: 48%; /* Căn chỉnh cho các trường nhập liệu thành 2 cột */
+}
+
+/* Nút gửi thông tin */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}

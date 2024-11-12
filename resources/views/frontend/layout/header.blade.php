@@ -8,7 +8,7 @@
                     <a href="/"><i class="fa-solid fa-envelope me-2" style="color: #fff;"></i>hi@vietsunco.com</a>
                 </div>
                 <div>
-                    <a class="ms-2" href="">Đăng ký thành viên
+                    <a class="ms-2" href="#" id="openForm">Đăng ký thành viên
                         <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
                     </a>
                     <a href="">
@@ -23,6 +23,34 @@
             </div>
         </div>
     </nav>
+    <!-- Form đăng ký -->
+<div class="full-screen-container" id="registerForm" style="display: none;">
+    <div class="form-container">
+        <h2>Đăng ký thành viên</h2>
+        <div class="form-group">
+            <label>Họ và tên*</label>
+            <input type="text" placeholder="Nhập tại đây">
+        </div>
+        <div class="form-group half-width">
+            <label>Số điện thoại*</label>
+            <input type="text" placeholder="Nhập tại đây">
+        </div>
+        <div class="form-group half-width">
+            <label>Tên công ty*</label>
+            <input type="text" placeholder="Nhập tại đây">
+        </div>
+        <div class="form-group">
+            <label>Email*</label>
+            <input type="email" placeholder="Nhập tại đây">
+        </div>
+        <div class="form-group">
+            <label>Lời nhắn</label>
+            <textarea placeholder="Nội dung cần tư vấn"></textarea>
+        </div>
+        <button class="submit-btn">Gửi thông tin</button>
+    </div>
+
+</div>
 
     <nav class="navbar navbar-expand-lg navbar-bottom">
         <div class="container-xl">
@@ -126,3 +154,21 @@
         </div>
     </nav>
 </header>
+
+@push('script')
+<script>
+    // JavaScript để hiển thị và ẩn form
+    document.getElementById('openForm').addEventListener('click', function(event) {
+        event.preventDefault(); // Ngăn không cho link chuyển trang
+        document.getElementById('registerForm').style.display = 'flex';
+    });
+
+    // Đóng form khi nhấn vào khu vực bên ngoài form
+    document.getElementById('registerForm').addEventListener('click', function(event) {
+        if (event.target === this) {
+            this.style.display = 'none';
+        }
+    });
+
+</script>
+@endpush

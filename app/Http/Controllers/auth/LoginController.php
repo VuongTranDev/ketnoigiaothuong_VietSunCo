@@ -28,8 +28,9 @@ class LoginController extends Controller
                 'password' => $request->password,
             ]
         ]);
-        $data = json_decode($response->getBody(), true);
-        if ($data['status'] == 'success') {
+
+        $data = json_decode($response->getBody());
+        if ($data->status == 'success') {
             return redirect()->route('/')->withSuccess('Đăng nhập thành công!');
         } else {
             return redirect()->back()->withErrors($data['errors'])->withInput();
