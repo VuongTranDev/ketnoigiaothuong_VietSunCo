@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Comments;
 use App\Models\News;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -150,4 +152,22 @@ class NewsService
         $news->delete();
         return $news;
     }
+
+    public function showAllCommentInnews($slug)
+    {
+       /// $data = DB::select('CALL proc_selectCommentInNews(?)', [$slug]);
+        $data = News::with('comments.user')->where('slug', $slug)->first();
+        return $data;
+    }
+
+    public function show5NewOfUser($user_id)
+    {
+        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
+        return News::withCount('comments')
+        ->where('user_id', $user_id)
+        ->orderBy('comments_count', 'desc')
+        ->limit(2)
+        ->get();
+    }
+
 }

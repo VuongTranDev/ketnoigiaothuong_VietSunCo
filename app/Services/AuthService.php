@@ -40,7 +40,7 @@ class AuthService
     }
     public function login(Request $request)
     {
-        
+
 
 
     }
@@ -73,6 +73,8 @@ class AuthService
     {
         $user = $request->user();
         if ($user) {
+            $user->remember_token = null;
+            $user->save() ;
             $user->currentAccessToken()->delete();
             return [
                 'status' => 'success',

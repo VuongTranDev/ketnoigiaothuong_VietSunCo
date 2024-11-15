@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Models\News;
 use App\Services\NewsService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response;
+
 
 class NewsController extends BaseController
 {
@@ -126,4 +123,18 @@ class NewsController extends BaseController
             return $this->exception('an error occurred', $e->getMessage(), 500);
         }
     }
+
+    public function showAllComments($slug)
+    {
+        $data = $this->newsService->showAllCommentInnews($slug) ;
+        return $this->success($data,"Danh sách comment được lấy thành công",200) ;
+    }
+
+    public function show5NewOfUser($user_id)
+    {
+        $data = $this->newsService->show5NewOfUser($user_id);
+        return $this->success($data,"Danh sách bài viết của công ty được lấy thành công",200);
+    }
+
+
 }

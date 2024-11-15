@@ -19,7 +19,7 @@ class LoginController extends Controller
     public function store(Request $request)
     {
         $client = new Client();
-        $response = $client->post(env('API_URL').'login', [
+        $response = $client->post(env('API_URL') . 'login', [
             'headers' => [
                 'Accept' => 'application/json',
             ],
@@ -30,7 +30,7 @@ class LoginController extends Controller
         ]);
         $data = json_decode($response->getBody());
         if ($data->status == 'success') {
-            $token = $client->get(env('API_URL').'user', [
+            $token = $client->get(env('API_URL') . 'user', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $data->token,
@@ -44,6 +44,33 @@ class LoginController extends Controller
             return redirect()->back()->withErrors($data['errors'])->withInput();
         }
     }
+
+
+    public function loginGoole()
+    {
+        $client = new Client();
+
+        try {
+            // Gửi yêu cầu đến API để lấy URL đăng nhập Google
+            $response = $client->get(env('API_URL') . 'get-google-sign-in-url', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ]);
+            $data = json_decode($response->getBody());
+
+            if ($data->status == 'success') {
+                // Chuyển hướng người dùng đến URL đăng nhập Google
+                return redirect()->away($data->data); // `data` chứa URL đăng nhập Google
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Không lấy được URL đăng nhập Google.']);
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi khi kết nối đến API: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function clearSession()
     {
         Session::forget('token');
@@ -67,6 +94,7 @@ class LoginController extends Controller
 
         $data = json_decode($response->getBody());
         if ($data->status === 'success') {
+            Session::flush() ;
             Session::forget('token');
             Session::forget('user');
             Auth::guard('web')->logout();

@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     {{-- link css --}}
     <link rel="stylesheet" href="{{ asset('frontend/css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleLoading.css') }}">
@@ -29,7 +30,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/styleLogin.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleBlog.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('frontend/css/styleNewDetail.css') }}">
     @stack('style')
 </head>
 
@@ -49,12 +50,13 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script>
         AOS.init();
     </script>
 
-    @stack('script')
+    @stack('scripts')
 </body>
 
 </html>

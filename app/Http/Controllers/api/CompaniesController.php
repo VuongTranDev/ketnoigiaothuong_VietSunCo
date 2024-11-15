@@ -26,13 +26,10 @@ class CompaniesController extends BaseController
         try {
             $limit = $request->input('limit', 12);
             $page = $request->input('page', 1);
-
             $companies = $this->companyService->show($page, $limit);
-
             $formattedData = collect($companies->items())->map(function ($item) {
                 return $this->companyService->formatData($item);
             })->toArray();
-
             $formattedPagination = $this->companyService->formatPaginate($companies);
 
             return $this->successWithPagination(

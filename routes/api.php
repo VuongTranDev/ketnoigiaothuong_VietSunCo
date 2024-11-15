@@ -10,6 +10,7 @@ use App\Http\Controllers\api\CompanyCategoryController;
 use App\Http\Controllers\api\NewsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\GoogleController;
 use App\Http\Controllers\api\MessageController;
 
 use App\Models\News;
@@ -32,7 +33,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-Route::apiResource('comments',CommentAPIController::class);
 
 Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember') ;
 
@@ -40,7 +40,7 @@ Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember')
 Route::fallback(function () {
     return response()->json([
         'status' => 'error',
-        'message' => 'slug not exist!'
+        'message' => 'Lỗi api'
     ], 404);
 });
 
@@ -48,16 +48,13 @@ Route::fallback(function () {
 Route::apiResource('/company', CompaniesController::class);
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
 Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
+Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
+Route::get('new/newOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
 Route::apiResource('/category', CategoriesController::class);
 Route::apiResource('/company-category', CompanyCategoryController::class);
 Route::apiResource('/address', AddressController::class);
+Route::apiResource('/comments',CommentAPIController::class);
 
-// Route::prefix('companies')->group(function () {
-//     Route::apiResource('/', CompaniesController::class);
-//     Route::get('/', [CompaniesController::class, 'index']);
-//     Route::get('/{id}', [CompaniesController::class, 'show']);
-//     Route::post('/store', [CompaniesController::class, 'store']);
-// });
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
@@ -74,4 +71,9 @@ Route::middleware('auth:sanctum')->get('/messages/{userId}', [MessageController:
 Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
 
 //
+
+
+Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl'])->name('loginGoogle');
+Route::middleware('web')->get('/google-callback', [GoogleController::class, 'loginCallback']);
+
 

@@ -28,7 +28,6 @@ class NewsController extends BaseController
     {
         try {
             $news = $this->fetchDataFromApi("new");
-
             $moreNews = $this->fetchDataFromApi("new/?limit=5");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
@@ -48,13 +47,18 @@ class NewsController extends BaseController
     {
         try {
             $news = $this->fetchDataSlugFromApi("new/slug/{$slug}");
-
             $moreNews = $this->fetchDataFromApi("new?limit=5");
+            $newComment = $this->fetchDataFromApi("new/comment/{$slug}");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];
             $moreNews = [];
+            $comments= [];
         }
-        return view('frontend.news.new-detail', compact('news', 'moreNews'));
+        return view('frontend.news.new-detail', compact('news', 'moreNews','newComment'));
     }
+
+
+
+    
 }

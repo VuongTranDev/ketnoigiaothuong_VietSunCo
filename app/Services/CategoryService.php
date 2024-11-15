@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Validator;
 class CategoryService {
     /**
      * Retrieve all categories data.
-     * @param Request $request
      * @return Categories[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function show(Request $request) {
+    public function show()
+    {
         return Categories::get();
     }
 
@@ -21,7 +21,8 @@ class CategoryService {
      * @param int $id
      * @return Categories|Categories[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function showById($id) {
+    public function showById($id)
+    {
         return Categories::find($id);
     }
 

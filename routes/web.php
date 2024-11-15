@@ -5,6 +5,7 @@ use App\Http\Controllers\auth\LoginController;
 
 use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\backend\HomeController as BackendHomeController;
+use App\Http\Controllers\frontend\CommentsController;
 use App\Http\Controllers\frontend\CompaniesController as FrontendCompaniesController;
 use App\Http\Controllers\frontend\DashboardController;
 
@@ -34,6 +35,10 @@ Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDet
 
 Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
 Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
+Route::get('/loginGG/post', [LoginController::class, 'loginGoole'])->name('auth.login-google');
+Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+
 
 Route::get('/regis', [RegisterController::class, 'create'])->name('get.register');
 Route::post('/register/post', [RegisterController::class, 'store'])->name('auth.register');
@@ -45,6 +50,5 @@ Route::get('getsession',[LoginController::class,'someFunction']);
 
 Route::get('clearsession',[LoginController::class,'clearSession']);
 
+Route::post('/postComment',[CommentsController::class,'createComment'])->name('postComment');
 
-Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
-Route::get('/register', [LoginController::class, 'register'])->name('auth.register');

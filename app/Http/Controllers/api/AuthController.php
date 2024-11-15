@@ -25,6 +25,9 @@ class AuthController extends BaseController
         }
         return $this->success($result['data'], 'Register success', 201);
     }
+
+
+    
     public function login(Request $request)
     {
         $request->validate([
