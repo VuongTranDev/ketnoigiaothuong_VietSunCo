@@ -32,8 +32,8 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $companycategory->map(fn($category) => $this->companyCategoryService->formatData($category)),
-                200,
-                'Company categories retrieved successfully'
+                'Company categories retrieved successfully',
+                200
             );
         } catch (\Exception $e) {
             return $this->exception('An error occurred while retrieving company categories', $e->getMessage(), 500);
@@ -57,8 +57,8 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $this->companyCategoryService->formatData($companyCategory),
-                201,
-                'Company category created successfully'
+                'Company category created successfully',
+                201
             );
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
@@ -86,6 +86,25 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $this->companyCategoryService->formatData($companycategory),
+                'Company category retrieved successfully',
+                200
+            );
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving the company category', $e->getMessage(), 500);
+        }
+    }
+
+    public function showCategoryByCompanyId(string $id)
+    {
+        try {
+            $companycategory = $this->companyCategoryService->showCategoryByCompanyId($id);
+
+            if ($companycategory->isEmpty()) {
+                return $this->failed('Company category not found!', 404);
+            }
+
+            return $this->success(
+                $companycategory,
                 'Company category retrieved successfully',
                 200
             );

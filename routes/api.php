@@ -46,11 +46,19 @@ Route::fallback(function () {
 
 
 Route::apiResource('/company', CompaniesController::class);
+Route::get('company/slug/{slug}', [CompaniesController::class, 'showBySlug'])->name('company.showBySlug');
+Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailCompany'])->name('company.showDetailCompany');
+
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
 Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
+
 Route::apiResource('/category', CategoriesController::class);
+Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
+
 Route::apiResource('/company-category', CompanyCategoryController::class);
+
 Route::apiResource('/address', AddressController::class);
+Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('address.showAddressByIdCompany');
 
 // Route::prefix('companies')->group(function () {
 //     Route::apiResource('/', CompaniesController::class);

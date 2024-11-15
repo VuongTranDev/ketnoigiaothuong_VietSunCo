@@ -29,7 +29,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tin-tuc', [NewsController::class, 'news'])->name('news');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'newsDetail'])->name('news.detail');
 
-Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
+Route::get('/chi-tiet-cong-ty/{slug}', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
 
 
 Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
@@ -46,5 +46,5 @@ Route::get('getsession',[LoginController::class,'someFunction']);
 Route::get('clearsession',[LoginController::class,'clearSession']);
 
 
-Route::get('/login', [LoginController::class, 'login'])->name('auth.login');
-Route::get('/register', [LoginController::class, 'register'])->name('auth.register');
+Route::get('/login', [LoginController::class, 'create'])->name('auth.login');
+// Route::get('/register', [LoginController::class, 'register'])->name('auth.register');

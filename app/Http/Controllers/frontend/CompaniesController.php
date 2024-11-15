@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categories;
+use App\Models\Companies;
+use App\Models\CompanyCategory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
@@ -10,9 +13,22 @@ use Illuminate\Support\Facades\Log;
 
 class CompaniesController extends BaseController
 {
-    public function companyDetail()
+    protected $client;
+    protected $url;
+    public function __construct(Client $client)
     {
-        return view('frontend.company.company-detail');
+        $this->client = $client;
+        $this->url = env('API_URL');
+    }
+    public function companyDetail($slug)
+    {
+        $company = $this->fetchDataFromApi("company/slug/{$slug}");
+
+        $address = $this->fetchDataFromApi("address/company/{$company->id}");
+
+        $categories = collect($this->fetchDataFromApi('category/company/' . $company->id));
+
+        return view('frontend.company.company-detail', compact('company', 'address', 'categories'));
     }
 
 
