@@ -79,6 +79,20 @@ class AddressController extends BaseController
         }
     }
 
+    public function showAddressByIdCompany($id) {
+        try {
+            $address = $this->addressService->showAddressByIdCompany($id);
+
+            if ($address == null) {
+                return $this->failed('Address not found', 404);
+            }
+
+            return $this->success($this->addressService->formatData($address), 'address retrieved successfully', 200);
+        } catch (\Exception $e) {
+            return $this->exception('an error occurred while retrieving address', $e->getMessage(), 500);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */

@@ -30,6 +30,11 @@ class CompanyService
         return Companies::with('user')->find($id);
     }
 
+    public function showBySlug($slug)
+    {
+        return Companies::with('user')->where('slug', $slug)->first();
+    }
+
     /**
      * Format company data for a structured API response.
      *

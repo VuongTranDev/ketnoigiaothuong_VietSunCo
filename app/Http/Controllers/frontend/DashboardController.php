@@ -10,4 +10,8 @@ class DashboardController extends Controller
     public function index() {
         return view('frontend.admin.dashboard.index');
     }
+
+    public function partner() {
+        return view('frontend.partner.index');
+    }
 }

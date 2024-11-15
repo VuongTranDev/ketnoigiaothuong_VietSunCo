@@ -10,7 +10,7 @@
         </nav>
 
         <div class="row">
-            <div class="col-lg-9 col-9" style="color: #777;">
+            <div class="col-lg-9" style="color: #777;">
 
                 @foreach ($news as $item)
                     <div class="news-group">
@@ -52,7 +52,7 @@
                 </nav>
             </div>
 
-            <div class="col-lg-3 col-3" style="color: #777;">
+            <div class="col-lg-3" style="color: #777;">
                 @include('frontend.news.components.feature-sidebar')
             </div>
         </div>

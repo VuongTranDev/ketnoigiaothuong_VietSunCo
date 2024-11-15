@@ -82,6 +82,21 @@ class CompaniesController extends BaseController
         );
     }
 
+    public function showBySlug($slug)
+    {
+        $company = $this->companyService->showBySlug($slug);
+
+        if (!$company) {
+            return $this->failed('company not found!', 404);
+        }
+
+        return $this->success(
+            $this->companyService->formatData($company),
+            'company retrieved successfully',
+            200
+        );
+    }
+
     /**
      * Update the specified resource in storage.
      */

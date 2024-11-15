@@ -46,7 +46,7 @@ class NewsController extends BaseController
     public function newsDetail(string $slug)
     {
         try {
-            $news = $this->fetchDataSlugFromApi("new/slug/{$slug}");
+            $news = $this->fetchDataFromApi("new/slug/{$slug}");
             $moreNews = $this->fetchDataFromApi("new?limit=5");
             $newComment = $this->fetchDataFromApi("new/comment/{$slug}");
         } catch (RequestException $e) {
@@ -60,5 +60,5 @@ class NewsController extends BaseController
 
 
 
-    
+
 }
