@@ -1,7 +1,7 @@
 {{-- start loading page --}}
 <div class="loading">
     <div class="loader" id="loader">
-        <div class="box">
+        {{-- <div class="box">
             <div class="logo">
                 <img src="{{ asset('frontend/image/logo.png') }}" alt="Công ty TNHH Thương Mại Dịch Vụ VietSunCo"
                     width="100">
@@ -10,7 +10,7 @@
         <div class="box"></div>
         <div class="box"></div>
         <div class="box"></div>
-        <div class="box"></div>
+        <div class="box"></div> --}}
     </div>
 </div>
 

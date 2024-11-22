@@ -100,4 +100,6 @@ class CategoriesController extends BaseController
             return $this->exception('an error occurred', $e->getMessage(), 500);
         }
     }
+
+   
 }

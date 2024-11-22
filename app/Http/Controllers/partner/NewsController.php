@@ -4,10 +4,13 @@ namespace App\Http\Controllers\partner;
 
 use App\DataTables\NewsDatatables;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\frontend\BaseController;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Session;
 
-class NewsController extends Controller
+class NewsController extends BaseController
 {
     protected $client;
     public function __construct(Client $client)
@@ -24,6 +27,7 @@ class NewsController extends Controller
         $data = json_decode($response->getBody());
         return view('frontend.partner.news.index')->with('data', $data);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,7 +57,7 @@ class NewsController extends Controller
             return redirect()->route('partner.news.index')->with('error', 'Thêm tin tức mới thất bại!');
         }
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -97,12 +101,26 @@ class NewsController extends Controller
             return redirect()->route('partner.news.index')->with('error', 'Cập nhật tin tức thất bại!');
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
     }
+
+    public function hotNews()
+    {
+        try {
+            //
+            $user = Session::get('user') ;
+            $url = config('api.base_url') . "new/show5NewOfUser/{$user->id}";
+            $response = $this->client->request('GET', $url);
+            $news = (json_decode($response->getBody(),false))->data ;
+
+            return view('frontend.partner.news.hotnew', compact('news'));
+            } catch (RequestException $e) {
+            \Log::error('API request failed: ' . $e->getMessage());
+            $news = [];
+        }
+    }
+
+
 }

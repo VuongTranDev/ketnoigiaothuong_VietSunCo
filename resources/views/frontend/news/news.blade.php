@@ -23,7 +23,7 @@
                                 <h5 class="news-title font-weight-bold mb-1">{{ $item->title }}</h5>
                                 <div class="news-meta text-muted mb-2">
                                     <span class="news-author font-weight-bold">VietSunCo</span> - <span
-                                        class="news-date">02/10/2024</span>
+                                        class="news-date">02/11/2024</span>
                                 </div>
                                 <p class="news-description mb-0">
                                     {{ strip_tags($item->content) }}

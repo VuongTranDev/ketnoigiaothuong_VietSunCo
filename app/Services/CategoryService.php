@@ -70,4 +70,12 @@ class CategoryService {
         $category->delete();
         return $category;
     }
+
+
+    // public function countNewsOfUser($user_id)
+    // {
+    //     // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
+    //     return Cate::where('user_id', $user_id)
+    //     ->count();
+    // }
 }

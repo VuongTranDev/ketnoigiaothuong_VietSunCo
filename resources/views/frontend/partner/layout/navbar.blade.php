@@ -12,7 +12,9 @@
                 <img alt="image" style="width: 40px;height: 40px;
         object-fit: cover;"
                     src="{{ asset('frontend/image/icon.png') }}" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block">Hi, </div>
+                <div class="d-sm-none d-lg-inline-block">@php
+                    echo session('user')->email ;
+                @endphp</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="" class="dropdown-item has-icon">

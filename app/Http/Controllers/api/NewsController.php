@@ -133,8 +133,19 @@ class NewsController extends BaseController
     public function show5NewOfUser($user_id)
     {
         $data = $this->newsService->show5NewOfUser($user_id);
+        \Log::info("data". json_encode($data)) ;
         return $this->success($data,"Danh sách bài viết của công ty được lấy thành công",200);
     }
+
+
+    public function countNewsOfUser($user_id)
+    {
+        $data = $this->newsService->countNewsOfUser($user_id);
+        \Log::info("data". json_encode($data)) ;
+        return $this->success($data,"Số lượng bài viết của công ty",200);
+    }
+
+
 
 
 }

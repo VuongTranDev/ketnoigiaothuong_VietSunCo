@@ -22,6 +22,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/styleNews.css') }}">
 
 
     {{-- @if ($settings->layout === 'RTL')
@@ -67,6 +68,7 @@
 
     <!-- General JS Scripts -->
     <script src="{{ asset('backend/assets/modules/jquery.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('backend/assets/modules/popper.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/tooltip.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>

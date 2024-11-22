@@ -34,9 +34,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember') ;
-
-
 Route::fallback(function () {
     return response()->json([
         'status' => 'error',
@@ -45,6 +42,10 @@ Route::fallback(function () {
 });
 
 
+
+Route::post('/report/statisticMember', [ReportAPIController::class,'statisticMember']) ;
+Route::get('report/countUser',[ReportAPIController::class,'countUser']);
+
 Route::apiResource('/company', CompaniesController::class);
 Route::get('company/slug/{slug}', [CompaniesController::class, 'showBySlug'])->name('company.showBySlug');
 Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailCompany'])->name('company.showDetailCompany');
@@ -52,7 +53,9 @@ Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailComp
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
 Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
 Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
-Route::get('new/newOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
+Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
+Route::get('new/countNewsOfUser/{user_id}',[NewsController::class,'countNewsOfUser']);
+
 Route::apiResource('/category', CategoriesController::class);
 Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
 
@@ -61,7 +64,6 @@ Route::apiResource('/company-category', CompanyCategoryController::class);
 Route::apiResource('/address', AddressController::class);
 Route::apiResource('/comments',CommentAPIController::class);
 Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('address.showAddressByIdCompany');
-
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');

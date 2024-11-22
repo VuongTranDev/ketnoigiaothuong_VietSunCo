@@ -17,5 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', [DashboardController::class, 'partner']);
+Route::get('/dashboard', [DashboardController::class, 'partner'])->name('dashboard');
+Route::get('/news/hotnews', [NewsController::class, 'hotNews'])->name('news.hotnews');
 Route::resource('news', NewsController::class);

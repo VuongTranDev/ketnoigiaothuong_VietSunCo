@@ -166,8 +166,15 @@ class NewsService
         return News::withCount('comments')
         ->where('user_id', $user_id)
         ->orderBy('comments_count', 'desc')
-        ->limit(2)
+        ->limit(5)
         ->get();
+    }
+
+    public function countNewsOfUser($user_id)
+    {
+        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
+        return News::where('user_id', $user_id)
+        ->count();
     }
 
 }
