@@ -19,9 +19,6 @@ namespace App\Models{
  * @property string|null $details
  * @property string|null $address
  * @property int $company_id
- * @property int $province_id
- * @property int $district_id
- * @property int $ward_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Companies $companies
@@ -32,11 +29,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereDetails($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereDistrictId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereProvinceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereWardId($value)
  */
 	class Address extends \Eloquent {}
 }
@@ -77,7 +71,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\News $news
- * @property-read \App\Models\Users $users
+ * @property-read \App\Models\Users $user
  * @method static \Illuminate\Database\Eloquent\Builder|Comments newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comments newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comments query()
@@ -328,9 +322,10 @@ namespace App\Models{
  *
  * @property int $id
  * @property string|null $title
+ * @property string|null $slug
  * @property string|null $tag_name
  * @property string|null $content
- * @property string $image
+ * @property string|null $image
  * @property int $cate_id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -347,6 +342,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|News whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereTagName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereUpdatedAt($value)
@@ -431,12 +427,12 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property string|null $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
+ * @property string|null $password
  * @property int|null $status
  * @property int $role_id
+ * @property string|null $google_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -451,8 +447,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRoleId($value)
