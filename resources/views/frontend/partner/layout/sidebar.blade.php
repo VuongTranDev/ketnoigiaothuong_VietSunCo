@@ -24,13 +24,13 @@
                     <li class=""><a class="nav-link" href="">Địa chỉ</a></li>
                 </ul>
             </li>
-            <li class="dropdown {{ setActive(['partner.news.*', 'partner.blog-comments.index']) }}">
+            <li class="dropdown {{ setActive(['partner.news.*', 'partner.news.*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fab fa-blogger-b"></i>
                     <span>Quản lý tin tức</span></a>
                 <ul class="dropdown-menu">
-                    <li class=""><a class="nav-link"
+                    <li class="{{ setActive(['partner.news.index']) }}"><a class="nav-link"
                             href="{{ route('partner.news.index') }}">Tin tức</a></li>
-                    <li class=""><a class="nav-link"
+                    <li class="{{ setActive(['partner.news.hotnews']) }}"><a class="nav-link"
                             href="{{ route('partner.news.hotnews') }}">Tin tức hot </a></li>
                 </ul>
             </li>

@@ -23,7 +23,6 @@ class AuthController extends BaseController
     {
         $result =  $this->authService->register($request);
 
-        dd($result);
         if (!$result['status']) {
             return $this->failed('Register failed',  400, $result['errors']);
         }

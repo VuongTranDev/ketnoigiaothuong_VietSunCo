@@ -31,25 +31,30 @@
                 <div class="company-info">
                     <table class="info-table">
                         <tr>
-                            <td><strong>Tên công ty:</strong></td>
-                            <td>{{ @$company->company_name }}</td>
+                            <td><b>Tên công ty:</b></td>
+                            <td>{{ $company->company_name ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Tên viết tắt:</strong></td>
-                            <td>{{ @$company->short_name }}</td>
+                            <td><b>Tên viết tắt:</b></td>
+                            <td>{{ $company->short_name ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Người đại diện:</strong></td>
-                            <td>{{ @$company->representative }}</td>
+                            <td><b>Người đại diện:</b></td>
+                            <td>{{ $company->representative ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Lĩnh vực:</strong></td>
+                            <td><b>Lĩnh vực:</b></td>
                             <td>
-                                @foreach ($categories as $category)
-                                    {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
-                                @endforeach
+                                @if (!empty($categories) && $categories->isNotEmpty())
+                                    @foreach ($categories as $category)
+                                        {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                @else
+                                    Đang cập nhật
+                                @endif
                             </td>
                         </tr>
+
                         {{-- <tr>
                             <td><strong>Khu vực:</strong></td>
                             <td>Miền nam</td>
@@ -116,10 +121,30 @@
                 <div class="card">
                     <h3 class="company-name-detail">{{ @$company->company_name }}</h3>
                     <div class="info">
-                        <p><i class="fas fa-envelope"></i> hi@vietsunco.com</p>
-                        <p><i class="fa-solid fa-globe"></i> <a href="{{ $company->link }}">{{ @$company->link }}</a></p>
-                        <p><i class="fas fa-phone-alt"></i> {{ @$company->phone_number }}</p>
-                        <p><i class="fas fa-map-marker-alt"></i> {{ @$address->address }}</p>
+                        {{-- <p><i class="fas fa-envelope"></i>
+                            <a href="mailto:">{{ $company->email ?? 'Đang cập nhật' }}</a>
+                        </p> --}}
+                        <p><i class="fas fa-envelope"></i>
+                            <a href="mailto:">hi@vietsunco.com</a>
+                        </p>
+                        <p><i class="fa-solid fa-globe"></i>
+                            <a href="{{ $company->link ?? '#' }}">{{ $company->link ?? 'Đang cập nhật' }}</a>
+                        </p>
+                        <p><i class="fas fa-phone-alt"></i>
+                            <a
+                                href="callto:{{ $company->phone_number ?? '' }}">{{ $company->phone_number ?? 'Đang cập nhật' }}</a>
+                        </p>
+                        @if (@$address->address == null)
+                            <p><i class="fas fa-map-marker-alt"></i> Đang cập nhật</p>
+                        @else
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode(@$address->address) }}"
+                                    target="_blank">
+                                    {{ @$address->address }}
+                                </a>
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -309,6 +334,15 @@
         .info i {
             margin-right: 5px;
             color: #3EAEF4;
+        }
+
+        .info p a {
+            color: #444;
+            transition: all linear 0.2s;
+        }
+
+        .info p a:hover {
+            color: #1380c4;
         }
     </style>
 @endsection

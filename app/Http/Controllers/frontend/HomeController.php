@@ -22,13 +22,14 @@ class HomeController extends BaseController
 
     public function index()
     {
-
         try {
             $apiUrl = $this->url . "company";
             $response = $this->client->request('GET', $apiUrl);
             $data = json_decode($response->getBody()->getContents());
 
             $companies = $data->data ?? [];
+
+
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $companies = [];
