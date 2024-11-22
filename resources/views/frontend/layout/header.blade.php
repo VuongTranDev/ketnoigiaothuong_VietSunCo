@@ -8,7 +8,7 @@
                     <a href="/"><i class="fa-solid fa-envelope me-2" style="color: #fff;"></i>hi@vietsunco.com</a>
                 </div>
                 <div>
-                    <a class="ms-2" href="">Đăng ký thành viên
+                    <a class="ms-2" href="#" id="openForm">Đăng ký thành viên
                         <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
                     </a>
                     <a href="">
@@ -23,6 +23,37 @@
             </div>
         </div>
     </nav>
+    <!-- Form đăng ký -->
+    <div class="full-screen-container" id="registerForm" style="display: none;">
+        <div class="form-container">
+            <h2>Đăng ký thành viên</h2>
+            <div class="form-group">
+                <label>Họ và tên*</label>
+                <input type="text" id="representative" placeholder="Nhập tại đây">
+            </div>
+            <div class="form-group half-width">
+                <label>Số điện thoại*</label>
+                <input type="text" id="phone_number" placeholder="Nhập tại đây">
+            </div>
+            <div class="form-group half-width">
+                <label>Tên công ty*</label>
+                <input type="text" id="company_name" placeholder="Nhập tại đây">
+            </div>
+            <div class="form-group">
+                <label>Tên viết tắt của công ty*</label>
+                <input type="text" id="short_name" placeholder="Nhập tại đây">
+            </div>
+            <div class="form-group">
+                <label>Link của công ty*</label>
+                <input type="text" id="link" placeholder="Nhập tại đây">
+            </div>
+            <div class="form-group">
+                <label>Thông tin công ty</label>
+                <textarea id="content" placeholder="Thông tin công ty"></textarea>
+            </div>
+            <button class="submit-btn" id="submitCompanyForm">Gửi thông tin</button>
+        </div>
+    </div>
 
     <nav class="navbar navbar-expand-lg navbar-bottom">
         <div class="container-xl">
@@ -77,10 +108,10 @@
                             <a href="" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
                         </form> --}}
                     <div class="d-flex align-items-center">
-                        <form class="d-flex align-items-center search me-3" role="search" action="" method="GET"
-                            autocomplete="off">
-                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..." aria-label="Search"
-                                name="query" value="{{ request('query') }}">
+                        <form class="d-flex align-items-center search me-3" role="search" action=""
+                            method="GET" autocomplete="off">
+                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..."
+                                aria-label="Search" name="query" value="{{ request('query') }}">
                             <a class="search-btn" href="#">
                                 <i class="fas fa-search"></i>
                             </a>
@@ -96,15 +127,17 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{ route('partner.dashboard') }}">Hồ sơ</a></li>
-                                        <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                                    <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST"
+                                            style="display: none;">
                                             @csrf <!-- Include CSRF token for security -->
                                         </form>
-                                        <a class="dropdown-item" href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <a class="dropdown-item" href=""
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Đăng xuất
                                         </a>
                                     </li>
@@ -126,3 +159,21 @@
         </div>
     </nav>
 </header>
+
+@push('script')
+    <script>
+        // JavaScript để hiển thị và ẩn form
+        document.getElementById('openForm').addEventListener('click', function(event) {
+            event.preventDefault(); // Ngăn không cho link chuyển trang
+            document.getElementById('registerForm').style.display = 'flex';
+        });
+
+        // Đóng form khi nhấn vào khu vực bên ngoài form
+        document.getElementById('registerForm').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    </script>
+
+@endpush

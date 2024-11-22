@@ -34,8 +34,10 @@
                     <span>Đăng nhập bằng</span>
                 </div>
                 <div class="google-login">
-                    <a href="{{ route('auth.login-google') }}">
-                    <img src="{{ asset('frontend/image/ic-google.png') }}" alt="Google Logo"></a>
+
+                    <a href="{{ route('google.login') }}">
+                        <img src="{{ asset('frontend/image/ic-google.png') }}"  alt="Google Logo">
+                    </a>
                 </div>
             </form>
         </div>

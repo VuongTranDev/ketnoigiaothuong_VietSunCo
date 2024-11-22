@@ -12,6 +12,40 @@
                 <a href="{{ route('admin.dashboard') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
             <li class="menu-header">Mamager</li>
+            <li
+                class="dropdown {{ setActive([
+                    'brands.*',
+                    'products.*',
+                    'admin.products-image-gallery.*',
+                    'admin.products-variant.*',
+                    'admin.products-variant-item.*',
+                    'admin.seller-products.*',
+                    'admin.seller-pending-products.*',
+                ]) }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
+                    <span>Manage Companies</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ setActive(['admin.companies.index']) }}"><a class="nav-link" href="{{ route('admin.companies.index') }}">Companies</a></li>
+                    <li
+                        class="{{ setActive([
+                            'products.*',
+                            'admin.products-image-gallery.*',
+                            'admin.products-variant.*',
+                            'admin.products-variant-item.*',
+                            'admin.reviews.*',
+                        ]) }}">
+                        <a class="nav-link" href="">Products</a>
+                    </li>
+                    <li class="{{ setActive(['admin.seller-products.*']) }}"><a class="nav-link" href="">Seller
+                            Products</a></li>
+                    <li class="{{ setActive(['admin.seller-pending-products.*']) }}"><a class="nav-link"
+                            href="">Seller Pending Products</a></li>
+
+                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="">Product
+                            Reviews</a></li>
+
+                </ul>
+            </li>
 
 
 

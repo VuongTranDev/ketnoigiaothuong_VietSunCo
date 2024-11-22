@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class AuthService
 {
+
     public function register(Request $request)
     {
-        Log::info('Register user: ' . $request->email);
         $validator = Validator::make($request->all(), [
-            'password' => 'required|string',
-            'email' => 'required|email|unique:Users,email',
+            'password' => 'required|string|min:6',
+            'email' => 'required|email|unique:users,email',
         ]);
 
         if ($validator->fails()) {
@@ -28,11 +28,10 @@ class AuthService
         }
         $user = new Users();
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->status = 1;
         $user->role_id = 2;
         $user->save();
-
         return [
             'status' => true,
             'data' => $user
@@ -40,9 +39,36 @@ class AuthService
     }
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
+        $user = Users::where('email', $request->email)->first();
 
+        if ($user && $user->remember_token) {
+            return [
+                'message' => 'User is already logged in. Please logout first.',
+                'status' => false,
+                'errors' => 'User is already logged in. Please logout first.'
 
+            ];
+        }
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return [
+                'message' => 'Unauthorized',
+                'errors' => 'The provided credentials are incorrect.',
+                'status' => false
+            ];
+        }
+        $token = $user->createToken('auth_token')->plainTextToken;
+        $user->remember_token = $token;
+        $user->save();
+        return [
+            'message' => 'Login success',
+            'token' => $token,
+            'status' => 'success'
+        ];
     }
 
     public function changeStatusUser($id)
@@ -74,8 +100,8 @@ class AuthService
         $user = $request->user();
         if ($user) {
             $user->remember_token = null;
-            $user->save() ;
-            $user->currentAccessToken()->delete();
+            $request->user()->currentAccessToken()->delete();
+            $user->save();
             return [
                 'status' => 'success',
                 'message' => 'Logged out successfully.'
