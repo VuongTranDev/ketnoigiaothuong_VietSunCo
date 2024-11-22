@@ -29,7 +29,7 @@ class NewsController extends BaseController
         try {
             $news = $this->fetchDataFromApi("new");
 
-            $moreNews = $this->fetchDataFromApi("new/?limit=5");
+            $moreNews = $this->fetchDataFromApi("new?limit=5");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];

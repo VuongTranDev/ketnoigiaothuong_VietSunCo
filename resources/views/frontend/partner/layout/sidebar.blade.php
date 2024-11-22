@@ -1,15 +1,15 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('admin.dashboard') }}" style="color: #6777ef;">Ketnoigiaothuong.com</a>
+            <a href="{{ route('partner.dashboard') }}" style="color: #6777ef;">Ketnoigiaothuong.com</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{ route('admin.dashboard') }}">||</a>
+            <a href="{{ route('partner.dashboard') }}">||</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class="dropdown {{ setActive(['admin.dashboard']) }}">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
+            <li class="dropdown {{ setActive(['partner.dashboard']) }}">
+                <a href="{{ route('partner.dashboard') }}" class="nav-link"><i
                         class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
             <li class="menu-header">Mamager</li>
