@@ -126,7 +126,7 @@
                                     <i class="fa-solid fa-user" style="font-size: 20px;"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Hồ sơ</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('partner.dashboard') }}">Hồ sơ</a></li>
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\backend\NewsController;
+use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\frontend\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\CompaniesController;

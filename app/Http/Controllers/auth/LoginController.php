@@ -35,24 +35,49 @@ class LoginController extends Controller
         $data = json_decode($response->getBody());
 
         if ($data->status == 'success') {
-
-            if (Auth::attempt($credentials)) {
-
-                Session::put('token', $data->data);
-                Session::put('user', Auth::user());
-
-                return redirect()->route('home')->withSuccess('Đăng nhập thành công!');
-            } else {
-                return redirect()->back()->withErrors([
-                    'email' => 'Đăng nhập thất bại, không thể khởi tạo phiên.',
-                ])->withInput();
-            }
+            $token = $client->get(env('API_URL') . 'user', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $data->token,
+                ]
+            ]);
+            $token_info = json_decode($token->getBody());
+            Session::put('token', $data->token);
+            Session::put('user', $token_info);
+            return redirect()->route('home')->withSuccess('Đăng nhập thành công!');
         } else {
             return redirect()->back()->withErrors([
                 'email' => $data['message'] ?? 'Thông tin đăng nhập không hợp lệ.',
             ])->withInput();
         }
     }
+
+
+    public function loginGoole()
+    {
+        $client = new Client();
+
+        try {
+            // Gửi yêu cầu đến API để lấy URL đăng nhập Google
+            $response = $client->get(env('API_URL') . 'get-google-sign-in-url', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ]);
+            $data = json_decode($response->getBody());
+
+            if ($data->status == 'success') {
+                // Chuyển hướng người dùng đến URL đăng nhập Google
+                return redirect()->away($data->data); // `data` chứa URL đăng nhập Google
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Không lấy được URL đăng nhập Google.']);
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi khi kết nối đến API: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function clearSession()
     {
         Session::forget('token');
@@ -69,35 +94,15 @@ class LoginController extends Controller
             return redirect()->back()->withErrors(['error' => 'Vui lòng đăng nhập trước khi đăng xuất'])->withInput();
         }
 
-        try {
-            // Gửi yêu cầu logout đến API
-            $response = $client->post(env('API_URL') . 'logout', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
-                ],
-            ]);
-
-            // Kiểm tra phản hồi từ API
-            if ($response->getStatusCode() === 200) {
-                $data = json_decode($response->getBody(), true);
-
-                if ($data['status'] === 'success') {
-
-                    Session::forget('token');
-                    Session::forget('user');
-                    Auth::guard('web')->logout();
-
-                    toastr()->success('Đăng xuất thành công');
-                    return redirect()->route('home');
-                } else {
-                    return redirect()->back()->withErrors($data['errors'] ?? 'Lỗi không xác định')->withInput();
-                }
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Đăng xuất thất bại. Vui lòng thử lại sau'])->withInput();
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Không thể kết nối đến API: ' . $e->getMessage()])->withInput();
+        $data = json_decode($response->getBody());
+        if ($data->status === 'success') {
+            Session::flush() ;
+            Session::forget('token');
+            Session::forget('user');
+            Auth::guard('web')->logout();
+            return redirect()->route('home')->withSuccess('Đăng xuất thành công!');
+        } else {
+            return redirect()->back()->withErrors($data['errors'])->withInput();
         }
     }
 

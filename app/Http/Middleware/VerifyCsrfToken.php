@@ -12,6 +12,8 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'api/get-google-sign-in-url',
+        'api/google-callback',
     ];
+
 }

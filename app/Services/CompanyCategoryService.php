@@ -25,6 +25,15 @@ class CompanyCategoryService {
         return CompanyCategory::with('companies', 'categories')->find($id);
     }
 
+    public function showCategoryByCompanyId($id) {
+        return CompanyCategory::query()
+            ->leftJoin('categories', 'company_category.cate_id', '=', 'categories.id')
+            ->leftJoin('companies', 'company_category.company_id', '=', 'companies.id')
+            ->where('company_id', $id)
+            ->select('categories.*')
+            ->get();
+    }
+
     /**
      * Format company category data for a structured API response.
      * @param CompanyCategory $companycategory

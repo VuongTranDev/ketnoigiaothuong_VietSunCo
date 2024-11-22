@@ -10,7 +10,7 @@
         </nav>
 
         <div class="row">
-            <div class="col-lg-9 col-9" style="color: #777;">
+            <div class="col-lg-9" style="color: #777;">
 
                 @foreach ($news as $item)
                     <div class="news-group">
@@ -23,7 +23,7 @@
                                 <h5 class="news-title font-weight-bold mb-1">{{ $item->title }}</h5>
                                 <div class="news-meta text-muted mb-2">
                                     <span class="news-author font-weight-bold">VietSunCo</span> - <span
-                                        class="news-date">02/10/2024</span>
+                                        class="news-date">02/11/2024</span>
                                 </div>
                                 <p class="news-description mb-0">
                                     {{ strip_tags($item->content) }}
@@ -52,7 +52,7 @@
                 </nav>
             </div>
 
-            <div class="col-lg-3 col-3" style="color: #777;">
+            <div class="col-lg-3" style="color: #777;">
                 @include('frontend.news.components.feature-sidebar')
             </div>
         </div>

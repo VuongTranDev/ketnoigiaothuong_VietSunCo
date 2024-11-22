@@ -42,10 +42,10 @@ class NewsController extends Controller
         $data['cate_id'] = 1;
         $data['user_id'] = 1;
         $url = config('api.base_url') . "new";
-        $response = $this->client->request('POST', $url, [
+        $response = $this->client->request('POST', $url,
+        [
             'form_params' => $data
         ]);
-
         if($response->getStatusCode() == 201) {
             return redirect()->route('admin.news.index')->with('success', 'Thêm tin tức mới thành công!');
         }
@@ -68,9 +68,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $url = config('api.base_url') . "new/{$id}";
-
         $response = $this->client->request('GET', $url);
-
         $responseData = json_decode($response->getBody());
         $new = $responseData->data;
         return view('frontend.admin.news.edit')->with('new', $new);
@@ -84,7 +82,6 @@ class NewsController extends Controller
         $data = $request->only(['title', 'tag_name', 'content']);
         $data['cate_id'] = 1;
         $data['user_id'] = 1;
-
         $url = config('api.base_url') . "new/{$id}";
         $response = $this->client->request('PUT', $url, [
             'form_params' => $data
