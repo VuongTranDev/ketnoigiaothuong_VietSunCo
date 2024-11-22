@@ -38,7 +38,6 @@ class LoginGoogleController extends Controller
             ]);
 
             $apiResponse = json_decode($response->getBody()->getContents());
-            dd($apiResponse);
             if ($apiResponse->status === 'success') {
                 return redirect()->route('home')->with('success', 'Đăng nhập thành công');
             }
