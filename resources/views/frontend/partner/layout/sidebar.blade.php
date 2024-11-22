@@ -1,7 +1,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('admin.dashboard') }}" style="color: #6777ef;">Ketnoigiaothuong.com</a>
+            <a href="{{ route('home') }}" style="color: #6777ef;">Ketnoigiaothuong.com</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="{{ route('admin.dashboard') }}">||</a>
