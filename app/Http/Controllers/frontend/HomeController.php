@@ -5,8 +5,10 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\api\Controller;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends BaseController
 {
@@ -20,6 +22,7 @@ class HomeController extends BaseController
 
     public function index()
     {
+
         try {
             $apiUrl = $this->url . "company";
             $response = $this->client->request('GET', $apiUrl);

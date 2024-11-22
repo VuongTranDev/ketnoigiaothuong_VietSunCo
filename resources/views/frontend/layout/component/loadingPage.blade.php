@@ -15,18 +15,18 @@
 </div>
 
 <script>
-    window.addEventListener("load", function() {
-        const loading = document.querySelector('.loading');
-        loading.style.display = 'none';
-    });
-
     // window.addEventListener("load", function() {
-    //     // Hiển thị loading trong 5 giây
-    //     setTimeout(function() {
-    //         const loading = document.querySelector('.loading');
-    //         loading.style.display = 'none';
-    //     }, 1000); // 5000 ms = 5 giây
+    //     const loading = document.querySelector('.loading');
+    //     loading.style.display = 'none';
     // });
+
+    window.addEventListener("load", function() {
+        // Hiển thị loading trong 5 giây
+        setTimeout(function() {
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'none';
+        }, 200); // 5000 ms = 5 giây
+    });
 </script>
 
 {{-- end laoding page --}}

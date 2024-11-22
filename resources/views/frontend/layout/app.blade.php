@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/styleLogin.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleBlog.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
-
     @stack('style')
 </head>
 

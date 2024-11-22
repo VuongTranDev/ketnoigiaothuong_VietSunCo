@@ -23,9 +23,9 @@
                     'admin.seller-pending-products.*',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
-                    <span>Manage Products</span></a>
+                    <span>Manage Companies</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ setActive(['brands.index']) }}"><a class="nav-link" href="">Brands</a></li>
+                    <li class="{{ setActive(['admin.companies.index']) }}"><a class="nav-link" href="{{ route('admin.companies.index') }}">Companies</a></li>
                     <li
                         class="{{ setActive([
                             'products.*',
