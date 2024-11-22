@@ -35,9 +35,7 @@ class LoginController extends Controller
         $data = json_decode($response->getBody());
 
         if ($data->status == 'success') {
-
             if (Auth::attempt($credentials)) {
-
                 Session::put('token', $data->data);
                 Session::put('user', Auth::user());
 

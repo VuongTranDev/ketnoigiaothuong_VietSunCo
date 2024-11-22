@@ -18,5 +18,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
 
 // login google
 
+
 Route::get('login/google', [LoginGoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [LoginGoogleController::class, 'handleGoogleCallback'])->name('google.callback');

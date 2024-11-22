@@ -99,28 +99,21 @@ class AuthController extends BaseController
         }
         return $this->success($result['data'], 'Change status success', 200);
     }
+
     public function handleGoogleCallback(Request $request)
     {
         try {
             Log::info('Attempting to authenticate Google user.');
-            $googleUser = Socialite::driver('google')->stateless()->user();
-            if (!$googleUser) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Unable to retrieve Google user information.',
-                ], 400);
-            }
-
             $user = Users::updateOrCreate(
-                ['email' => $googleUser->getEmail()],
+                ['email' => $request->email],
                 [
-                    'name' => $googleUser->getName(),
-                    'google_id' => $googleUser->getId(),
-                    'email' => $googleUser->getEmail(),
+                    'google_id' => $request->google_id,
+                    'email' => $request->email,
                     'role_id' => 2,
+                    'status'=>1
                 ]
             );
-            Log::info('Attempting to authenticate Google user. 1 ');
+            Log::info('Attempting to authenticate Google user. '. json_encode($user));
 
             $token = $user->createToken('auth_token')->plainTextToken;
             $user->remember_token = $token;

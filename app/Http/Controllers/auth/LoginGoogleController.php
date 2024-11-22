@@ -4,6 +4,8 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Socialite;
 
@@ -24,11 +26,8 @@ class LoginGoogleController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            \Log::info("Start auth handle - redirect" ) ;
-
             $googleUser = Socialite::driver('google')->stateless()->user();
-            $response = $this->client->request('GET', $this->url . 'api/auth/google/callback',
-            [
+            $response = $this->client->request('GET', $this->url . 'auth/callback/google', [
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
@@ -41,6 +40,9 @@ class LoginGoogleController extends Controller
             ]);
             $apiResponse = json_decode($response->getBody()->getContents());
             if ($apiResponse->status === 'success') {
+                Session::put('token', $apiResponse->token);
+                Session::put('user', $apiResponse->user);
+
                 return redirect()->route('home')->with('success', 'Đăng nhập thành công');
             }
 
