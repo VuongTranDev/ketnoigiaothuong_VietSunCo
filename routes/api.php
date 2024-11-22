@@ -4,10 +4,12 @@
 use App\Http\Controllers\api\CommentAPIController;
 use App\Http\Controllers\api\ReportAPIController;
 use App\Http\Controllers\api\AddressController;
+use App\Http\Controllers\api\AdminApiController;
 use App\Http\Controllers\api\CategoriesController;
 use App\Http\Controllers\api\CompaniesController;
 use App\Http\Controllers\api\CompanyCategoryController;
 use App\Http\Controllers\api\NewsController;
+use App\Http\Controllers\frontend\DashboardController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\MessageController;
@@ -26,15 +28,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 
-Route::apiResource('comments',CommentAPIController::class);
+Route::apiResource('comments', CommentAPIController::class);
 
-Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember') ;
+Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember');
 
 
 Route::fallback(function () {
@@ -58,13 +60,17 @@ Route::apiResource('/address', AddressController::class);
 //     Route::get('/{id}', [CompaniesController::class, 'show']);
 //     Route::post('/store', [CompaniesController::class, 'store']);
 // });
+// Login google
 
+Route::get('auth/callback/google', [AuthController::class, 'handleGoogleCallback']);
+
+
+// Login bình thường
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
-
-Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'getInfo'])->name('user');
-Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'getInfo']);
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->post('changeStatus/{id}', [AuthController::class, 'changeStatusUser']);
 
 //Route::middleware('auth:sanctum')->get('/news/statistics', [NewsController::class, 'statistics'])->name('news.statistics');
@@ -73,5 +79,6 @@ Route::middleware('auth:sanctum')->post('/messages/send', [MessageController::cl
 Route::middleware('auth:sanctum')->get('/messages/{userId}', [MessageController::class, 'getMessages'])->name('messages.get');
 Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
 
-//
-
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    // Route::get('get-admin', [AdminApiController::class, 'index']);
+});

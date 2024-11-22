@@ -330,6 +330,7 @@ namespace App\Models{
  * @property string|null $title
  * @property string|null $tag_name
  * @property string|null $content
+ * @property string $image
  * @property int $cate_id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -345,6 +346,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|News whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereTagName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereUpdatedAt($value)
@@ -410,6 +412,8 @@ namespace App\Models{
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Users> $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Roles newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Roles newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Roles query()
@@ -430,7 +434,7 @@ namespace App\Models{
  * @property string|null $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property mixed $password
+ * @property string $password
  * @property int|null $status
  * @property int $role_id
  * @property string|null $remember_token
