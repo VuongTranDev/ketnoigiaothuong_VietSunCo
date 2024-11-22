@@ -26,7 +26,8 @@ class Users extends Authenticatable
         'password',
         'remember_token',
         'status',
-        'role_id', // Nếu bạn đang dùng trường role_id
+        'role_id',
+        'google_id', // Nếu bạn đang dùng trường role_id
         // Các trường khác cần được cho phép
     ];
 
