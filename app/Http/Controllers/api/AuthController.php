@@ -102,7 +102,6 @@ class AuthController extends BaseController
     public function handleGoogleCallback(Request $request)
     {
         try {
-
             Log::info('Attempting to authenticate Google user.');
             $googleUser = Socialite::driver('google')->stateless()->user();
             if (!$googleUser) {

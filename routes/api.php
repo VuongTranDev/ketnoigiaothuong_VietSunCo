@@ -92,6 +92,6 @@ Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageCo
 
 
 Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl'])->name('loginGoogle');
-Route::middleware('web')->get('/google-callback', [GoogleController::class, 'loginCallback']);
+Route::middleware('web')->get('/auth/google/callback', [GoogleController::class, 'loginCallback']);
 
 

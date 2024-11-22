@@ -18,27 +18,28 @@ class LoginGoogleController extends Controller
     }
     public function redirectToGoogle()
     {
+        \Log::info("Start auth - redirect" ) ;
         return Socialite::driver('google')->stateless()->redirect();
     }
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            \Log::info("Start auth handle - redirect" ) ;
 
-            $response = $this->client->request('GET', $this->url . 'api/auth/google/callback', [
+            $googleUser = Socialite::driver('google')->stateless()->user();
+            $response = $this->client->request('GET', $this->url . 'api/auth/google/callback',
+            [
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'query' => [
+                'query' =>
+                [
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
                 ]
-
             ]);
-
             $apiResponse = json_decode($response->getBody()->getContents());
-            dd($apiResponse);
             if ($apiResponse->status === 'success') {
                 return redirect()->route('home')->with('success', 'Đăng nhập thành công');
             }
