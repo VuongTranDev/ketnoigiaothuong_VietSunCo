@@ -43,7 +43,6 @@ class CompaniesController extends BaseController
             Log::error('API request failed: ' . $exception->getMessage());
             $companies = [];
         }
-
         return view('frontend.company.list-company', compact('companies'));
     }
     public function createCompany123(Request $request)

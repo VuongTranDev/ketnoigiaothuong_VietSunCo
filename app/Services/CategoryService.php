@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\Categories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Str;
 
 class CategoryService {
     /**
@@ -13,7 +15,7 @@ class CategoryService {
      */
     public function show()
     {
-        return Categories::get();
+        return Categories::all();
     }
 
     /**
@@ -34,17 +36,19 @@ class CategoryService {
     public function validateData($request) {
         return Validator::make($request->all(), [
             'name' => 'required|string',
-            'slug' => 'required|string',
         ]);
     }
 
     /**
      * Create a new category record in the database.
-     * @param Request $request
      * @return Categories|\Illuminate\Database\Eloquent\Model
      */
     public function create($request) {
-        return Categories::create($request->only('name', 'slug'));
+        $slug = Str::slug($request->name) ;
+        return Categories::create([
+            'name'=> $request->name,
+            'slug'=>$slug
+        ]);
     }
 
     /**
@@ -53,9 +57,14 @@ class CategoryService {
      * @param int $id
      * @return Categories|Categories[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
      */
-    public function update($request, $id) {
-        $category = Categories::findOrFail($id);
-        $category->update($request->only('name', 'slug'));
+    public function update($request) {
+        $category = Categories::findOrFail($request->id);
+        Log::info("sucess".$category);
+        $slug = Str::slug($request->name) ;
+        $category->update([
+            'name'=> $request->name,
+            'slug'=>$slug
+        ]);
         return $category;
     }
 
@@ -70,12 +79,4 @@ class CategoryService {
         $category->delete();
         return $category;
     }
-
-
-    // public function countNewsOfUser($user_id)
-    // {
-    //     // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
-    //     return Cate::where('user_id', $user_id)
-    //     ->count();
-    // }
 }

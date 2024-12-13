@@ -53,7 +53,9 @@ Route::post('/report/statisticMember', [ReportAPIController::class,'statisticMem
 Route::get('report/countUser',[ReportAPIController::class,'countUser']);
 
 Route::apiResource('/company', CompaniesController::class);
+Route::put('company/status/{id}',[CompaniesController::class,'changeStatus'])->name('company.changeStatus');
 Route::get('company/slug/{slug}', [CompaniesController::class, 'showBySlug'])->name('company.showBySlug');
+Route::get('company/detail/{id}', [CompaniesController::class, 'showById'])->name('company.showDetailById');
 Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailCompany'])->name('company.showDetailCompany');
 
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
@@ -62,7 +64,7 @@ Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name
 Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
 Route::get('new/countNewsOfUser/{user_id}',[NewsController::class,'countNewsOfUser']);
 
-Route::apiResource('/category', CategoriesController::class);
+Route::apiResource('/categories', CategoriesController::class)->names(['index' => 'api.categories']);
 Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
 
 Route::apiResource('/company-category', CompanyCategoryController::class);

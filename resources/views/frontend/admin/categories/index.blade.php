@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Tin tức</h1>
+            <h1>Categories</h1>
         </div>
         <div class="section-body">
             <div class="row">
@@ -12,7 +12,7 @@
                         <div class="card-header">
                             <h4>Tất cả tin tức</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.news.create') }}" class="btn btn-primary"><i
+                                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary"><i
                                         class="fas fa-plus"></i> Tạo mới</a>
                             </div>
                         </div>
@@ -23,7 +23,6 @@
                                         <th>STT</th>
                                         <th>Tiêu đề</th>
                                         <th>Tag</th>
-                                        <th>Nội dung</th>
                                         <th>Ngày tạo</th>
                                         <th>Ngày cập nhật</th>
                                         <th>Hành động</th>
@@ -37,6 +36,29 @@
         </div>
     </section>
 
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa tin tức</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">Tiêu đề</label>
+                            <input type="text" class="form-control" id="editTitle" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -44,7 +66,7 @@
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 ajax: {
-                    url: '{{ route('api.new') }}',
+                    url: '{{ route('api.categories') }}',
                     dataSrc: 'data'
                 },
                 columns: [{
@@ -53,22 +75,12 @@
                         render: function(data, type, row, meta) {
                             return meta.row + 1;
                         }
-                    }, {
-                        data: 'title'
                     },
                     {
-                        data: 'tag_name'
+                        data: 'name'
                     },
                     {
-                        data: 'content',
-                        render: function(data, type, row) {
-                            let parser = new DOMParser();
-                            let doc = parser.parseFromString(data, 'text/html');
-                            let textContent = doc.body.textContent || "";
-
-                            return textContent.length > 50 ? textContent.substring(0, 50) + '...' :
-                                textContent;
-                        }
+                        data: 'slug'
                     },
                     {
                         data: 'created_at',
@@ -88,14 +100,13 @@
                         orderable: false,
                         render: function(data, type, row) {
 
-                            let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row
-                                .id);
+                            let editUrl = `{{ route('admin.categories.edit', ':id') }}`.replace(':id', row.id);
 
                             return `
                                 <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
                                     <i class='far fa-edit'></i>
                                 </a>
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/categories/${row.id}">
                                     <i class='far fa-trash-alt'></i>
                                 </button>
                             `;
@@ -119,21 +130,20 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: `/api/new/${id}`,
+                            url: `/api/categories/${id}`,
                             type: 'DELETE',
                             success: function(response) {
                                 table.ajax.reload();
-
                                 Swal.fire(
                                     'Thành công!',
-                                    'Xóa tin tức thành công.',
+                                    'Delete category successfully.',
                                     'success'
                                 );
                             },
                             error: function(xhr) {
                                 Swal.fire(
                                     'Lỗi!',
-                                    'Đã xảy ra lỗi khi xóa.',
+                                    'Delete category unsuccessfully.',
                                     'error'
                                 );
                             }

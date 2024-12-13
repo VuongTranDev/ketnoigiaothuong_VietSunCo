@@ -6,6 +6,7 @@ use App\Models\Categories;
 use App\Services\CategoryService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 class CategoriesController extends BaseController
 {
     public $categoryService;
-
     /**
      * Summary of __construct
      * @param \App\Services\CategoryService $categoryService
@@ -29,7 +29,6 @@ class CategoriesController extends BaseController
     public function index()
     {
         $category = $this->categoryService->show();
-
         if ($category == null) {
             return $this->failed('category not found', 404);
         } else {
@@ -43,13 +42,10 @@ class CategoriesController extends BaseController
     public function store(Request $request)
     {
         $validator = $this->categoryService->validateData($request);
-
         if ($validator->fails()) {
             return $this->failed($validator->errors(), 422);
         }
-
         $category = $this->categoryService->create($request);
-
         return $this->success($category,  'category created successfully', 201);
     }
 
@@ -58,31 +54,28 @@ class CategoriesController extends BaseController
      */
     public function show(string $id)
     {
-
         $category = $this->categoryService->showById($id);
-
         if ($category == null) {
             $this->failed('category not found', 404);
         }
-
         return $this->success($category, 'category retrieved successfully', 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         $validator = $this->categoryService->validateData($request);
-
         if ($validator->fails()) {
             return $this->failed($validator->errors(), 422);
         }
         try {
-            $category = $this->categoryService->update($request, $id);
+            $category = $this->categoryService->update($request);
             return $this->success($category,  'category updated successfully', 200);
         } catch (ModelNotFoundException $e) {
-            return $this->failed('category not found!', 422);
+            Log::info("message".$e->getMessage());
+            return $this->failed('category not found!', 404);
         }
     }
 
@@ -101,5 +94,5 @@ class CategoriesController extends BaseController
         }
     }
 
-   
+
 }
