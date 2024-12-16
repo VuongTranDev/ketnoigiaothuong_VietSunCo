@@ -59,7 +59,7 @@ class CompanyCategoryService {
         return Validator::make($request->all(), [
             'cate_id' => 'required',
             'company_id' => 'required',
-            'description' => 'required',
+            // 'description' => 'required',
         ]);
     }
 
@@ -95,4 +95,37 @@ class CompanyCategoryService {
         $companycategory->delete();
         return $companycategory;
     }
+
+    
+
+    public function store(Request $request)
+    {
+        \Log::info('Request Data Cate:', $request->all());
+
+
+        $validator = Validator::make($request->all(), [
+            'cate_id' => 'required',
+            'company_id' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            \Log::error('Validation Errors:', $validator->errors()->toArray());
+            return [
+                'status' => false,
+                'errors' => $validator->errors()
+            ];
+        }
+
+
+        $companyCate = new CompanyCategory();
+        $companyCate->cate_id=$request->cate_id;
+        $companyCate->company_id=$request->company_id;
+        $companyCate->save();
+        return [
+            'status' => true,
+            'data' => $companyCate
+        ];
+    }
+
 }

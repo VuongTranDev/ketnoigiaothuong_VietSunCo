@@ -101,4 +101,39 @@ class CategoriesController extends BaseController
     }
 
 
+    // Trong controller của Điền
+    public function getAllCategory()
+    {
+        try {
+            // Giả sử $categories là kết quả từ phương thức getAllCategory
+            $categories = $this->categoryService->getAllCategory();
+
+            // Kiểm tra nếu categories là một collection hoặc kiểu dữ liệu có chứa phần "original"
+            if (isset($categories->original)) {
+                $categories = $categories->original; // Truy cập vào phần dữ liệu thực tế
+            }
+
+            if (empty($categories)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'No categories found',
+                    'data' => [],
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category retrieved successfully',
+                'data' => $categories,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred',
+                'data' => [],
+                'exception' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

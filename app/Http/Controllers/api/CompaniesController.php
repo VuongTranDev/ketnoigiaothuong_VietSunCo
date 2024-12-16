@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Client;
 
 class CompaniesController extends BaseController
 {
     protected $companyService;
+
 
     public function __construct(CompanyService $companyService)
     {
@@ -64,13 +66,25 @@ class CompaniesController extends BaseController
         );
     }
 
+
+    public function createCompany(Request $request)
+    {
+        $result = $this->companyService->store($request);
+        if (!$result['status']) {
+            return $this->failed('Create company failed', 400, $result['errors']);
+        }
+        return $this->success($result['data'], 'Create company success', 201);
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $company = $this->companyService->showById($id);
-
+        //Lấy thằng company id
+        // $company = $this->companyService->showById($id);
+        //Lấy từ user_id này sửa sau nha đuối quá rồi
+        $company = $this->companyService->showByUserId($id);
         if (!$company) {
             return $this->failed('company not found!', 404);
         }
@@ -135,5 +149,11 @@ class CompaniesController extends BaseController
         } catch (\Exception $e) {
             return $this->exception('an error occurred', $e->getMessage(), 500);
         }
+    }
+
+    public function checkCompanyByUserId(string $id)
+    {
+        $check=$this->companyService->checkCompanyById($id);
+        return $check;
     }
 }

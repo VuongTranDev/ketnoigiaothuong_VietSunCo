@@ -154,10 +154,22 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\Companies|null $companies
+ * @property int $id
+ * @property string|null $image
+ * @property string|null $name
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Companies $companies
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyImage whereUpdatedAt($value)
  */
 	class CompanyImage extends \Eloquent {}
 }
@@ -377,24 +389,23 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property string|null $name
- * @property string $email
  * @property string|null $content
  * @property int|null $numberstart
  * @property int $company_id
+ * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Companies $company
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings query()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereNumberstart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ratings whereUserId($value)
  */
 	class Ratings extends \Eloquent {}
 }
