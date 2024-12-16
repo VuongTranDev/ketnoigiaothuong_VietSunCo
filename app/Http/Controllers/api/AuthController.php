@@ -98,6 +98,7 @@ class AuthController extends BaseController
         return $this->success($result['data'], 'Change status success', 200);
     }
 
+
     public function handleGoogleCallback(Request $request)
     {
         try {
@@ -130,4 +131,5 @@ class AuthController extends BaseController
             ], 500);
         }
     }
+
 }
