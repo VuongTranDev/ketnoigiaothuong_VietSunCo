@@ -4,11 +4,10 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Models\Users;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Session;
 
@@ -36,10 +35,13 @@ class LoginController extends Controller
 
         if ($data->status == 'success') {
             if (Auth::attempt($credentials)) {
-                Session::put('token', $data->data);
+                Session::put('token', $data->data[0]);
                 Session::put('user', Auth::user());
-
-                return redirect()->route('home')->withSuccess('Đăng nhập thành công!');
+                if ($data->data[1] === 'admin') {
+                    return redirect()->route('admin.dashboard')->withSuccess('Đăng nhập thành công với quyền Admin!');
+                } else {
+                    return redirect()->route('home')->withSuccess('Đăng nhập thành công!');
+                }
             } else {
                 return redirect()->back()->withErrors([
                     'email' => 'Đăng nhập thất bại, không thể khởi tạo phiên.',
@@ -47,11 +49,10 @@ class LoginController extends Controller
             }
         } else {
             return redirect()->back()->withErrors([
-                'email' => $data['message'] ?? 'Thông tin đăng nhập không hợp lệ.',
+                'email' => $data->message ?? 'Thông tin đăng nhập không hợp lệ.',
             ])->withInput();
         }
     }
-
 
 
     public function clearSession()
@@ -101,5 +102,4 @@ class LoginController extends Controller
             return redirect()->back()->withErrors(['error' => 'Không thể kết nối đến API: ' . $e->getMessage()])->withInput();
         }
     }
-
 }

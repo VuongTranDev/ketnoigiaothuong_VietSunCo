@@ -51,9 +51,9 @@ class AuthService
                 'message' => 'User is already logged in. Please logout first.',
                 'status' => false,
                 'errors' => 'User is already logged in. Please logout first.'
-
             ];
         }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return [
                 'message' => 'Unauthorized',
@@ -61,12 +61,15 @@ class AuthService
                 'status' => false
             ];
         }
-        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $token = $user->createToken('auth_token', ['*'], now()->addMinutes(30))->plainTextToken;
         $user->remember_token = $token;
         $user->save();
+
         return [
             'message' => 'Login success',
             'token' => $token,
+            'role' => $user->roles->name,
             'status' => 'success'
         ];
     }
