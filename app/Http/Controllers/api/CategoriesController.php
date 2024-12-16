@@ -64,7 +64,6 @@ class CategoriesController extends BaseController
         if ($category == null) {
             $this->failed('category not found', 404);
         }
-
         return $this->success($category, 'category retrieved successfully', 200);
     }
 
@@ -101,5 +100,5 @@ class CategoriesController extends BaseController
         }
     }
 
-   
+
 }
