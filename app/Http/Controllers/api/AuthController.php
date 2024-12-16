@@ -26,7 +26,6 @@ class AuthController extends BaseController
             return $this->failed('Register failed',  400, $result['errors']);
         }
         return $this->success($result['data'], 'Đăng kí thành công', 200);
-
     }
 
 
@@ -34,11 +33,10 @@ class AuthController extends BaseController
     public function login(Request $request)
     {
         $result =  $this->authService->login($request);
-
         if ($result['status'] == false) {
             return $this->failed('Login failed',  400, $result['errors']);
         }
-        return $this->success($result['token'], $request['message'], 200);
+        return $this->success([$result['token'],$result['role']], $request['message'], 200);
     }
 
     public function getInfo(Request $request)
