@@ -144,7 +144,9 @@
     background-color: #fff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
+
     overflow-y: auto; /* Cho phép cuộn nội dung bên trong form */
+
 }
 
 /* Căn chỉnh tiêu đề */
@@ -201,7 +203,6 @@
 .submit-btn:hover {
     background-color: #0056b3;
 }
-
 /* Tùy chỉnh upload container */
 .upload-container {
     display: flex;
@@ -248,3 +249,4 @@
     background-color: blue;
     color: white;
 }
+

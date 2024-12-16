@@ -77,12 +77,20 @@ class CompanyService
         return Companies::with('user')->find($id);
     }
 
+
     public function showByUserId($user_id)
     {
         return Companies::with('user')
                         ->where('user_id', $user_id)
-                        ->orderBy('created_at', 'desc')  // Sắp xếp theo thời gian tạo mới nhất
-                        ->first();  // Lấy bản ghi đầu tiên
+                        ->orderBy('created_at', 'desc')  
+                        ->first();  
+    }
+
+
+
+    public function showBySlug($slug)
+    {
+        return Companies::with('user')->where('slug', $slug)->first();
     }
 
 
@@ -190,7 +198,7 @@ class CompanyService
     {
         $company = Companies::with('user')
                 ->where('user_id', $user_id)
-                ->orderBy('created_at', 'desc')  // Sắp xếp theo thời gian tạo mới nhất
+                ->orderBy('created_at', 'desc')  
                 ->first();  // Lấy bản ghi đầu tiên
 
         return $company ? 1 : 0;

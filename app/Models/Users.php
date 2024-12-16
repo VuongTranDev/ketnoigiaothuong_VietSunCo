@@ -12,12 +12,24 @@ class Users extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-
+    protected $fillable = [
+        'id', // Nếu bạn cần cho phép gán giá trị cho id, thêm nó vào đây
+        'name',
+        'email',
+        'password',
+        'remember_token',
+        'status',
+        'role_id',
+        'google_id', // Nếu bạn đang dùng trường role_id
+        // Các trường khác cần được cho phép
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -36,7 +48,6 @@ class Users extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
     public function roles()
     {

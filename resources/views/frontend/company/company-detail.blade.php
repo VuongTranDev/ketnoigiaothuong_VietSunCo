@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Công ty ..</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ @$company->company_name }}</li>
             </ol>
         </nav>
 
@@ -21,22 +21,7 @@
                     <h2 class="title-b2b">Giới thiệu</h2>
                     <hr class="line-title">
                 </div>
-                <p style="text-align: justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit nobis repellat
-                    fugiat deserunt at dolores
-                    quia modi molestiae perspiciatis officiis quaerat harum enim ducimus accusantium iusto, neque a!
-                    Aliquid, exercitationem.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. At voluptatem reiciendis mollitia molestiae,
-                    iure saepe alias ut ratione nobis, sunt molestias tenetur labore reprehenderit distinctio, numquam
-                    accusantium ipsam fuga nesciunt.
-                </p>
-
-                <p style="text-align: justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit nobis repellat
-                    fugiat deserunt at dolores
-                    quia modi molestiae perspiciatis officiis quaerat harum enim ducimus accusantium iusto, neque a!
-                    Aliquid, exercitationem.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. At voluptatem reiciendis mollitia molestiae,
-                    iure saepe alias ut ratione nobis, sunt molestias tenetur labore reprehenderit distinctio, numquam
-                    accusantium ipsam fuga nesciunt.
+                <p style="text-align: justify">{{ @$company->content }}
                 </p>
 
                 <div>
@@ -47,24 +32,28 @@
                     <table class="info-table">
                         <tr>
                             <td><strong>Tên công ty:</strong></td>
-                            <td>CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ VIETSUNCO</td>
+                            <td>{{ @$company->company_name }}</td>
                         </tr>
                         <tr>
                             <td><strong>Tên viết tắt:</strong></td>
-                            <td>CÔNG TY TMDV VIET SUN</td>
+                            <td>{{ @$company->short_name }}</td>
                         </tr>
                         <tr>
                             <td><strong>Người đại diện:</strong></td>
-                            <td>Đỗ Phan Phước Huy</td>
+                            <td>{{ @$company->representative }}</td>
                         </tr>
                         <tr>
                             <td><strong>Lĩnh vực:</strong></td>
-                            <td>Thiết kế website, Digital marketing, Ứng dụng di động, Sàn thương mại điện tử</td>
+                            <td>
+                                @foreach ($categories as $category)
+                                    {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
+                                @endforeach
+                            </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td><strong>Khu vực:</strong></td>
                             <td>Miền nam</td>
-                        </tr>
+                        </tr> --}}
                     </table>
                 </div>
                 <hr class="line-w-100">
@@ -146,12 +135,12 @@
             </div>
             <div class="col-lg-4">
                 <div class="card">
-                    <h3 class="company-name-detail">CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ VIETSUNCO</h3>
+                    <h3 class="company-name-detail">{{ @$company->company_name }}</h3>
                     <div class="info">
                         <p><i class="fas fa-envelope"></i> hi@vietsunco.com</p>
-                        <p><i class="fas fa-phone-alt"></i> 0914 416 363</p>
-                        <p><i class="fas fa-map-marker-alt"></i> P.903, Tầng 9, Tòa nhà Diamond Plaza, 34 Lê Duẩn, Phường
-                            Bến Nghé, Quận 1, Thành phố Hồ Chí Minh</p>
+                        <p><i class="fa-solid fa-globe"></i> <a href="{{ $company->link }}">{{ @$company->link }}</a></p>
+                        <p><i class="fas fa-phone-alt"></i> {{ @$company->phone_number }}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> {{ @$address->address }}</p>
                     </div>
                 </div>
             </div>
@@ -162,7 +151,7 @@
             <hr class="line-title ">
         </div>
 
-        @include('frontend.company.components.company-same-field')
+        {{-- @include('frontend.company.components.company-same-field') --}}
 
     </div>
 

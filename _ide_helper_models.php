@@ -71,7 +71,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\News $news
- * @property-read \App\Models\Users $users
+ * @property-read \App\Models\Users $user
  * @method static \Illuminate\Database\Eloquent\Builder|Comments newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comments newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comments query()
@@ -419,6 +419,8 @@ namespace App\Models{
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Users> $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Roles newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Roles newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Roles query()
@@ -438,9 +440,10 @@ namespace App\Models{
  * @property int $id
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property mixed $password
+ * @property string|null $password
  * @property int|null $status
  * @property int $role_id
+ * @property string|null $google_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -455,6 +458,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRememberToken($value)

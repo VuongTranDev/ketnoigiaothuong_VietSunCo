@@ -15,24 +15,31 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
-        $client = new Client();
-        $response = $client->post(env('API_URL').'register', [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'form_params' => [
-                'email' => $request->email,
-                'password' => $request->password,
-            ]
-        ]);
+        try {
+            $client = new Client();
+            $response = $client->post(env('API_URL').'register', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'form_params' => [
+                    'email' => $request->email,
+                    'password' => $request->password,
+                ],
+            ]);
 
-        $data = json_decode($response->getBody());
 
+            $data = json_decode($response->getBody());
 
-        if ($data->status == 'success') {
-            return redirect()->route('auth.login')->withSuccess('Đăng ký tài khoản thành công');
-        } else {
-            return redirect()->back()->withErrors($data['errors'])->withInput();
+            if (isset($data->status) && $data->status == true) {
+                flash('Đăng kí thành công', 'success');
+                return redirect()->route('auth.login');
+            } else {
+                return redirect()->back()->withErrors($data->errors ?? 'Đăng ký thất bại')->withInput();
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors('Có lỗi xảy ra, vui lòng thử lại sau.')->withInput();
+
         }
     }
+
 }

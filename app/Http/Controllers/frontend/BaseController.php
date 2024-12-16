@@ -18,34 +18,18 @@ class BaseController extends Controller
     }
     public function fetchDataFromApi(string $endpoint)
     {
-        $apiUrl = $this->url . $endpoint;
-
-        $response = $this->client->request('GET', $apiUrl);
-        $responseData = json_decode($response->getBody()->getContents(), false);
-
-        if ($responseData->status == 'success') {
-            $data = $responseData->data;
-
-            if (is_array($data)) {
-                return $data;
+        try
+        {
+            $apiUrl = $this->url . $endpoint;
+            $response = $this->client->request('GET', $apiUrl);
+            $responseData = json_decode($response->getBody()->getContents(), false);
+            if ($responseData->status == 'success') {
+                return $responseData->data;
             } else {
-                return [$data];
+                return [];
             }
-        } else {
-            return [];
-        }
-    }
-
-    public function fetchDataSlugFromApi(string $endpoint)
-    {
-        $apiUrl = $this->url . $endpoint;
-
-        $response = $this->client->request('GET', $apiUrl);
-        $responseData = json_decode($response->getBody()->getContents(), false);
-
-        if ($responseData->status == 'success') {
-            return $responseData->data;
-        } else {
+        } catch (\Exception $e) {
+            Log::error('API request failed: ' . $e->getMessage());
             return [];
         }
     }

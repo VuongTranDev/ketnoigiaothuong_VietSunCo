@@ -28,13 +28,10 @@ class CompaniesController extends BaseController
         try {
             $limit = $request->input('limit', 12);
             $page = $request->input('page', 1);
-
             $companies = $this->companyService->show($page, $limit);
-
             $formattedData = collect($companies->items())->map(function ($item) {
                 return $this->companyService->formatData($item);
             })->toArray();
-
             $formattedPagination = $this->companyService->formatPaginate($companies);
 
             return $this->successWithPagination(
@@ -88,6 +85,21 @@ class CompaniesController extends BaseController
         // $company = $this->companyService->showById($id);
         //Lấy từ user_id này sửa sau nha đuối quá rồi
         $company = $this->companyService->showByUserId($id);
+        if (!$company) {
+            return $this->failed('company not found!', 404);
+        }
+
+        return $this->success(
+            $this->companyService->formatData($company),
+            'company retrieved successfully',
+            200
+        );
+    }
+
+    public function showBySlug($slug)
+    {
+        $company = $this->companyService->showBySlug($slug);
+
         if (!$company) {
             return $this->failed('company not found!', 404);
         }

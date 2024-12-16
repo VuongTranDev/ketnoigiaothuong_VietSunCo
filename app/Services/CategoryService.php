@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Validator;
 class CategoryService {
     /**
      * Retrieve all categories data.
-     * @param Request $request
      * @return Categories[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function show(Request $request) {
+    public function show()
+    {
         return Categories::get();
     }
 
@@ -21,7 +21,8 @@ class CategoryService {
      * @param int $id
      * @return Categories|Categories[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function showById($id) {
+    public function showById($id)
+    {
         return Categories::find($id);
     }
 
@@ -70,6 +71,7 @@ class CategoryService {
         return $category;
     }
 
+
     public function getAllCategory()
     {
         try {
@@ -82,6 +84,15 @@ class CategoryService {
             return response()->json(['error' => $e->getMessage()], 500);  // Xử lý lỗi nếu có
         }
     }
+
+
+
+    // public function countNewsOfUser($user_id)
+    // {
+    //     // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
+    //     return Cate::where('user_id', $user_id)
+    //     ->count();
+    // }
 
 }
 

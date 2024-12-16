@@ -3,18 +3,37 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categories;
+use App\Models\Companies;
+use App\Models\CompanyCategory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class CompaniesController extends BaseController
 {
-    public function companyDetail()
+    protected $client;
+    protected $url;
+    public function __construct(Client $client)
     {
-        return view('frontend.company.company-detail');
+        $this->client = $client;
+        $this->url = env('API_URL');
+    }
+    public function companyDetail($slug)
+    {
+        $company = $this->fetchDataFromApi("company/slug/{$slug}");
+
+        $address = $this->fetchDataFromApi("address/company/{$company->id}");
+
+        $categories = collect($this->fetchDataFromApi('category/company/' . $company->id));
+
+        return view('frontend.company.company-detail', compact('company', 'address', 'categories'));
     }
 
 
@@ -30,6 +49,7 @@ class CompaniesController extends BaseController
         return view('frontend.company.list-company', compact('companies'));
     }
 
+
     public function createCompany(Request $request)
     {
         Log::info('Allrequest', $request->all());
@@ -39,7 +59,6 @@ class CompaniesController extends BaseController
         // Tạo slug từ tên công ty
         $slug = \Str::slug($request->company_name);
         $userId=Session::get('user')->id;
-
         $client = new Client();
         $response = $client->post(env('API_URL') . 'createCompany', [
             'headers' => [
@@ -50,6 +69,7 @@ class CompaniesController extends BaseController
                 'company_name' => $request->company_name,
                 'short_name' => $request->short_name,
                 'phone_number' => $request->phone_number,
+
                 'slug' => $slug,
                 'content' => $request->content,
                 'link' => $request->link,
@@ -137,12 +157,18 @@ class CompaniesController extends BaseController
             }
         }
 
-
         if ($data->status == 'success') {
             return redirect()->back()->withSuccess('Công ty đã được tạo thành công');
         } else {
             return redirect()->back()->withErrors($data->errors)->withInput();
         }
+
     }
+
+
+
+
+
+
 
 }

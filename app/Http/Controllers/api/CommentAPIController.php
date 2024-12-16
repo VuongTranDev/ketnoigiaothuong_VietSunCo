@@ -4,32 +4,34 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comments;
+use App\Services\CommentsServices;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CommentAPIController extends Controller
+class CommentAPIController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
+    protected $commentServices;
+    public function __construct(CommentsServices $commentsS)
+    {
+        $this->commentServices = $commentsS;
+    }
     public function index()
     {
-
-        $com = Comments::with('news', 'users')->get();
-        $formatcomment = $com->map(function($com) {
-            return[
-                'id' => $com->id,
-                'content' => $com->content,
-                'new' =>$com->news,
-                'users' => $com->users
-            ];
-        }) ;
-
-        return response()->json([
-            'message' => 'Successfully request',
-            'data' => $formatcomment,
-            'status' => true,
-        ], 200);
+        try {
+            \Log::info("message");
+            $comment = $this->commentServices->show();
+            $formattedData = collect($comment->items())->map(function ($item) {
+                return $this->commentServices->formatData($item);
+            })->toArray();
+            return $this->success($formattedData, "Comment success", 200);
+        } catch (ModelNotFoundException $e) {
+            return $this->failed("Erorr, Comment not found", 404);
+        }
     }
 
     /**
@@ -37,127 +39,45 @@ class CommentAPIController extends Controller
      */
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(),[
-            'content'=>'required|string',
-            'new_id' => 'required|exists:news,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
-        if($validator->fails())
-        {
-            return response()->json([
-                'message' => 'Validation failed',
-                'data' => $validator->errors(),
-                'status' => false,
-            ], 400);
-        }
-        // $existingComment = Comments::where('user_id', $request->input('user_id'))
-        // ->where('new_id', $request->input('new_id')) // Nếu bạn cũng muốn kiểm tra theo new_id
-        // ->first();
-
-        // if ($existingComment) {
-        //     return response()->json([
-        //         'message' => 'User has already commented on this news',
-        //         'status' => false,
-        //     ], 409); // 409 Conflict
-        // }
-        $comment = Comments::create([
-            'content' => $request->input('content'),
-            'new_id' => $request->input('new_id'),
-            'user_id' => $request->input('user_id'),
-        ]) ;
-
-        return response()->json([
-            'message' => 'Comments created',
-            'status' => true,
-            'data' => $comment
-        ],201);
+        $validator = $this->commentServices->validateData($request);
+        \Log::info('reqeseeee' . json_encode($request->user_id));
+        if ($validator->fails())
+            return $this->failed($validator->errors(), 400);
+        $comment = $this->commentServices->store($request);
+        return $this->success($comment, "Comment created", 200);
     }
 
-    public function show(string $id)
-    {
 
-    }
+    public function show(string $id) {}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $comment = Comments::find($id);
+            \Log::info('Message' .json_encode($request->all()));
+            $comment = $this->commentServices->showById($id);
+            if (!$comment) {
+                return $this->failed("Comment not found", 404);
+            }
 
-        if (!$comment) {
-            return response()->json([
-                'message' => 'Comment not found',
-                'status' => false], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'content' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-                'status' => false,
-            ], 400);
-        }
-
-        $comment->update([
-            'content' => $request->content,
-        ]);
-
-        return response()->json([
-            'message' => 'Comment updated successfully',
-            'data' => $comment,
-            'status' => true,
-        ], 200);
+            $validator = Validator::make($request->all(), [
+                'edit_content' => 'required|string',
+            ]);
+            if ($validator->fails())
+                return $this->failed($validator->errors()->toArray(), 404);
+            $comment = $this->commentServices->update($request, $comment);
+            return $this->success($comment, "Comment updated", 200);
     }
-
-
     public function destroy(string $id)
     {
-        $comment = Comments::find($id) ;
-        if(!$comment)
-        {
-            return response()->json([
-                'message' => 'Comment not found',
-                'status' => false,
-            ], 404);
+        $comment = $this->commentServices->showById($id);
+        if (!$comment) {
+            return $this->failed("Comment not found", 404);
         }
-        else
-        {
-            $comment->delete();
-        }
-        return response()->json([
-            'message' => 'Comment deleted successfully',
-            'status' => true,
-        ], 200);
-
+        $this->commentServices->destroy($comment);
+        return $this->success([], "Comment deleted", 200);
     }
 
-    public function countCommentInNews(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'new_id' => 'required|exists:news,id',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-                'status' => false,
-            ], 400);
-        }
-
-        $newsId = $request->input('new_id');
-        $countAllComments = Comments::where('new_id', $newsId)->count();
-        return response()->json([
-            'message' => 'Số lượt comments của bài viết',
-            'news_count' => $countAllComments,
-            'status' => true,
-        ], 200);
-
-    }
 }

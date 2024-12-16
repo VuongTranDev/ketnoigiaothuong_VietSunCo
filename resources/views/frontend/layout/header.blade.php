@@ -9,6 +9,7 @@
                 </div>
 
                 <div>
+
                     @if (isset($company_id) && $company_id > 0 || !Session::has('user'))
                         <a class="ms-2">
                             <a class="ms-2" href="#" id="openForm" style="display:none">Đăng ký thành viên
@@ -93,9 +94,6 @@
         </div>
     </div>
 
-
-
-
     <nav class="navbar navbar-expand-lg navbar-bottom">
         <div class="container-xl">
             <!-- Button trigger offcanvas -->
@@ -149,10 +147,10 @@
                             <a href="" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
                         </form> --}}
                     <div class="d-flex align-items-center">
-                        <form class="d-flex align-items-center search me-3" role="search" action="" method="GET"
-                            autocomplete="off">
-                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..." aria-label="Search"
-                                name="query" value="{{ request('query') }}">
+                        <form class="d-flex align-items-center search me-3" role="search" action=""
+                            method="GET" autocomplete="off">
+                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..."
+                                aria-label="Search" name="query" value="{{ request('query') }}">
                             <a class="search-btn" href="#">
                                 <i class="fas fa-search"></i>
                             </a>
@@ -167,16 +165,31 @@
                                     <i class="fa-solid fa-user" style="font-size: 20px;"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
+                                    <li><a class="dropdown-item"href="
+                                            @if (session('user')->role_id == '1')
+                                                route('admin.dashboard')
+                                            @else
+                                                route('partner.dashboard')
+                                            @endif">
+
+                                            @if (session('user')->role_id == '1')
+                                                Trang quản trị
+                                            @else
+                                                Hồ sơ
+                                            @endif
+                                        </a>
+                                    </li>
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST"
+                                            style="display: none;">
                                             @csrf <!-- Include CSRF token for security -->
                                         </form>
-                                        <a class="dropdown-item" href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <a class="dropdown-item" href=""
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Đăng xuất
                                         </a>
                                     </li>
@@ -262,5 +275,4 @@
         });
     });
 </script>
-
 @endpush

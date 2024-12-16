@@ -1,7 +1,7 @@
 <div class="company-carousel">
     @for ($i = 0; $i < 10; $i++)
         <div class="company-item">
-            <a href="{{ route('company.detail') }}" class="company-link">
+            <a href="" class="company-link">
                 <div class="company-detail" align="center">
                     <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company" loading="lazy">
                     <p class="name-company">VietSunCo</p>
