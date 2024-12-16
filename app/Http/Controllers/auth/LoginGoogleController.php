@@ -42,7 +42,6 @@ class LoginGoogleController extends Controller
             if ($apiResponse->status === 'success') {
                 Session::put('token', $apiResponse->token);
                 Session::put('user', $apiResponse->user);
-
                 return redirect()->route('home')->with('success', 'Đăng nhập thành công');
             }
 
