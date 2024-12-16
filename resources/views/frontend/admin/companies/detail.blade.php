@@ -27,7 +27,6 @@
                         <li>No categories found.</li>
                     @endif
                 </ul>
-
                 </p>
                 <p>
                     <strong>
