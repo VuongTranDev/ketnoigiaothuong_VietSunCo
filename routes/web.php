@@ -44,9 +44,6 @@ Route::get('/chi-tiet-cong-ty/{slug}', [FrontendCompaniesController::class, 'com
 
 Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
 Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
-// Route::get('/loginGG/post', [LoginController::class, 'loginGoole'])->name('auth.login-google');
-// Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.google.callback');
-
 
 
 Route::get('/regis', [RegisterController::class, 'create'])->name('get.register');

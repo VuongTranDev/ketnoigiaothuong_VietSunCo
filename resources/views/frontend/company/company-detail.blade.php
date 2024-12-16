@@ -21,9 +21,7 @@
                     <h2 class="title-b2b">Giới thiệu</h2>
                     <hr class="line-title">
                 </div>
-                <p style="text-align: justify">{{ @$company->content }}
-                </p>
-
+                <p style="text-align: justify">{{ @$company->content }}</p>
                 <div>
                     <h2 class="title-b2b">Thông tin chung</h2>
                     <hr class="line-title">

@@ -102,7 +102,6 @@ class AuthController extends BaseController
     public function handleGoogleCallback(Request $request)
     {
         try {
-
             Log::info('Attempting to authenticate Google user.');
             $user = Users::updateOrCreate(
                 ['email' => $request->email],

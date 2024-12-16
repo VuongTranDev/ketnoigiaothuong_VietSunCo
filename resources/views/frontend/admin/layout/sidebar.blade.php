@@ -32,6 +32,7 @@
                             'admin.products-image-gallery.*',
                             'admin.products-variant.*',
                             'admin.products-variant-item.*',
+                            'admin.categories.*',
                             'admin.reviews.*',
                         ]) }}">
                         <a class="nav-link" href="">Products</a>
@@ -43,7 +44,7 @@
 
                     <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="">Product
                             Reviews</a></li>
-
+                    <li class="{{ setActive(['admin.categories.*']) }}"><a class="nav-link" href="{{ route('admin.categories.index') }}">Categories</a></li>
                 </ul>
             </li>
 
@@ -59,10 +60,6 @@
                             href="">Blog Comments</a></li>
                 </ul>
             </li>
-
-
-
-
             <li class="menu-header">Settings & More</li>
 
 
