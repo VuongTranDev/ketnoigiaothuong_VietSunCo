@@ -116,6 +116,27 @@
                         </div>
                     </div>
 
+                    <div class="modal-rating" id="modalRating" style="display:none;">
+                        <div class="modal-content">
+                            <span class="close-btn">&times;</span>
+                            <div class="rating-header">
+                                <h3>Số sao:</h3>
+                                <div class="stars">
+                                    <span data-star="1">&#9733;</span>
+                                    <span data-star="2">&#9733;</span>
+                                    <span data-star="3">&#9733;</span>
+                                    <span data-star="4">&#9733;</span>
+                                    <span data-star="5">&#9733;</span>
+                                </div>
+                            </div>
+                            <textarea class="content-rating" placeholder="Nhập đánh giá của bạn..."></textarea>
+                            <div class="modal-buttons">
+                                <button class="cancel-btn">Hủy</button>
+                                <button class="submit-btn-rating" id="submitbtnRating">Gửi</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="review-actions">
                         <button class="view-more-btn me-3">Xem thêm đánh giá</button>
                         <button class="write-review-btn">Viết đánh giá</button>
@@ -141,7 +162,7 @@
             <hr class="line-title ">
         </div>
 
-        @include('frontend.company.component.company-same-field')
+        @include('frontend.company.components.company-same-field')
 
     </div>
 
@@ -323,3 +344,102 @@
         }
     </style>
 @endsection
+
+
+@push('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("modalRating");
+            const openBtn = document.querySelector(".write-review-btn");
+            const closeBtn = document.querySelector(".close-btn");
+            const cancelBtn = document.querySelector(".cancel-btn");
+            const submitBtn = document.querySelector(".submit-btn-rating");
+            const stars = document.querySelectorAll(".stars span");
+            const textarea = document.querySelector(".content-rating");
+
+            let selectedRating = 0;
+
+
+            if (openBtn) {
+                openBtn.addEventListener("click", function() {
+                    modal.style.display = "block";
+                });
+            }
+
+
+            if (closeBtn) closeBtn.addEventListener("click", closeModal);
+            if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+
+            function closeModal() {
+                modal.style.display = "none";
+            }
+
+
+            stars.forEach((star, index) => {
+                star.addEventListener("mouseover", function() {
+                    highlightStars(index + 1);
+                });
+
+                star.addEventListener("mouseout", function() {
+                    highlightStars(selectedRating); // Reset to selected rating
+                });
+
+                star.addEventListener("click", function() {
+                    selectedRating = index + 1;
+                    highlightStars(selectedRating);
+                });
+            });
+
+            function highlightStars(rating) {
+                stars.forEach((star, index) => {
+                    star.classList.toggle("hovered", index < rating);
+                });
+            }
+
+
+            if (submitBtn) {
+                submitBtn.addEventListener("click", function() {
+                    console.log("Submit button clicked");
+                    const content = textarea.value.trim();
+                    const numberstart = selectedRating;
+                    const company_id = 41;
+                    console.log('Selected rating:', selectedRating);
+                    console.log('Content:', content);
+                    closeModal();
+                    if (content && numberstart > 0) {
+
+                        $.ajax({
+                            url: "{{ route('createRating') }}",
+                            method: 'POST',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                content: content,
+                                numberstart: numberstart,
+                                company_id: company_id
+                            },
+
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    toastr.success(response.message);
+
+
+                                } else {
+                                    toastr.error(response.message);
+                                }
+
+
+
+                            },
+                            error: function(data) {
+                                alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                                console.error("Error:", data);
+                            }
+                        });
+                    } else {
+                        alert("Vui lòng nhập nội dung và chọn số sao.");
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

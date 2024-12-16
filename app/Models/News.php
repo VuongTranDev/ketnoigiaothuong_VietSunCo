@@ -11,8 +11,10 @@ class News extends Model
     public $timestamps = true;
     protected $fillable = [
         'title',
+        'slug',
         'tag_name',
         'content',
+        'image',
         'cate_id',
         'user_id',
     ];

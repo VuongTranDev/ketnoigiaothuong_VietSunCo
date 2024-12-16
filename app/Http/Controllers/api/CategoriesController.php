@@ -33,7 +33,7 @@ class CategoriesController extends BaseController
         if ($category == null) {
             return $this->failed('category not found', 404);
         } else {
-            return $this->success($category, 200, 'category retrieved successfully');
+            return $this->success($category,  'category retrieved successfully', 200);
         }
     }
 
@@ -50,7 +50,7 @@ class CategoriesController extends BaseController
 
         $category = $this->categoryService->create($request);
 
-        return $this->success($category, 201, 'category created successfully');
+        return $this->success($category,  'category created successfully', 201);
     }
 
     /**
@@ -65,7 +65,7 @@ class CategoriesController extends BaseController
             $this->failed('category not found', 404);
         }
 
-        return $this->success($category, 200, 'category retrieved successfully');
+        return $this->success($category, 'category retrieved successfully', 200);
     }
 
     /**
@@ -80,7 +80,7 @@ class CategoriesController extends BaseController
         }
         try {
             $category = $this->categoryService->update($request, $id);
-            return $this->success($category, 200, 'category updated successfully');
+            return $this->success($category,  'category updated successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('category not found!', 422);
         }
@@ -93,11 +93,46 @@ class CategoriesController extends BaseController
     {
         try {
             $this->categoryService->delete($id);
-            return $this->success([], 200, 'category deleted successfully');
+            return $this->success([],  'category deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('category not found', 404);
         } catch (\Exception $e) {
             return $this->exception('an error occurred', $e->getMessage(), 500);
+        }
+    }
+
+    // Trong controller của bạn
+    public function getAllCategory()
+    {
+        try {
+            // Giả sử $categories là kết quả từ phương thức getAllCategory
+            $categories = $this->categoryService->getAllCategory();
+
+            // Kiểm tra nếu categories là một collection hoặc kiểu dữ liệu có chứa phần "original"
+            if (isset($categories->original)) {
+                $categories = $categories->original; // Truy cập vào phần dữ liệu thực tế
+            }
+
+            if (empty($categories)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'No categories found',
+                    'data' => [],
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category retrieved successfully',
+                'data' => $categories,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred',
+                'data' => [],
+                'exception' => $e->getMessage(),
+            ], 500);
         }
     }
 }

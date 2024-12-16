@@ -27,7 +27,6 @@ class NewsDatatables extends DataTable
             ->addColumn('action', function ($query) {
                 $editBtn = "<a href='" . route('admin.news.edit', $query->id) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='" . route('admin.news.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-
                 return $editBtn . $deleteBtn;
             })
             ->rawColumns(['action'])
@@ -39,7 +38,7 @@ class NewsDatatables extends DataTable
      */
     public function query(News $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('id', 'asc');
+        return $model->with('categories', 'users')->newQuery();
     }
 
     /**
@@ -50,7 +49,7 @@ class NewsDatatables extends DataTable
         return $this->builder()
             ->setTableId('newsdatatables-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('api.new'))
+            ->minifiedAjax()
             //->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()
@@ -70,6 +69,7 @@ class NewsDatatables extends DataTable
     public function getColumns(): array
     {
         return [
+            // Column::make('id'),
             Column::computed('DT_RowIndex')
                 ->title('STT')
                 ->exportable(false)
@@ -84,7 +84,7 @@ class NewsDatatables extends DataTable
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }

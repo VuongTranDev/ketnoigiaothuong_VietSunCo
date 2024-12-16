@@ -130,18 +130,21 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ cho toàn màn hình */
-    z-index: 1000; /* Đảm bảo form ở trên cùng */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto; /* Cho phép cuộn dọc */
 }
 
-/* Căn chỉnh form ra giữa */
+/* Căn chỉnh form ra giữa và cho phép cuộn bên trong nếu nội dung quá nhiều */
 .form-container {
-    width: 60%; /* Điều chỉnh kích thước để form lớn hơn */
+    width: 60%;
     max-width: 800px;
+    max-height: 90vh; /* Giới hạn chiều cao form để có thể cuộn */
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
+    overflow-y: auto; /* Cho phép cuộn nội dung bên trong form */
 }
 
 /* Căn chỉnh tiêu đề */
@@ -178,7 +181,7 @@
 
 /* Thiết lập các trường theo hàng ngang */
 .form-group.half-width {
-    flex-basis: 48%; /* Căn chỉnh cho các trường nhập liệu thành 2 cột */
+    flex-basis: 48%;
 }
 
 /* Nút gửi thông tin */
@@ -197,4 +200,51 @@
 
 .submit-btn:hover {
     background-color: #0056b3;
+}
+
+/* Tùy chỉnh upload container */
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-container input[type="file"] {
+    padding: 5px;
+}
+
+/* Preview hình ảnh nhỏ */
+.preview-container {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.preview-container img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.category-btn {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.category-btn.selected {
+    background-color: blue;
+    color: white;
 }

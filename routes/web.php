@@ -10,9 +10,10 @@ use App\Http\Controllers\frontend\DashboardController;
 
 use App\Http\Controllers\frontend\NewsController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\RatingController;
 use Illuminate\Support\Facades\Route;
 
-
+require __DIR__ . '/auth.php';
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,35 +25,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', [
-//     HomeController::class,
-//     "index"
-// ]);
+Route::post('createRating', [RatingController::class, 'createRating'])->name('createRating');
+Route::post('insertCompany', [FrontendCompaniesController::class, 'createCompany'])->name('insertCompany');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/news', [NewsController::class, 'news']);
-Route::get('/news-detail', [NewsController::class, 'newsDetail'])->name('news.detail');
+Route::get('/tin-tuc', [NewsController::class, 'news'])->name('news');
+Route::get('/tin-tuc/{slug}', [NewsController::class, 'newsDetail'])->name('news.detail');
 
 Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
 
-
-// Route::prefix('admin')->group(function () {
-//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-//     Route::resource('news', NewsController::class);
-// });
-
-
-Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
-Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
-
-Route::get('/regis', [RegisterController::class, 'create'])->name('get.register');
-Route::post('/register/post', [RegisterController::class, 'store'])->name('auth.register');
-Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
-
 Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');
 
-Route::get('showData', [HomeController::class, 'showData'])->name('news.show');
-
 Route::get('getsession',[LoginController::class,'someFunction']);
+
+Route::get('clearsession',[LoginController::class,'clearSession']);
+
+
+
 

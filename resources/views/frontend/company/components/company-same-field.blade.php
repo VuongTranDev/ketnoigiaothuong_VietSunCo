@@ -14,56 +14,6 @@
     @endfor
 </div>
 
-
-<style>
-    .company-item {
-        margin: 10px;
-        border-radius: 8px;
-        transition: transform 0.3s ease;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .company-link {
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .name-company {
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    .slick-prev,
-    .slick-next {
-        border: none;
-        border-radius: 50px;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        overflow: hidden;
-        z-index: 10;
-    }
-
-    .slick-prev {
-        left: 20px;
-    }
-
-    .slick-next {
-        right: 20px;
-    }
-
-    .slick-prev:before,
-    .slick-next:before {
-        font-size: 60px;
-        color: #f7f7f7;
-        line-height: 1;
-    }
-</style>
-
 @push('script')
     <script type="text/javascript">
         $(document).ready(function() {

@@ -38,13 +38,8 @@ class Users extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = bcrypt($password);
-    }
     public function roles()
     {
         return $this->belongsTo(Roles::class, 'role_id', 'id');
     }
-
 }

@@ -33,15 +33,18 @@ class NewsController extends BaseController
             })->toArray();
 
             $formattedPagination = $this->newsService->formatPaginate($news);
-            return $this->successWithPagination($formattedPagination, $formattedData, 200);
+
+            return $this->successWithPagination(
+                $formattedPagination,
+                $formattedData,
+                200,
+            );
         } catch (ModelNotFoundException $e) {
-            return $this->failed('News not found', 404);
+            return $this->failed('Companies not found', 404);
         } catch (\Exception $e) {
-            return $this->exception('An error occurred while retrieving news', $e->getMessage(), 500);
+            return $this->exception('An error occurred while retrieving companies', $e->getMessage(), 500);
         }
     }
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -62,13 +65,32 @@ class NewsController extends BaseController
      */
     public function show($id)
     {
-        $news = $this->newsService->showById($id);
+        try {
+            $companycategory = $this->newsService->showById($id);
+
+            if (!$companycategory) {
+                return $this->failed('new not found!', 404);
+            }
+
+            return $this->success(
+                $this->newsService->formatData($companycategory),
+                'news retrieved successfully',
+                200
+            );
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving the company category', $e->getMessage(), 500);
+        }
+    }
+
+    public function showBySlug($slug)
+    {
+        $news = $this->newsService->showBySlug($slug);
 
         if (!$news) {
             return $this->failed('news not found', 404);
         }
 
-        return $this->success($this->newsService->formatData($news), 200, 'news retrieved successfully');
+        return $this->success($this->newsService->formatData($news),  'news retrieved successfully', 200);
     }
 
     /**

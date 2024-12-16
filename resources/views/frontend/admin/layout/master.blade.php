@@ -41,7 +41,7 @@
     </script>
 
     @vite(['resources/js/app.js', 'resources/js/admin.js']) --}}
-
+    @stack('style')
 </head>
 
 <body>

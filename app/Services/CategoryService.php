@@ -69,4 +69,20 @@ class CategoryService {
         $category->delete();
         return $category;
     }
+
+    public function getAllCategory()
+    {
+        try {
+            $categories = Categories::all();
+            if ($categories->isEmpty()) {
+                return response()->json([], 200);  // Trả về mảng rỗng nếu không có dữ liệu
+            }
+            return response()->json($categories, 200);  // Trả về danh sách category
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);  // Xử lý lỗi nếu có
+        }
+    }
+
 }
+
+

@@ -10,8 +10,9 @@ use App\Http\Controllers\api\CompanyCategoryController;
 use App\Http\Controllers\api\NewsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\CompanyImageController;
 use App\Http\Controllers\api\MessageController;
-
+use App\Http\Controllers\api\RatingController;
 use App\Models\News;
 use Illuminate\Support\Facades\Route;
 
@@ -44,12 +45,15 @@ Route::fallback(function () {
     ], 404);
 });
 
-
+Route::apiResource('/rating', RatingController::class);
 Route::apiResource('/company', CompaniesController::class);
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
+Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
 Route::apiResource('/category', CategoriesController::class);
 Route::apiResource('/company-category', CompanyCategoryController::class);
 Route::apiResource('/address', AddressController::class);
+
+Route::get('/getAllCategory',[CategoriesController::class,'getAllCategory'])->name('getAllCategory');
 
 // Route::prefix('companies')->group(function () {
 //     Route::apiResource('/', CompaniesController::class);
@@ -60,7 +64,10 @@ Route::apiResource('/address', AddressController::class);
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
-
+Route::post('createCompany', [CompaniesController::class, 'createCompany'])->name('createCompany');
+Route::post('createCompanyCategory', [CompanyCategoryController::class, 'createCompanyCategory'])->name('createCompanyCategory');
+Route::post('createNewCompanyImage',[CompanyImageController::class,'createNew'])->name('createNew');
+Route::get('checkCompany/{id}',[CompaniesController::class,'checkCompanyByUserId'])->name('checkCompany');
 
 Route::middleware('auth:sanctum')->get('user', [AuthController::class, 'getInfo'])->name('user');
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -71,4 +78,6 @@ Route::middleware('auth:sanctum')->post('changeStatus/{id}', [AuthController::cl
 Route::middleware('auth:sanctum')->post('/messages/send', [MessageController::class, 'sendMessage'])->name('messages.send');
 Route::middleware('auth:sanctum')->get('/messages/{userId}', [MessageController::class, 'getMessages'])->name('messages.get');
 Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
+
+//
 

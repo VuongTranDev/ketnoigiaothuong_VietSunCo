@@ -60,16 +60,17 @@ class CompanyCategoryController extends BaseController
                 201,
                 'Company category created successfully'
             );
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->errorInfo[1] == 1062) {
-                return $this->failed('Duplicate entry detected', 409);
-            }
-            return $this->exception('Database query error occurred', $e->getMessage(), 500);
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     if ($e->errorInfo[1] == 1062) {
+        //         return $this->failed('Duplicate entry detected', 409);
+        //     }
+        //     return $this->exception('Database query error occurred', $e->getMessage(), 500);
         } catch (ValidationException $e) {
             return $this->failed($e->errors(), 422);
-        } catch (\Exception $e) {
-            return $this->exception('An error occurred while creating the company category', $e->getMessage(), 500);
         }
+        // } catch (\Exception $e) {
+        //     return $this->exception('An error occurred while creating the company category', $e->getMessage(), 500);
+        // }
     }
 
     /**
@@ -86,8 +87,8 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $this->companyCategoryService->formatData($companycategory),
-                200,
-                'Company category retrieved successfully'
+                'Company category retrieved successfully',
+                200
             );
         } catch (\Exception $e) {
             return $this->exception('An error occurred while retrieving the company category', $e->getMessage(), 500);
@@ -110,8 +111,8 @@ class CompanyCategoryController extends BaseController
 
             return $this->success(
                 $this->companyCategoryService->formatData($companycategory),
-                201,
-                'Company category updated successfully'
+                'Company category updated successfully',
+                201
             );
         } catch (ModelNotFoundException $e) {
             return $this->failed('Company category not found', 404);
@@ -127,13 +128,22 @@ class CompanyCategoryController extends BaseController
     public function destroy(string $id)
     {
         try {
-            $companycategory = $this->companyCategoryService->delete($id);
+            $this->companyCategoryService->delete($id);
 
-            return $this->success([], 200, 'Company category deleted successfully');
+            return $this->success([],  'Company category deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('Company category not found', 404);
         } catch (\Exception $e) {
             return $this->exception('An error occurred while deleting the company category', $e->getMessage(), 500);
         }
+    }
+
+    public function createCompanyCategory(Request $request)
+    {
+        $result = $this->companyCategoryService->store($request);
+        if (!$result['status']) {
+            return $this->failed('Create company failed', 400, $result['errors']);
+        }
+        return $this->success($result['data'], 'Create company success', 201);
     }
 }

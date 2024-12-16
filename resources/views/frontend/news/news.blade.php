@@ -1,8 +1,8 @@
 @extends('frontend.layout.app')
 
 @section('renderBody')
-    <div class="container-xl">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="pt-5 pb-2">
+    <div class="container-xl pt-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="pb-2">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa-solid fa-house"></i></a></li>
                 <li class="breadcrumb-item active" aria-current="page">Tin tức</li>
@@ -11,41 +11,27 @@
 
         <div class="row">
             <div class="col-lg-9 col-9" style="color: #777;">
-                @for ($i = 1; $i < 10; $i++)
+
+                @foreach ($news as $item)
                     <div class="news-group">
-                        <a href="{{ route('news.detail') }}">
-                            <img class="img-news" src="{{ asset('frontend/image/media.jpg') }}" alt="">
-                        </a>
-                        <div class="group-content">
-                            <a href="#ádas">
-                                <h4>Lorem, ipsum dolor sit amet</h4>
-                                <p class="author-news"><b><a href="{{ route('news.detail') }}">VietSunCo</a></b> - 02/10/2024</p>
-                                <p class="content-news">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    Sapiente
-                                    maiores
-                                    temporibus id dolor harum dolores ab rerum atque aliquid, doloribus accusantium
-                                    sed
-                                    nisi...
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                    <hr class="line-news">
-
-
-                    {{-- <div class="col-6 col-sm-3 col-md-3 d-flex company-list">
-                        <div class="company-detail" align="center" data-aos="fade-up">
-                            <a href="{{ route('company.detail') }}" class="company-link">
-                                <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company"
-                                    loading="lazy">
-                                <p class="name-company">VietSunCo</p>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <span class="me-2" style="font-size: 13px">1231212đ</span>
+                        <a href="{{ route('news.detail', $item->slug) }}" class="news-item d-flex align-items-start p-3 mb-3">
+                            <div class="news-image flex-shrink-0">
+                                <img src="{{ asset('frontend/image/media.jpg') }}" alt="News Image"
+                                    class="img-fluid rounded">
+                            </div>
+                            <div class="news-content pl-3">
+                                <h5 class="news-title font-weight-bold mb-1">{{ $item->title }}</h5>
+                                <div class="news-meta text-muted mb-2">
+                                    <span class="news-author font-weight-bold">VietSunCo</span> - <span
+                                        class="news-date">02/10/2024</span>
                                 </div>
-                            </a>
-                        </div>
-                    </div> --}}
-                @endfor
+                                <p class="news-description mb-0">
+                                    {{ strip_tags($item->content) }}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
@@ -67,16 +53,7 @@
             </div>
 
             <div class="col-lg-3 col-3" style="color: #777;">
-                @for ($i = 1; $i < 5; $i++)
-                    <div class="news-suggest d-flex flex-column">
-                        <img src="{{ asset('frontend/image/media.jpg') }}" alt="">
-                        <p class="content-news">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam deleniti
-                            accusamus possimus iure
-                            porro...
-                        </p>
-                        <hr class="line-news">
-                    </div>
-                @endfor
+                @include('frontend.news.components.feature-sidebar')
             </div>
         </div>
     </div>
