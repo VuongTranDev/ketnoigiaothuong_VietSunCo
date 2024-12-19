@@ -54,7 +54,7 @@ class NewsController extends BaseController
         }
 
         $news = $this->newsService->create($request);
-        return $this->success($this->newsService->formatData($news), 201, 'news created successfully');
+        return $this->success($this->newsService->formatData($news), 'news created successfully', 201);
     }
 
     /**
@@ -103,7 +103,7 @@ class NewsController extends BaseController
 
         try {
             $news = $this->newsService->update($request, $id);
-            return $this->success($this->newsService->formatData($news), 200, 'news updated successfully');
+            return $this->success($this->newsService->formatData($news), 'news updated successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('news not found', 404);
         }
@@ -116,7 +116,7 @@ class NewsController extends BaseController
     {
         try {
             $this->newsService->delete($id);
-            return $this->success([], 200, 'news deleted successfully');
+            return $this->success([], 'news deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('news not found', 404);
         } catch (\Exception $e) {

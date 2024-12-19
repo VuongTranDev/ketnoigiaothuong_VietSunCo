@@ -38,9 +38,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only(['title', 'tag_name', 'content']);
-        $data['cate_id'] = 1;
-        $data['user_id'] = 1;
+        $data = $request->only(['title', 'tag_name', 'content', 'user_id', 'cate_id']);
         $url = config('api.base_url') . "new";
         $response = $this->client->request('POST', $url,
         [

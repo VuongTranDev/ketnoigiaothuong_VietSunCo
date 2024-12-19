@@ -12,8 +12,8 @@
                         <div class="card-header">
                             <h4>Tất cả tin tức</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.news.create') }}" class="btn btn-primary"><i
-                                        class="fas fa-plus"></i> Tạo mới</a>
+                                <a href="{{ route('admin.news.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i>
+                                    Tạo mới</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -22,10 +22,11 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Tiêu đề</th>
+                                        <th>Hình ảnh</th>
                                         <th>Tag</th>
                                         <th>Nội dung</th>
+                                        <th>Người đăng</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày cập nhật</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -36,11 +37,12 @@
             </div>
         </div>
     </section>
-
 @endsection
 
 @push('scripts')
     <script>
+        const assetBaseUrl = "{{ asset('') }}";
+
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 ajax: {
@@ -57,6 +59,12 @@
                         data: 'title'
                     },
                     {
+                        data: 'image',
+                        render: function(data, type, row) {
+                            return `<img src="${assetBaseUrl}${data}" alt="" width="100">`;
+                        }
+                    },
+                    {
                         data: 'tag_name'
                     },
                     {
@@ -71,13 +79,10 @@
                         }
                     },
                     {
-                        data: 'created_at',
-                        render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
+                        data: 'user.email'
                     },
                     {
-                        data: 'updated_at',
+                        data: 'created_at',
                         render: function(data, type, row) {
                             return moment(data).format('DD-MM-YYYY');
                         }
@@ -90,11 +95,15 @@
 
                             let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row
                                 .id);
+                            // let deleteUrl = `{{ route('admin.news.destroy', ':id') }}`.replace(
+                            //     ':id', row
+                            //     .id);
 
                             return `
                                 <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
                                     <i class='far fa-edit'></i>
                                 </a>
+
                                 <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
                                     <i class='far fa-trash-alt'></i>
                                 </button>

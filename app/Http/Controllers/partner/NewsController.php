@@ -42,22 +42,22 @@ class NewsController extends BaseController
      */
     public function store(Request $request)
     {
-        $data = $request->only(['title', 'tag_name', 'content']);
-        $data['cate_id'] = 1;
-        $data['user_id'] = 1;
+        dd($request->all());
+
+        $data = $request->only(['title', 'tag_name', 'content', 'user_id', 'cate_id']);
         $url = config('api.base_url') . "new";
-        $response = $this->client->request('POST', $url, [
+        $response = $this->client->request('POST', $url,
+        [
             'form_params' => $data
         ]);
-
         if($response->getStatusCode() == 201) {
-            return redirect()->route('partner.news.index')->with('success', 'Thêm tin tức mới thành công!');
+            return redirect()->route('admin.news.index')->with('success', 'Thêm tin tức mới thành công!');
         }
         else {
-            return redirect()->route('partner.news.index')->with('error', 'Thêm tin tức mới thất bại!');
+            return redirect()->route('admin.news.index')->with('error', 'Thêm tin tức mới thất bại!');
         }
     }
-    
+
     /**
      * Display the specified resource.
      */

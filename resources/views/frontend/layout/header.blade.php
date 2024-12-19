@@ -10,15 +10,17 @@
 
                 <div>
 
-                    @if (isset($company_id) && $company_id > 0 || !Session::has('user'))
+                    @if ((isset($company_id) && $company_id > 0) || !Session::has('user'))
                         <a class="ms-2">
                             <a class="ms-2" href="#" id="openForm" style="display:none">Đăng ký thành viên
-                                <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
+                                <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên"
+                                    width="15">
                             </a>
                         </a>
                     @else
                         <a class="ms-2" href="#" id="openForm">Đăng ký thành viên
-                            <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
+                            <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên"
+                                width="15">
                         </a>
                     @endif
 
@@ -67,22 +69,24 @@
                 <div class="form-group">
                     <label for="company_images">Ảnh công ty</label>
                     <div class="upload-container">
-                        <input type="file" id="company_images" name="company_images[]" accept="image/*" multiple onchange="previewImages()">
+                        <input type="file" id="company_images" name="company_images[]" accept="image/*" multiple
+                            onchange="previewImages()">
                         <div class="preview-container" id="previewContainer"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="category">Lĩnh vực của công ty*</label>
                     <div id="category-buttons" class="category-buttons">
-                        @if(isset($category) && count($category) > 0)
-                            @foreach($category as $cate)
-                                <button type="button" class="category-btn" data-id="{{ $cate->id }}">{{ $cate->name }}</button>
+                        @if (isset($category) && count($category) > 0)
+                            @foreach ($category as $cate)
+                                <button type="button" class="category-btn"
+                                    data-id="{{ $cate->id }}">{{ $cate->name }}</button>
                             @endforeach
                         @else
                             <p>No categories available.</p>
                         @endif
                         <!-- Vòng lặp để tạo button cho mỗi category -->
-                        {{-- @foreach($category as $cate)
+                        {{-- @foreach ($category as $cate)
                             <button type="button" class="category-btn" data-id="{{ $cate->id }}">{{ $cate->name }}</button>
                         @endforeach --}}
                     </div>
@@ -109,7 +113,8 @@
                 aria-labelledby="offcanvasMenuLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasMenuLabel">Ketnoigiaothuong.com</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
@@ -120,23 +125,16 @@
                             <a class="nav-link" href="#">Về chúng tôi</a>
                         </li>
                         <li class="nav-item dropdown dropdown-field">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Lĩnh vực
                             </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/">A</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/">B</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/">C</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/">D</a>
-                                </li>
+                            <ul class="dropdown-menu dropdown-column">
+                                @foreach ($category as $item)
+                                    <li>
+                                        <a class="dropdown-item" href="/">{{ $item->name }}</a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -164,12 +162,11 @@
                                     {{ session('user')->email }}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="
-                                            @if (session('user')->role_id == '1')
-                                                {{ route('admin.dashboard') }}
+                                    <li><a class="dropdown-item"
+                                            href="
+                                            @if (session('user')->role_id == '1') {{ route('admin.dashboard') }}
                                             @else
-                                                {{ route('partner.dashboard') }}
-                                            @endif">
+                                                {{ route('partner.dashboard') }} @endif">
 
                                             @if (session('user')->role_id == '1')
                                                 Trang quản trị
@@ -212,66 +209,66 @@
 </header>
 
 @push('script')
-<script>
-    // JavaScript để hiển thị và ẩn form
-    document.getElementById('openForm').addEventListener('click', function(event) {
-        event.preventDefault(); // Ngăn không cho link chuyển trang
-        document.getElementById('registerForm').style.display = 'flex';
-    });
+    <script>
+        // JavaScript để hiển thị và ẩn form
+        document.getElementById('openForm').addEventListener('click', function(event) {
+            event.preventDefault(); // Ngăn không cho link chuyển trang
+            document.getElementById('registerForm').style.display = 'flex';
+        });
 
-    // Đóng form khi nhấn vào khu vực bên ngoài form
-    document.getElementById('registerForm').addEventListener('click', function(event) {
-        if (event.target === this) {
-            this.style.display = 'none';
+        // Đóng form khi nhấn vào khu vực bên ngoài form
+        document.getElementById('registerForm').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        // Hiển thị ảnh khi người dùng tải lên
+        function previewImages() {
+            const previewContainer = document.getElementById('previewContainer');
+            const files = document.getElementById('company_images').files;
+
+            previewContainer.innerHTML = ''; // Xóa các hình ảnh trước đó
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
         }
-    });
 
-    // Hiển thị ảnh khi người dùng tải lên
-    function previewImages() {
-        const previewContainer = document.getElementById('previewContainer');
-        const files = document.getElementById('company_images').files;
+        // Đảm bảo xử lý sự kiện click cho các nút category-btn khi DOM đã sẵn sàng
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedCategoriesInput = document.getElementById("selectedCategories");
+            const selectedCategories = [];
 
-        previewContainer.innerHTML = ''; // Xóa các hình ảnh trước đó
+            // Gán sự kiện click cho các nút .category-btn
+            document.querySelectorAll(".category-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    const categoryId = this.getAttribute("data-id");
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
+                    if (this.classList.contains("selected")) {
+                        // Bỏ chọn: Chuyển màu trở lại và xóa ID khỏi mảng
+                        this.classList.remove("selected");
+                        const index = selectedCategories.indexOf(categoryId);
+                        if (index > -1) selectedCategories.splice(index, 1);
+                    } else {
+                        // Chọn: Đổi màu sang xanh và thêm ID vào mảng
+                        this.classList.add("selected");
+                        selectedCategories.push(categoryId);
+                    }
 
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                previewContainer.appendChild(img);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // Đảm bảo xử lý sự kiện click cho các nút category-btn khi DOM đã sẵn sàng
-    document.addEventListener("DOMContentLoaded", function () {
-        const selectedCategoriesInput = document.getElementById("selectedCategories");
-        const selectedCategories = [];
-
-        // Gán sự kiện click cho các nút .category-btn
-        document.querySelectorAll(".category-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                const categoryId = this.getAttribute("data-id");
-
-                if (this.classList.contains("selected")) {
-                    // Bỏ chọn: Chuyển màu trở lại và xóa ID khỏi mảng
-                    this.classList.remove("selected");
-                    const index = selectedCategories.indexOf(categoryId);
-                    if (index > -1) selectedCategories.splice(index, 1);
-                } else {
-                    // Chọn: Đổi màu sang xanh và thêm ID vào mảng
-                    this.classList.add("selected");
-                    selectedCategories.push(categoryId);
-                }
-
-                // Cập nhật giá trị của input ẩn
-                selectedCategoriesInput.value = JSON.stringify(selectedCategories);
+                    // Cập nhật giá trị của input ẩn
+                    selectedCategoriesInput.value = JSON.stringify(selectedCategories);
+                });
             });
         });
-    });
-</script>
+    </script>
 @endpush

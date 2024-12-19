@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Comments;
 use App\Models\News;
+use App\Traits\ImageUploadTrait;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,8 @@ use Illuminate\Support\Str;
 
 class NewsService
 {
+
+    use ImageUploadTrait;
     /**
      * Retrieve all news items with related categories and user data.
      *
@@ -20,7 +23,7 @@ class NewsService
      */
     public function show($page, $limit)
     {
-        return News::with('categories', 'users')->paginate($limit, ['*'], 'page', $page);
+        return News::with('categories', 'users')->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $page);
     }
 
     /**
@@ -31,12 +34,18 @@ class NewsService
      */
     public function showBySlug($slug)
     {
-        return News::with('categories', 'users')->where('slug', $slug)->first();
+        return News::with('categories', 'users')
+            ->where('slug', $slug)
+            ->orderBy('id', 'desc')
+            ->first();
     }
 
     public function showById($id)
     {
-        return News::with('categories', 'users')->where('id', $id)->first();
+        return News::with('categories', 'users')
+            ->where('id', $id)
+            ->orderBy('id', 'desc')
+            ->first();
     }
 
     /**
@@ -53,6 +62,7 @@ class NewsService
             'slug' => $news->slug,
             'tag_name' => $news->tag_name,
             'content' => $news->content,
+            'image' => $news->image,
             'categorie' => $news->categories,
             'user' => $news->users,
             'created_at' => $news->created_at,
@@ -107,6 +117,7 @@ class NewsService
             'title' => $request->title,
             'slug' => $slug,
             'tag_name' => $request->tag_name,
+            'image' => $request->image,
             'content' => $request->content,
             'cate_id' => $request->cate_id,
             'user_id' => $request->user_id,
@@ -131,6 +142,7 @@ class NewsService
             'title' => $request->title,
             'slug' => $slug,
             'tag_name' => $request->tag_name,
+            'image' => $request->image,
             'content' => $request->content,
             'cate_id' => $request->cate_id,
             'user_id' => $request->user_id,
@@ -149,13 +161,15 @@ class NewsService
     public function delete($id)
     {
         $news = News::findOrFail($id);
+        $this->deleteImage($news->image);
+
         $news->delete();
         return $news;
     }
 
     public function showAllCommentInnews($slug)
     {
-       /// $data = DB::select('CALL proc_selectCommentInNews(?)', [$slug]);
+        /// $data = DB::select('CALL proc_selectCommentInNews(?)', [$slug]);
         $data = News::with('comments.user')->where('slug', $slug)->first();
         return $data;
     }
@@ -164,17 +178,16 @@ class NewsService
     {
         // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::withCount('comments')
-        ->where('user_id', $user_id)
-        ->orderBy('comments_count', 'desc')
-        ->limit(5)
-        ->get();
+            ->where('user_id', $user_id)
+            ->orderBy('comments_count', 'desc')
+            ->limit(5)
+            ->get();
     }
 
     public function countNewsOfUser($user_id)
     {
         // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::where('user_id', $user_id)
-        ->count();
+            ->count();
     }
-
 }

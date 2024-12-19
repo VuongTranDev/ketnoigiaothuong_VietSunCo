@@ -4,12 +4,14 @@ namespace App\Http\Controllers\admin;
 
 use App\DataTables\NewsDatatables;
 use App\Http\Controllers\Controller;
+use App\Traits\ImageUploadTrait;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
     protected $client;
+    use ImageUploadTrait;
     public function __construct(Client $client)
     {
         $this->client = $client;
@@ -38,18 +40,23 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only(['title', 'tag_name', 'content']);
-        $data['cate_id'] = 1;
-        $data['user_id'] = 1;
-        $url = config('api.base_url') . "new";
-        $response = $this->client->request('POST', $url, [
-            'form_params' => $data
-        ]);
+        $data = $request->only(['title', 'tag_name', 'content', 'user_id', 'cate_id']);
 
-        if($response->getStatusCode() == 201) {
+        $imagePath = $this->uploadImage($request, 'image', 'frontend/image/news');
+        $data['image'] = $imagePath;
+
+        $url = env('API_URL') . "new";
+        $response = $this->client->request(
+            'POST',
+            $url,
+            [
+                'form_params' => $data
+            ]
+        );
+
+        if ($response->getStatusCode() == 201) {
             return redirect()->route('admin.news.index')->with('success', 'Thêm tin tức mới thành công!');
-        }
-        else {
+        } else {
             return redirect()->route('admin.news.index')->with('error', 'Thêm tin tức mới thất bại!');
         }
     }
@@ -67,12 +74,13 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        $url = config('api.base_url') . "new/{$id}";
+        $url = env('API_URL') . "new/{$id}";
 
         $response = $this->client->request('GET', $url);
 
         $responseData = json_decode($response->getBody());
         $new = $responseData->data;
+
         return view('frontend.admin.news.edit')->with('new', $new);
     }
 
@@ -81,19 +89,22 @@ class NewsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->only(['title', 'tag_name', 'content']);
-        $data['cate_id'] = 1;
-        $data['user_id'] = 1;
+        $data = $request->only(['id', 'title', 'tag_name', 'content', 'image', 'user_id', 'cate_id']);
+        $imagePath = $this->uploadImage($request, 'image', 'frontend/image/news');
+        $data['image'] = $imagePath;
 
-        $url = config('api.base_url') . "new/{$id}";
-        $response = $this->client->request('PUT', $url, [
-            'form_params' => $data
-        ]);
+        $url = env('API_URL') . "new/{$id}";
+        $response = $this->client->request(
+            'PUT',
+            $url,
+            [
+                'form_params' => $data
+            ]
+        );
 
-        if($response->getStatusCode() == 200) {
+        if ($response->getStatusCode() == 200) {
             return redirect()->route('admin.news.index')->with('success', 'Cập nhật tin tức thành công!');
-        }
-        else {
+        } else {
             return redirect()->route('admin.news.index')->with('error', 'Cập nhật tin tức thất bại!');
         }
     }
@@ -103,6 +114,17 @@ class NewsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $url = env('API_URL') . "new/{$id}";
+
+        $deleteImage = $this->client->request('GET', $url);
+        $this->deleteImage($deleteImage->image);
+
+        $response = $this->client->request('DELETE', $url);
+
+        if ($response->getStatusCode() == 200) {
+            return redirect()->route('admin.news.index')->with('success', 'Xóa tin tức thành công!');
+        } else {
+            return redirect()->route('admin.news.index')->with('error', 'Xóa tin tức thất bại!');
+        }
     }
 }
