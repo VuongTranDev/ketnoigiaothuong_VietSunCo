@@ -22,7 +22,6 @@ class HomeController extends BaseController
 
     public function index()
     {
-
         try {
             $apiUrl = $this->url . "company";
             $response = $this->client->request('GET', $apiUrl);

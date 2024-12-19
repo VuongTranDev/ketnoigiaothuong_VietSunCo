@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/styleLogin.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleBlog.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/css/styleNewDetail.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/styleNewsDetail.css') }}">
     @stack('style')
 </head>
 
