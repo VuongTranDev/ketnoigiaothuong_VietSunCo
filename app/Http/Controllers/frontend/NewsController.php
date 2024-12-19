@@ -58,7 +58,19 @@ class NewsController extends BaseController
         return view('frontend.news.new-detail', compact('news', 'moreNews','newComment'));
     }
 
+    public function search(Request $request)
+    {
+        try {
+            $news = $this->fetchDataFromApi("new/search/search_query={$request->search_query}");
+            $moreNews = $this->fetchDataFromApi("new?limit=5");
 
+        } catch (RequestException $e) {
+            Log::error('API request failed: ' . $e->getMessage());
+            $news = [];
+            $moreNews = [];
+        }
+        return view('frontend.news.search', compact('news', 'moreNews'));
+    }
 
 
 }

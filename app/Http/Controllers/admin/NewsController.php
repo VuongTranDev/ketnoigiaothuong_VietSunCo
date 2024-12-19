@@ -89,9 +89,20 @@ class NewsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $url = env('API_URL') . "new/{$id}";
+        $response = $this->client->request('GET', $url);
+        $responseData = json_decode($response->getBody());
+
+        $currentImage = $responseData->data->image;
+
         $data = $request->only(['id', 'title', 'tag_name', 'content', 'image', 'user_id', 'cate_id']);
-        $imagePath = $this->uploadImage($request, 'image', 'frontend/image/news');
-        $data['image'] = $imagePath;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $this->updateImage($request, 'image', 'frontend/image/news',  $currentImage);
+            $data['image'] = $imagePath;
+        } else {
+            $data['image'] = $currentImage;
+        }
 
         $url = env('API_URL') . "new/{$id}";
         $response = $this->client->request(

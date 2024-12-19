@@ -26,7 +26,7 @@ class NewsController extends BaseController
             $news = $this->newsService->show($page, $limit);
 
             $formattedData = collect($news->items())->map(function ($item) {
-                return $this->newsService->formatData($item);
+                return $this->newsService->formatDataSlug($item);
             })->toArray();
 
             $formattedPagination = $this->newsService->formatPaginate($news);
@@ -87,7 +87,7 @@ class NewsController extends BaseController
             return $this->failed('news not found', 404);
         }
 
-        return $this->success($this->newsService->formatData($news),  'news retrieved successfully', 200);
+        return $this->success($this->newsService->formatDataSlug($news),  'news retrieved successfully', 200);
     }
 
     /**
@@ -126,26 +126,35 @@ class NewsController extends BaseController
 
     public function showAllComments($slug)
     {
-        $data = $this->newsService->showAllCommentInnews($slug) ;
-        return $this->success($data,"Danh sách comment được lấy thành công",200) ;
+        $data = $this->newsService->showAllCommentInnews($slug);
+        return $this->success($data, "Danh sách comment được lấy thành công", 200);
     }
 
     public function show5NewOfUser($user_id)
     {
         $data = $this->newsService->show5NewOfUser($user_id);
-        \Log::info("data". json_encode($data)) ;
-        return $this->success($data,"Danh sách bài viết của công ty được lấy thành công",200);
+        \Log::info("data" . json_encode($data));
+        return $this->success($data, "Danh sách bài viết của công ty được lấy thành công", 200);
     }
 
 
     public function countNewsOfUser($user_id)
     {
         $data = $this->newsService->countNewsOfUser($user_id);
-        \Log::info("data". json_encode($data)) ;
-        return $this->success($data,"Số lượng bài viết của công ty",200);
+        \Log::info("data" . json_encode($data));
+        return $this->success($data, "Số lượng bài viết của công ty", 200);
     }
 
+    public function showNewsByUserId($user_id)
+    {
+        $data = $this->newsService->showNewsByUserId($user_id);
+        return $this->success($data, "Danh sách bài viết của công ty được lấy thành công", 200);
+    }
 
+    public function searchNews(Request $request)
+    {
+        $data = $this->newsService->searchNews($request);
 
-
+        return $this->success($data,  'news retrieved successfully', 200);
+    }
 }

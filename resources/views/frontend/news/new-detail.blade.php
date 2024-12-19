@@ -5,7 +5,7 @@
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="pb-2">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa-solid fa-house"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">Tin tức</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('news') }}">Tin tức</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $news->title }}</li>
             </ol>
         </nav>
@@ -14,13 +14,13 @@
             <div class="col-lg-9">
                 <div class="wsus__main_blog">
                     <div class="wsus__main_blog_img mb-3">
-                        <img src="{{ asset('frontend/image/DaNang.png') }}" alt="blog" class="img-fluid w-100">
+                        <img src="{{ asset($news->image) }}" alt="blog" class="img-fluid w-100">
                     </div>
 
                     <h2>{{ $news->title }}</h2>
                     <div class="wsus__main_blog_header">
-                        <span><i class="fas fa-user-tie"></i> by VietSunCo</span>
-                        <span><i class="fas fa-calendar-alt"></i> 03/10/2024</span>
+                        <span><i class="fas fa-user-tie"></i> by {{ $news->company_name }}</span>
+                        <span><i class="fas fa-calendar-alt"></i> {{  date('d/m/Y', strtotime($news->created_at)) }}</span>
                     </div>
 
                     <div class="wsus__description_area">

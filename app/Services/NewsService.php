@@ -23,7 +23,14 @@ class NewsService
      */
     public function show($page, $limit)
     {
-        return News::with('categories', 'users')->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $page);
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name')
+            ->groupBy('news.id')
+            ->orderBy('news.id', 'desc')
+            ->paginate($limit, ['*'], 'page', $page);
     }
 
     /**
@@ -34,9 +41,13 @@ class NewsService
      */
     public function showBySlug($slug)
     {
-        return News::with('categories', 'users')
-            ->where('slug', $slug)
-            ->orderBy('id', 'desc')
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.*', 'companies.company_name')
+            ->where('news.slug', $slug)
+            ->orderBy('news.id', 'desc')
             ->first();
     }
 
@@ -63,6 +74,23 @@ class NewsService
             'tag_name' => $news->tag_name,
             'content' => $news->content,
             'image' => $news->image,
+            'categorie' => $news->categories,
+            'user' => $news->users,
+            'created_at' => $news->created_at,
+            'updated_at' => $news->updated_at
+        ];
+    }
+
+    public function formatDataSlug($news)
+    {
+        return [
+            'id' => $news->id,
+            'title' => $news->title,
+            'slug' => $news->slug,
+            'tag_name' => $news->tag_name,
+            'content' => $news->content,
+            'image' => $news->image,
+            'company_name' => $news->company_name,
             'categorie' => $news->categories,
             'user' => $news->users,
             'created_at' => $news->created_at,
@@ -189,5 +217,26 @@ class NewsService
         // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::where('user_id', $user_id)
             ->count();
+    }
+
+    public function showNewsByUserId($user_id)
+    {
+        return News::with('categories', 'users')
+            ->where('user_id', $user_id)
+            ->orderBy('id', 'desc')
+            ->get();
+    }
+
+    public function searchNews($request)
+    {
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name')
+            ->where('title', 'like', '%' . $request->search_query . '%')
+            ->groupBy('news.id')
+            ->orderBy('news.id', 'desc')
+            ->paginate(9);
     }
 }

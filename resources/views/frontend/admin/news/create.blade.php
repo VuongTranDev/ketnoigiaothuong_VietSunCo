@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label>Loại tin tức</label>
                                             <select class="form-control" name="cate_id" required>
-                                                <option value="">Chọn loại tour</option>
+                                                <option value="">Chọn loại tin tức</option>
                                                 @foreach ($category as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}
                                                     </option>

@@ -12,7 +12,7 @@
                         <div class="card-header">
                             <h4>Tất cả tin tức</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.news.create') }}" class="btn btn-primary"><i
+                                <a href="{{ route('partner.news.create') }}" class="btn btn-primary"><i
                                         class="fas fa-plus"></i> Tạo mới</a>
                             </div>
                         </div>
@@ -22,10 +22,10 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Tiêu đề</th>
+                                        <th>Hình ảnh</th>
                                         <th>Tag</th>
                                         <th>Nội dung</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày cập nhật</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -68,11 +68,13 @@
 
 @push('scripts')
     <script>
+        const assetBaseUrl = "{{ asset('') }}";
+
         $(document).ready(function() {
             var table = $('#example').DataTable({
 
                 ajax: {
-                    url: '{{ route('api.new') }}',
+                    url: '{{ route('api.news.showNewsByUserId', ['user_id' => session('user')->id]) }}',
                     dataSrc: 'data'
                 },
                 columns: [{
@@ -83,6 +85,12 @@
                         }
                     }, {
                         data: 'title'
+                    },
+                    {
+                        data: 'image',
+                        render: function(data, type, row) {
+                            return `<img src="${assetBaseUrl}${data}" alt="" width="100">`;
+                        }
                     },
                     {
                         data: 'tag_name'
@@ -105,18 +113,13 @@
                         }
                     },
                     {
-                        data: 'updated_at',
-                        render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
-                    },
-                    {
                         data: null,
                         className: "dt-center",
                         orderable: false,
                         render: function(data, type, row) {
 
-                            let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row
+                            let editUrl = `{{ route('partner.news.edit', ':id') }}`.replace(':id',
+                                row
                                 .id);
 
                             return `

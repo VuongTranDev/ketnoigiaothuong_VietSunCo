@@ -41,12 +41,12 @@ Route::apiResource('comments', CommentAPIController::class);
 Route::post('stattisticMB', ReportAPIController::class)->name('statisticMember');
 
 
-Route::fallback(function () {
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Lỗi api'
-    ], 404);
-});
+// Route::fallback(function () {
+//     return response()->json([
+//         'status' => 'error',
+//         'message' => 'Lỗi api'
+//     ], 404);
+// });
 
 
 Route::apiResource('/rating', RatingController::class);
@@ -68,6 +68,8 @@ Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.
 Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
 Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
 Route::get('new/countNewsOfUser/{user_id}',[NewsController::class,'countNewsOfUser']);
+Route::get('new/user/{user_id}',[NewsController::class,'showNewsByUserId'])->name('api.news.showNewsByUserId');
+Route::get('new/search/search_query={search_query}', [NewsController::class, 'searchNews'])->name('api.news.search');
 
 Route::apiResource('/categories', CategoriesController::class)->names(['index' => 'api.categories']);
 Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
