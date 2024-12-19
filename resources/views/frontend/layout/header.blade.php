@@ -165,11 +165,11 @@
                                     <i class="fa-solid fa-user" style="font-size: 20px;"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"href="
+                                    <li><a class="dropdown-item" href="
                                             @if (session('user')->role_id == '1')
-                                                route('admin.dashboard')
+                                                {{ route('admin.dashboard') }}
                                             @else
-                                                route('partner.dashboard')
+                                                {{ route('partner.dashboard') }}
                                             @endif">
 
                                             @if (session('user')->role_id == '1')
