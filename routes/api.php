@@ -13,6 +13,7 @@ use App\Http\Controllers\frontend\DashboardController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\CompanyImageController;
+use App\Http\Controllers\api\ContactsApiController;
 use App\Http\Controllers\api\GoogleController;
 use App\Http\Controllers\api\MessageController;
 use App\Http\Controllers\api\RatingController;
@@ -121,3 +122,4 @@ Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::clas
 Route::middleware('web')->get('/auth/google/callback', [GoogleController::class, 'loginCallback']);
 
 
+Route::apiResource('send-contact', ContactsApiController::class)->names(['index' => 'api.send-contact']);

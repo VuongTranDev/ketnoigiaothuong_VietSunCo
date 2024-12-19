@@ -5,6 +5,7 @@ use App\Http\Controllers\backend\CategoriesController;
 use App\Http\Controllers\frontend\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\CompaniesController;
+use App\Http\Controllers\backend\ContactsController;
 use App\Http\Controllers\backend\FooterGridInfoController;
 use App\Http\Controllers\backend\FooterGridThreeController;
 use App\Http\Controllers\backend\FooterGridTwoController;
@@ -30,3 +31,6 @@ Route::post('footer-grid-three/change-title', [FooterGridThreeController::class,
 
 Route::resource('footer-socials', FooterSocialController::class);
 Route::put('footer-socials/change-status', [FooterSocialController::class, 'changeStatus'])->name('footer-socials.change-status');
+
+Route::resource('send-contact', ContactsController::class);
+Route::post('send-contact/send-bulk-email', [ContactsController::class, 'sendBulkEmail'])->name('send-contact.send-bulk-email');

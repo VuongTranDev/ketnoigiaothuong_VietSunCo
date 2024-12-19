@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\api\Controller;
+use App\Models\Contacts;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Auth;
@@ -37,5 +38,25 @@ class HomeController extends BaseController
         }
 
         return view('index', compact('companies'));
+    }
+
+    public function sendContact(Request $request)
+    {
+        $data = $request->only(['name', 'email', 'phone', 'message']);
+
+        $url = env('API_URL') . "send-contact";
+        $response = $this->client->request(
+            'POST',
+            $url,
+            [
+                'form_params' => $data
+            ]
+        );
+
+        if($response->getStatusCode() == 201) {
+            return redirect()->back()->with('success', 'Gửi liên hệ thành công');
+        } else {
+            return redirect()->back()->with('error', 'Gửi liên hệ thất bại');
+        }
     }
 }

@@ -60,3 +60,5 @@ Route::get('clearsession',[LoginController::class,'clearSession']);
 Route::post('/postComment',[CommentsController::class,'createComment'])->name('postComment');
 
 Route::get('/tin-tuc/tim-kiem/search',[NewsController::class, 'search'])->name('news.search');
+
+Route::post('/send-contact', [HomeController::class, 'sendContact'])->name('send.contact');
