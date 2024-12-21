@@ -95,6 +95,10 @@ namespace App\Models{
  * @property string|null $short_name
  * @property string|null $phone_number
  * @property string|null $slug
+ * @property string $email
+ * @property int $status
+ * @property int $tax_code
+ * @property string $image
  * @property string|null $content
  * @property string|null $link
  * @property int $user_id
@@ -113,12 +117,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereCompanyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereRepresentative($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereShortName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereTaxCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereUserId($value)
  */

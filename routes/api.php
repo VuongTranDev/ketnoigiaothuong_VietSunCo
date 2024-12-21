@@ -55,6 +55,8 @@ Route::apiResource('/address', AddressController::class);
 
 Route::get('/getAllCategory',[CategoriesController::class,'getAllCategory'])->name('getAllCategory');
 
+Route::get('/getAllCompany/{slug}',[CompaniesController::class,'findCompanyByName'])->name('findCompanyByName');
+Route::get('/getCompanyByCate/{id}',[CompaniesController::class,'findCompanyByCateId'])->name('findCompanyByCateId');
 // Route::prefix('companies')->group(function () {
 //     Route::apiResource('/', CompaniesController::class);
 //     Route::get('/', [CompaniesController::class, 'index']);

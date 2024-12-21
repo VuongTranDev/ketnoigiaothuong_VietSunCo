@@ -55,7 +55,12 @@ class CompanyService
         $company->slug = $request->slug;
         $company->content = $request->content;
         $company->link = $request->link;
+        $company->email = $request->email;
+        $company->tax_code = $request->tax_code;
+        $company->status = $request->status;
+        $company->image = $request->image;
         $company->user_id = $request->user_id;
+
         $company->save();
 
         return [
@@ -81,10 +86,24 @@ class CompanyService
     {
         return Companies::with('user')
                         ->where('user_id', $user_id)
-                        ->orderBy('created_at', 'desc')  // Sắp xếp theo thời gian tạo mới nhất
-                        ->first();  // Lấy bản ghi đầu tiên
+                        ->orderBy('created_at', 'desc')
+                        ->first();
     }
 
+    public function showAllLikeSlug($slug)
+    {
+        return Companies::with('user')
+                        ->where('slug', 'LIKE', '%' . $slug . '%')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+    }
+
+    public function getCompaniesByCategory($categoryId)
+    {
+        return Companies::whereHas('companyCategory', function ($query) use ($categoryId) {
+            $query->where('cate_id', $categoryId);
+        })->get();
+    }
 
     /**
      * Format company data for a structured API response.

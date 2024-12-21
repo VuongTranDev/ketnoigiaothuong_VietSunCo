@@ -17,7 +17,11 @@ class Companies extends Model
         'slug',
         'content',
         'link',
-        'user_id'
+        'user_id',
+        'status',
+        'image',
+        'tax_code',
+        'email'
     ];
     public function companyCategory(){
         return $this->hasMany(CompanyCategory::class,'company_id');

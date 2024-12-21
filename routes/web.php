@@ -27,6 +27,10 @@ require __DIR__ . '/auth.php';
 
 Route::post('createRating', [RatingController::class, 'createRating'])->name('createRating');
 Route::post('insertCompany', [FrontendCompaniesController::class, 'createCompany'])->name('insertCompany');
+Route::post('findCompanies', [FrontendCompaniesController::class, 'findCompany'])->name('findCompany');
+Route::get('findCompaniesByCate/{cateId}', [FrontendCompaniesController::class, 'findCompanyByCate'])->name('findCompanyByCate');
+
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

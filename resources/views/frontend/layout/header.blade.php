@@ -9,16 +9,21 @@
                 </div>
 
                 <div>
-                    @if (isset($company_id) && $company_id > 0 || !Session::has('user'))
+                    @if ( isset($company_id ) && $company_id > 0 || !Session::has('user'))
                         <a class="ms-2">
                             <a class="ms-2" href="#" id="openForm" style="display:none">Đăng ký thành viên
                                 <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
                             </a>
+
+
                         </a>
+
                     @else
                         <a class="ms-2" href="#" id="openForm">Đăng ký thành viên
                             <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
+
                         </a>
+
                     @endif
 
                     <a href="">
@@ -60,11 +65,27 @@
                     <input type="text" id="link" name="link" placeholder="Nhập tại đây" required>
                 </div>
                 <div class="form-group">
+                    <label for="tax_code">Mã số thuế</label>
+                    <input type="text" id="tax_code" name="tax_code" placeholder="Nhập tại đây" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email công ty</label>
+                    <input type="email" id="email" name="email" placeholder="Nhập tại đây" required>
+                </div>
+
+                <div class="form-group">
                     <label for="content">Thông tin công ty</label>
                     <textarea id="content" name="content" placeholder="Thông tin công ty"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="company_images">Ảnh công ty</label>
+                    <label for="company_avatar">Ảnh đại diện công ty (Một ảnh)</label>
+                    <div class="upload-container">
+                        <input type="file" id="company_avatar" name="company_avatar" accept="image/*" onchange="previewSingleImage()">
+                        <div class="preview-container" id="avatarPreview"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="company_images">Ảnh công ty (Nhiều ảnh)</label>
                     <div class="upload-container">
                         <input type="file" id="company_images" name="company_images[]" accept="image/*" multiple onchange="previewImages()">
                         <div class="preview-container" id="previewContainer"></div>
@@ -80,10 +101,7 @@
                         @else
                             <p>No categories available.</p>
                         @endif
-                        <!-- Vòng lặp để tạo button cho mỗi category -->
-                        {{-- @foreach($category as $cate)
-                            <button type="button" class="category-btn" data-id="{{ $cate->id }}">{{ $cate->name }}</button>
-                        @endforeach --}}
+
                     </div>
                     <!-- Input ẩn để lưu các ID của category được chọn -->
                     <input type="hidden" name="category_id[]" id="selectedCategories">
@@ -127,18 +145,12 @@
                                 Lĩnh vực
                             </a>
                             <ul class="dropdown-menu">
+                                @foreach ($category as $item)
                                 <li>
-                                    <a class="dropdown-item" href="/">A</a>
+                                    <a class="dropdown-item" href="{{ route('findCompanyByCate', ['cateId' => $item->id]) }}">{{ $item->name }}</a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="/">B</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/">C</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/">D</a>
-                                </li>
+                                @endforeach
+
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -149,11 +161,10 @@
                             <a href="" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
                         </form> --}}
                     <div class="d-flex align-items-center">
-                        <form class="d-flex align-items-center search me-3" role="search" action="" method="GET"
-                            autocomplete="off">
-                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..." aria-label="Search"
-                                name="query" value="{{ request('query') }}">
-                            <a class="search-btn" href="#">
+                        <form class="d-flex align-items-center search me-3" role="search" action="{{ route('findCompany') }}" method="POST" autocomplete="off">
+                            @csrf
+                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..." aria-label="Search" name="name" required>
+                            <a class="search-btn" href="javascript:void(0);" onclick="document.querySelector('.search').submit();">
                                 <i class="fas fa-search"></i>
                             </a>
                         </form>
@@ -218,6 +229,27 @@
     function previewImages() {
         const previewContainer = document.getElementById('previewContainer');
         const files = document.getElementById('company_images').files;
+
+        previewContainer.innerHTML = ''; // Xóa các hình ảnh trước đó
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function previewSingleImage()
+    {
+        const previewContainer = document.getElementById('avatarPreview');
+        const files = document.getElementById('company_avatar').files;
 
         previewContainer.innerHTML = ''; // Xóa các hình ảnh trước đó
 

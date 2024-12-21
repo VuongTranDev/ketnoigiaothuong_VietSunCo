@@ -30,6 +30,24 @@ class CompaniesController extends BaseController
         return view('frontend.company.list-company', compact('companies'));
     }
 
+    public function findCompany(Request $request)
+    {
+        $slug=\Str::slug($request->name);
+        $client = new Client();
+        $responseCompany = $client->get(env('API_URL') . 'getAllCompany/'  . $slug);
+        $companiesData = json_decode($responseCompany->getBody()->getContents());
+        return view('frontend.company.list-find-companies',compact('companiesData'));
+    }
+
+    public function findCompanyByCate(int $cateId)
+    {
+
+        $client = new Client();
+        $responseCompany = $client->get(env('API_URL') . 'getCompanyByCate/'  . $cateId);
+        $companiesData = json_decode($responseCompany->getBody()->getContents());
+        return view('frontend.company.list-find-companies',compact('companiesData'));
+    }
+
     public function createCompany(Request $request)
     {
         Log::info('Allrequest', $request->all());
@@ -39,6 +57,19 @@ class CompaniesController extends BaseController
         // Tạo slug từ tên công ty
         $slug = \Str::slug($request->company_name);
         $userId=Session::get('user')->id;
+
+        $avatar = $request->company_avatar;
+        $avatarPath = null;
+
+        if ($avatar && $avatar instanceof \Illuminate\Http\UploadedFile) {
+            $filename = uniqid('avatar_', true) . '.' . $avatar->getClientOriginalExtension();
+
+            // Lưu file vào thư mục 'uploads'
+            $path = $avatar->move(public_path('uploads'), $filename);
+
+            // Lưu đường dẫn để sử dụng sau
+            $avatarPath = 'uploads/' . $filename;
+        }
 
         $client = new Client();
         $response = $client->post(env('API_URL') . 'createCompany', [
@@ -54,6 +85,10 @@ class CompaniesController extends BaseController
                 'content' => $request->content,
                 'link' => $request->link,
                 'user_id' => $userId,
+                'image' =>$avatarPath,
+                'email' => $request->email,
+                'status' => 0,
+                'tax_code' => $request->tax_code,
             ]
         ]);
 
@@ -125,7 +160,7 @@ class CompaniesController extends BaseController
                 ],
                 'form_params' => [
                     'company_id' => $company_id,
-                    'image' => $imagePath,  // Gửi đường dẫn ảnh đã thay đổi
+                    'image' => $imagePath,
                 ]
             ]);
 

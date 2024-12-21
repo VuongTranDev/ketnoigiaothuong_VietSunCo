@@ -144,4 +144,16 @@ class CompaniesController extends BaseController
         $check=$this->companyService->checkCompanyById($id);
         return $check;
     }
+
+    public function findCompanyByName(string $slug)
+    {
+        $company=$this->companyService->showAllLikeSlug($slug);
+        return $company;
+    }
+
+    public function findCompanyByCateId(int $cateId)
+    {
+        $companies=$this->companyService->getCompaniesByCategory($cateId);
+        return $companies;
+    }
 }
