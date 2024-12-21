@@ -30,7 +30,9 @@ class CompaniesController extends BaseController
 
         $categories = collect($this->fetchDataFromApi('category/company/' . $company->id));
 
-        return view('frontend.company.company-detail', compact('company', 'address', 'categories'));
+        $news = $this->fetchDataFromApi("new/company/{$company->id}?limit=8");
+
+        return view('frontend.company.company-detail', compact('company', 'address', 'categories', 'news'));
     }
 
 

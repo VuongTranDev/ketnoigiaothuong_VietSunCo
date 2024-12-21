@@ -27,7 +27,7 @@ class NewsService
             ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
             ->leftJoin('users', 'news.user_id', '=', 'users.id')
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
-            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
             ->paginate($limit, ['*'], 'page', $page);
@@ -94,6 +94,7 @@ class NewsService
             'image' => $news->image,
             'status' => $news->status,
             'company_name' => $news->company_name,
+            'company_id' => $news->company_id,
             'categorie' => $news->categories,
             'user' => $news->users,
             'created_at' => $news->created_at,
@@ -229,6 +230,20 @@ class NewsService
         return News::with('categories', 'users')
             ->where('user_id', $user_id)
             ->orderBy('id', 'desc')
+            ->get();
+    }
+
+    public function showNewsByCompanyId($id)
+    {
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
+            ->where('companies.id', $id)
+            ->where('news.status', 1)
+            ->groupBy('news.id')
+            ->orderBy('news.id', 'desc')
             ->get();
     }
 

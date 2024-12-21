@@ -163,4 +163,9 @@ class NewsController extends BaseController
         $data = $this->newsService->changeStatus($request);
         return $this->success($data,  'news retrieved successfully', 200);
     }
+
+    public function showNewsByCompanyId($id) {
+        $data = $this->newsService->showNewsByCompanyId($id);
+        return $this->success($data,  'news retrieved successfully', 200);
+    }
 }

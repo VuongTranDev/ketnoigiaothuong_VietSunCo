@@ -124,3 +124,4 @@ Route::middleware('web')->get('/auth/google/callback', [GoogleController::class,
 
 Route::apiResource('send-contact', ContactsApiController::class)->names(['index' => 'api.send-contact']);
 Route::post('new/change-status', [NewsController::class, 'changeStatus'])->name('api.news.changeStatus');
+Route::get('new/company/{id}',[NewsController::class,'showNewsByCompanyId'])->name('api.news.showNewsByCompanyId');
