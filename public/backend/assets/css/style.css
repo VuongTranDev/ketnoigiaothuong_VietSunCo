@@ -4223,3 +4223,7 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li ul.dropdown-menu li.active>a {
 .main-sidebar .sidebar-menu li ul.dropdown-menu li a:hover {
     color: #3EAEF4;
 }
+
+.custom-switch-input:checked~.custom-switch-indicator {
+    background-color: #3EAEF4;
+}

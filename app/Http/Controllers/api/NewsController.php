@@ -157,4 +157,10 @@ class NewsController extends BaseController
 
         return $this->success($data,  'news retrieved successfully', 200);
     }
+
+    public function changeStatus(Request $request)
+    {
+        $data = $this->newsService->changeStatus($request);
+        return $this->success($data,  'news retrieved successfully', 200);
+    }
 }

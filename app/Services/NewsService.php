@@ -47,6 +47,7 @@ class NewsService
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
             ->select('news.*', 'categories.name', 'users.*', 'companies.company_name')
             ->where('news.slug', $slug)
+            ->where('news.status', 1)
             ->orderBy('news.id', 'desc')
             ->first();
     }
@@ -74,6 +75,7 @@ class NewsService
             'tag_name' => $news->tag_name,
             'content' => $news->content,
             'image' => $news->image,
+            'status' => $news->status,
             'categorie' => $news->categories,
             'user' => $news->users,
             'created_at' => $news->created_at,
@@ -90,6 +92,7 @@ class NewsService
             'tag_name' => $news->tag_name,
             'content' => $news->content,
             'image' => $news->image,
+            'status' => $news->status,
             'company_name' => $news->company_name,
             'categorie' => $news->categories,
             'user' => $news->users,
@@ -146,6 +149,7 @@ class NewsService
             'slug' => $slug,
             'tag_name' => $request->tag_name,
             'image' => $request->image,
+            'status' => $request->status,
             'content' => $request->content,
             'cate_id' => $request->cate_id,
             'user_id' => $request->user_id,
@@ -171,6 +175,7 @@ class NewsService
             'slug' => $slug,
             'tag_name' => $request->tag_name,
             'image' => $request->image,
+            'status' => $request->status,
             'content' => $request->content,
             'cate_id' => $request->cate_id,
             'user_id' => $request->user_id,
@@ -235,8 +240,18 @@ class NewsService
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
             ->select('news.*', 'categories.name', 'users.email', 'companies.company_name')
             ->where('title', 'like', '%' . $request->search_query . '%')
+            ->where('news.status', 1)
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
             ->paginate(9);
+    }
+
+    public function changeStatus($request)
+    {
+        $news = News::findOrFail($request->id);
+        $news->status = $request->status === 'true' ? 1 : 0;
+        $news->save();
+
+        return $news;
     }
 }

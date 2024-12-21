@@ -40,7 +40,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only(['title', 'tag_name', 'content', 'user_id', 'cate_id']);
+        $data = $request->only(['title', 'tag_name', 'content', 'status', 'user_id', 'cate_id']);
 
         $imagePath = $this->uploadImage($request, 'image', 'frontend/image/news');
         $data['image'] = $imagePath;
@@ -95,7 +95,7 @@ class NewsController extends Controller
 
         $currentImage = $responseData->data->image;
 
-        $data = $request->only(['id', 'title', 'tag_name', 'content', 'image', 'user_id', 'cate_id']);
+        $data = $request->only(['id', 'title', 'tag_name', 'content', 'image', 'status', 'user_id', 'cate_id']);
 
         if ($request->hasFile('image')) {
             $imagePath = $this->updateImage($request, 'image', 'frontend/image/news',  $currentImage);
@@ -136,6 +136,27 @@ class NewsController extends Controller
             return redirect()->route('admin.news.index')->with('success', 'Xóa tin tức thành công!');
         } else {
             return redirect()->route('admin.news.index')->with('error', 'Xóa tin tức thất bại!');
+        }
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $url = env('API_URL') . "new/change-status";
+        $response = $this->client->request(
+            'POST',
+            $url,
+            [
+                'form_params' => [
+                    'id' => $request->id,
+                    'status' => $request->status
+                ]
+            ]
+        );
+
+        if ($response->getStatusCode() == 200) {
+            return response()->json(['message' => 'Cập nhật trạng thái thành công!']);
+        } else {
+            return response()->json(['message' => 'Cập nhật trạng thái thất bại!']);
         }
     }
 }

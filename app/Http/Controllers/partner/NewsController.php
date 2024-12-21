@@ -145,5 +145,24 @@ class NewsController extends BaseController
         }
     }
 
+    public function changeStatus(Request $request)
+    {
+        $url = env('API_URL') . "new/change-status";
+        $response = $this->client->request(
+            'POST',
+            $url,
+            [
+                'form_params' => [
+                    'id' => $request->id,
+                    'status' => $request->status
+                ]
+            ]
+        );
 
+        if ($response->getStatusCode() == 200) {
+            return response()->json(['message' => 'Cập nhật trạng thái thành công!']);
+        } else {
+            return response()->json(['message' => 'Cập nhật trạng thái thất bại!']);
+        }
+    }
 }

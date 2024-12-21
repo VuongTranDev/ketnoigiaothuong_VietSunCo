@@ -36,18 +36,21 @@ class ContactsController extends Controller
 
         $contacts = Contacts::where('status', 0)->get();
 
-        foreach ($contacts as $contact) {
-            try {
-                Mail::to($contact->email)->send(new SendContactMail($validated['subject'], $validated['message']));
+        if ($contacts->isEmpty()) {
+            return redirect()->back()->with('error', 'Tất cả email đã được gửi!');
+        } else {
+            foreach ($contacts as $contact) {
+                try {
+                    Mail::to($contact->email)->send(new SendContactMail($validated['subject'], $validated['message']));
 
-                $contact->status = 1;
-                $contact->save();
-            } catch (\Exception $e) {
-                \Log::error("Failed to send email to {$contact->email}: " . $e->getMessage());
+                    $contact->status = 1;
+                    $contact->save();
+                } catch (\Exception $e) {
+                    \Log::error("Failed to send email to {$contact->email}: " . $e->getMessage());
+                }
             }
+            return redirect()->back()->with('success', 'Gửi email thành công!');
         }
-
-        return redirect()->back()->with('success', 'Gửi email thành công!');
     }
 
 

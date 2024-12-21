@@ -34,3 +34,5 @@ Route::put('footer-socials/change-status', [FooterSocialController::class, 'chan
 
 Route::resource('send-contact', ContactsController::class);
 Route::post('send-contact/send-bulk-email', [ContactsController::class, 'sendBulkEmail'])->name('send-contact.send-bulk-email');
+
+Route::post('news/change-status', [NewsController::class, 'changeStatus'])->name('news.change-status');

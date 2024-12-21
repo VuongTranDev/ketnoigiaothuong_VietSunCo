@@ -23,8 +23,8 @@
                                         <th>STT</th>
                                         <th>Tiêu đề</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tag</th>
                                         <th>Nội dung</th>
+                                        <th>Trạng thái</th>
                                         <th>Ngày tạo</th>
                                         <th>Hành động</th>
                                     </tr>
@@ -93,9 +93,6 @@
                         }
                     },
                     {
-                        data: 'tag_name'
-                    },
-                    {
                         data: 'content',
                         render: function(data, type, row) {
                             let parser = new DOMParser();
@@ -104,6 +101,21 @@
 
                             return textContent.length > 50 ? textContent.substring(0, 50) + '...' :
                                 textContent;
+                        }
+                    },
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            let checked = data == 1 ? 'checked' : '';
+                            return `
+                                <label class="custom-switch mt-2">
+                                    <input type="checkbox" ${checked}
+                                        name="custom-switch-checkbox"
+                                        data-id="${row.id}"
+                                        class="custom-switch-input change-status">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            `;
                         }
                     },
                     {
@@ -169,6 +181,28 @@
                                 );
                             }
                         });
+                    }
+                });
+            });
+
+            $('body').on('change', '.change-status', function() {
+                let isChecked = $(this).is(':checked');
+                let id = $(this).data('id');
+
+                $.ajax({
+                    url: "{{ route('partner.news.change-status') }}",
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        status: isChecked ? 'true' : 'false',
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        toastr.success(response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
+                        console.log(xhr.responseText);
                     }
                 });
             });

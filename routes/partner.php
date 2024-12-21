@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard', [DashboardController::class, 'partner'])->name('dashboard');
 Route::get('/news/hotnews', [NewsController::class, 'hotNews'])->name('news.hotnews');
 Route::resource('news', NewsController::class);
+Route::post('news/change-status', [NewsController::class, 'changeStatus'])->name('news.change-status');
