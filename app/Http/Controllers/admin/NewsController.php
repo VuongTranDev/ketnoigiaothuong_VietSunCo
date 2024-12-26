@@ -21,7 +21,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $url = config('api.base_url') . "new";
+        $url = env('API_URL') . "new";
         $response = $this->client->request('GET', $url);
         $data = json_decode($response->getBody());
         return view('frontend.admin.news.index')->with('data', $data);
