@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\frontend\DashboardController;
 use App\Http\Controllers\partner\NewsController;
+use App\Http\Controllers\partner\AddressController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard', [DashboardController::class, 'partner'])->name('dashboard');
 Route::get('/news/hotnews', [NewsController::class, 'hotNews'])->name('news.hotnews');
 Route::resource('news', NewsController::class);
+Route::resource('address', AddressController::class);

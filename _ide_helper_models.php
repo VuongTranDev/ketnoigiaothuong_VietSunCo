@@ -93,6 +93,8 @@ namespace App\Models{
  * @property string|null $representative
  * @property string|null $company_name
  * @property string|null $short_name
+ * @property string $email
+ * @property string|null $image
  * @property string|null $phone_number
  * @property string|null $slug
  * @property string|null $content
@@ -113,7 +115,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereCompanyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereRepresentative($value)
@@ -309,9 +313,33 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property int $sender_id
+ * @property int $receiver_id
+ * @property string $content
+ * @property string $type
+ * @property string|null $attachment_path
+ * @property string $status
+ * @property string|null $seen_at
+ * @property int $is_deleted
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Users $receiverUser
+ * @property-read \App\Models\Users $senderUser
  * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereAttachmentPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereIsDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereReceiverId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereSeenAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereSenderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
  */
 	class Message extends \Eloquent {}
 }
@@ -427,6 +455,36 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $sender_id
+ * @property int $receiver_id
+ * @property string $title
+ * @property string $content
+ * @property string $date_meet
+ * @property string $address
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDateMeet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereReceiverId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereSenderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereUpdatedAt($value)
+ */
+	class Transaction extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $password
@@ -436,6 +494,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Companies> $companies
+ * @property-read int|null $companies_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \App\Models\Roles $roles
@@ -449,6 +509,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRoleId($value)

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('company_name')->unique()->nullable();
             // tên thường gọi của công ty
             $table->string('short_name')->nullable();
+            $table->text('image')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('slug')->nullable();
             $table->string('content')->nullable();

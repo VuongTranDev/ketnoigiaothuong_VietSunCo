@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
+    protected $table = 'messages';
+    protected $fillable = ['sender_id', 'receiver_id', 'content', 'status'];
+    public $timestamps = true;
+    public function senderUser(){
+        return $this->belongsTo(Users::class, 'sender_id');
+    }
+    public function receiverUser(){
+        return $this->belongsTo(Users::class, 'receiver_id');
+    }
 }

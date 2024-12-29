@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Session;
 
@@ -19,9 +17,11 @@ class LoginController extends Controller
         return view('auth.login');
     }
     public function store(LoginRequest $request)
-    {
-        $credentials = $request->only('email', 'password');
-        $client = new Client();
+{
+    $credentials = $request->only('email', 'password');
+    $client = new Client();
+
+    try {
         $response = $client->post(env('API_URL') . 'login', [
             'headers' => [
                 'Accept' => 'application/json',
@@ -29,14 +29,16 @@ class LoginController extends Controller
             'form_params' => [
                 'email' => $request->validated()['email'],
                 'password' => $request->validated()['password'],
-            ]
+            ],
         ]);
+
         $data = json_decode($response->getBody());
 
         if ($data->status == 'success') {
             if (Auth::attempt($credentials)) {
                 Session::put('token', $data->data[0]);
                 Session::put('user', Auth::user());
+
                 if ($data->data[1] === 'admin') {
                     return redirect()->route('admin.dashboard')->withSuccess('Đăng nhập thành công với quyền Admin!');
                 } else {
@@ -48,11 +50,27 @@ class LoginController extends Controller
                 ])->withInput();
             }
         } else {
-            return redirect()->back()->withErrors([
-                'email' => $data->message ?? 'Thông tin đăng nhập không hợp lệ.',
-            ])->withInput();
+            return redirect()->back()->withErrors($data->message ?? 'Thông tin đăng nhập không hợp lệ.')->withInput();
         }
+
+    } catch (\GuzzleHttp\Exception\ClientException $e) {
+        if ($e->getCode() === 400) {
+            $responseBody = $e->getResponse()->getBody()->getContents();
+            $responseBodyArray = json_decode($responseBody);
+            //dd($responseBodyArray->message);
+            Session::flash('error', $responseBodyArray->message);
+            return redirect()->back();
+        }
+        return redirect()->back()->withErrors([
+            'email' => 'Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.',
+        ])->withInput();
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors([
+            'email' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+        ])->withInput();
     }
+}
+
 
 
     public function clearSession()
@@ -66,7 +84,7 @@ class LoginController extends Controller
     {
         $client = new Client();
         $token = Session::get('token');
-        // dd($token);
+
         if (!$token) {
             return redirect()->back()->withErrors(['error' => 'Vui lòng đăng nhập trước khi đăng xuất'])->withInput();
         }
@@ -80,7 +98,6 @@ class LoginController extends Controller
                 ],
             ]);
 
-            // Kiểm tra phản hồi từ API
             if ($response->getStatusCode() === 200) {
                 $data = json_decode($response->getBody(), true);
 
