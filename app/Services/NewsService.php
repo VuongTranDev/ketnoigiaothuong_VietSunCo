@@ -233,7 +233,7 @@ class NewsService
             ->get();
     }
 
-    public function showNewsByCompanyId($id)
+    public function showNewsByCompanyId($id, $limit, $page)
     {
         return News::query()
             ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
@@ -244,7 +244,7 @@ class NewsService
             ->where('news.status', 1)
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
-            ->get();
+            ->paginate($limit, ['*'], 'page', $page);
     }
 
     public function searchNews($request)
