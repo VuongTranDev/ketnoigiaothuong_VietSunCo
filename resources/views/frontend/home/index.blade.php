@@ -30,6 +30,8 @@
 
 @include('frontend.home.components.community-section')
 
+@include('frontend.home.components.news-suggest')
+
 @push('script')
     <script>
         (function() {

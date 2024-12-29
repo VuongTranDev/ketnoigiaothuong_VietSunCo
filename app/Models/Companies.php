@@ -13,6 +13,7 @@ class Companies extends Model
         'representative',
         'company_name',
         'short_name',
+        'image',
         'phone_number',
         'slug',
         'content',

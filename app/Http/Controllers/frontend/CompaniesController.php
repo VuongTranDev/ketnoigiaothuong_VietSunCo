@@ -64,13 +64,14 @@ class CompaniesController extends BaseController
             $companyPoint=$this->fetchDataFromApi("avgPointCompany/{$company->id}");
             $starRating=$this->fetchDataFromApi("countStarRating/{$company->id}");
             $allRating=$this->fetchDataFromApi("countAllRating/{$company->id}");
+            $news = $this->fetchDataFromApi("new/company/{$company->id}?limit=4");
             $this->sendDataToApi("updatePointCompany/{$company->id}/{$companyPoint}");
             if (!Session::has('user') || Session::get('user') === null) {
-                return view('frontend.company.company-detail', compact('companyPoint','starRating','allRating','ratings','company', 'address', 'categories'));
+                return view('frontend.company.company-detail', compact('news','companyPoint','starRating','allRating','ratings','company', 'address', 'categories'));
             }
             $userId=Session::get('user')->id;
             $checkRating= $this->fetchDataFromApi("checkRating/$userId/{$company->id}");
-            return view('frontend.company.company-detail', compact('companyPoint','starRating','allRating','userId','checkRating','ratings','company', 'address', 'categories'));
+            return view('frontend.company.company-detail', compact('news','companyPoint','starRating','allRating','userId','checkRating','ratings','company', 'address', 'categories'));
 
         }
 
@@ -79,16 +80,23 @@ class CompaniesController extends BaseController
     }
 
 
-    public function companyList()
+    public function companyList(Request $request)
     {
+        $currentPage = $request->input('page', 1);
+        $limit = 15;
+
         try {
-            $companies = $this->fetchDataFromApi("company");
+            $url = env('API_URL') . "company?limit={$limit}&page={$currentPage}";
+            $response = $this->client->request('GET', $url);
+            $companysResponse = json_decode($response->getBody());
+
+            $companies = $companysResponse->data;
+            $paginate = $companysResponse->paginate;
         } catch (RequestException $exception) {
             Log::error('API request failed: ' . $exception->getMessage());
             $companies = [];
         }
-
-        return view('frontend.company.list-company', compact('companies'));
+        return view('frontend.company.list-company', compact('companies', 'paginate'));
     }
 
     public function findCompany(Request $request)

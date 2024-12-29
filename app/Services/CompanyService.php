@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Companies;
 use Illuminate\Support\Facades\Auth;
+use Faker\Provider\ar_EG\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -80,16 +81,16 @@ class CompanyService
      */
     public function showById($id)
     {
-        return Companies::with('user')->find($id);
+        return Companies::with('user','companyCategory.categories','addresses')->find($id);
     }
 
 
     public function showByUserId($user_id)
     {
         return Companies::with('user')
-            ->where('user_id', $user_id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+                        ->where('user_id', $user_id)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
     }
 
     public function showAllLikeSlug($slug)
@@ -166,6 +167,9 @@ class CompanyService
             'slug' => $companies->slug,
             'content' => $companies->content,
             'link' => $companies->link,
+            'status' => $companies->status,
+            'email' =>$companies->email,
+            'masothue' => $companies->masothue,
             'user' => $companies->user,
             'created_at' => $companies->created_at,
             'updated_at' => $companies->updated_at
@@ -217,7 +221,7 @@ class CompanyService
     public function create($request)
     {
         return Companies::create(
-            $request->only('representative', 'company_name', 'short_name', 'phone_number', 'slug', 'content', 'link', 'user_id')
+            $request->only('representative', 'company_name', 'short_name', 'phone_number', 'slug','status','email','masothue', 'content', 'link', 'user_id')
         );
     }
 
@@ -231,9 +235,9 @@ class CompanyService
      */
     public function update($request, $id)
     {
-        $companies = Companies::findOrFail($id);
-        $companies->update($request->only('representative', 'company_name', 'short_name', 'phone_number', 'slug', 'content', 'link'));
-        return $companies;
+        $company = Companies::findOrFail($id);
+        $company->update($request->only('representative', 'company_name', 'short_name', 'phone_number', 'slug', 'content', 'link'));
+        return $company;
     }
 
     /**
@@ -292,18 +296,16 @@ class CompanyService
             return 2;
         }
 
-       
+
         return $company->status != 0 ? 1 : 0;
     }
 
     public function checkCompanyById($user_id)
     {
         $company = Companies::with('user')
-            ->where('user_id', $user_id)
-
-            ->orderBy('created_at', 'desc')
-            ->first();
-
+                ->where('user_id', $user_id)
+                ->orderBy('created_at', 'desc')
+                ->first();  // Lấy bản ghi đầu tiên
         return $company ? 1 : 0;
     }
 

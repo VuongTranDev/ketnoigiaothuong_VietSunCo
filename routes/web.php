@@ -12,6 +12,7 @@ use App\Http\Controllers\frontend\DashboardController;
 
 use App\Http\Controllers\frontend\NewsController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\MessageController;
 use App\Http\Controllers\frontend\RatingController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,9 +51,6 @@ Route::get('/chi-tiet-cong-ty/{slug}', [FrontendCompaniesController::class, 'com
 
 Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
 Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
-// Route::get('/loginGG/post', [LoginController::class, 'loginGoole'])->name('auth.login-google');
-// Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.google.callback');
-
 
 
 Route::get('/regis', [RegisterController::class, 'create'])->name('get.register');
@@ -62,9 +60,28 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
 
 Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');
 
-Route::get('getsession',[LoginController::class,'someFunction']);
+Route::get('getsession', [LoginController::class, 'someFunction']);
 
-Route::get('clearsession',[LoginController::class,'clearSession']);
+Route::get('clearsession', [LoginController::class, 'clearSession']);
+
+
+Route::post('/postComment', [CommentsController::class, 'createComment'])->name('postComment');
+Broadcast::routes();
+
+// message
+Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], function () {
+    Route::get('message', [MessageController::class, 'index'])->name('message.index');
+    Route::get('message/getmessage', [MessageController::class, 'getMessages'])->name('message.getMessages');
+    Route::post('message/sendmessage', [MessageController::class, 'sendMessage'])->name('message.send-message');
+    Route::post('message/read', [MessageController::class, 'maskAsRead'])->name('message.read');
+    Route::get('getCompany', [MessageController::class, 'fillInformation'])->name('message.fillInformation');
+    Route::post('createTransaction', [MessageController::class, 'createTransaction'])->name('message.createTransaction');
+    Route::get('getTransactions', [MessageController::class, 'getTransaction'])->name('message.getTransaction');
+});
 
 Route::post('/postComment',[CommentsController::class,'createComment'])->name('postComment');
+
+Route::get('/tin-tuc/tim-kiem/search',[NewsController::class, 'search'])->name('news.search');
+
+Route::post('/send-contact', [HomeController::class, 'sendContact'])->name('send.contact');
 

@@ -145,8 +145,9 @@
 .register-member {
     padding: 10px;
     background-color: #3EAEF4;
-    border-radius: 12px;
+    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: #fff;
 }
 
 .register-member a {
@@ -173,12 +174,14 @@
 }
 
 .see-more {
-    width: 150px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 8px;
     background-color: #3EAEF4;
     margin-bottom: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: #fff;
 }
+
 
 .see-more:hover {
     background-color: #1192e2;
@@ -239,4 +242,86 @@
 .criteria-description {
     text-align: center;
     padding: 0 15px;
+}
+
+
+.thm-btn {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    border: none;
+    background-color: #3EAEF4;
+    padding: 10px 30px;
+    border-radius: 8px;
+    transition: .3s linear;
+    z-index: 1;
+    color: #fff;
+}
+
+.news-one__single {
+    margin-bottom: 26px;
+}
+
+.news-one__img {
+    overflow: hidden;
+    height: 260px;
+    border-radius: 8px;
+}
+
+.news-one__img img {
+    width: 100%;
+    height: 100%;
+    transform: scale(1);
+    transition: .5s;
+}
+
+.news-one__single:hover .news-one__img img {
+    transform: scale(1.05)
+}
+
+.news-one__img>a {
+    transform: translateY(-30%)
+}
+
+.news-one__img>a>span {
+    position: relative
+}
+
+.news-one__img>a>span::before {
+    width: 20px;
+    height: 2px;
+    position: absolute;
+    transition: .5s
+}
+
+.news-one__img>a>span::after {
+    transition: .5s;
+    width: 2px;
+    height: 20px;
+    position: absolute
+}
+
+.news-one__title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+.news-one__content {
+    position: relative;
+    display: block;
+    margin-top: 15px;
+}
+
+.news-one__meta {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin: 0;
+}
+
+.news-one__meta li a {
+    font-size: 14px;
+    color: #777;
+    transition: .5s;
 }

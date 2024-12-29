@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Services\CompanyService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -99,6 +100,19 @@ class CompaniesController extends BaseController
         );
     }
 
+    public function showById($id)
+    {
+        $company = $this->companyService->showById($id);
+        if (!$company) {
+            return $this->failed('company not found!', 404);
+        }
+        return $this->success(
+            $company,
+            'company retrieved successfully',
+            200
+        );
+    }
+
     public function showBySlug($slug)
     {
         $company = $this->companyService->showBySlug($slug);
@@ -120,7 +134,6 @@ class CompaniesController extends BaseController
     public function update(Request $request, string $id)
     {
         $validator = $this->companyService->validateData($request);
-
         if ($validator->fails()) {
             return $this->failed('validation failed', 422);
         }
@@ -145,12 +158,24 @@ class CompaniesController extends BaseController
     {
         try {
             $this->companyService->delete($id);
-
             return $this->success([], 'company deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('company not found', 404);
         } catch (\Exception $e) {
-            return $this->exception('an error occurred', $e->getMessage(), 500);
+            return $this->exception('company error occurred', $e->getMessage(), 500);
+        }
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+        try
+        {
+            $company =  $this->companyService->changeStatus($request,$id) ;
+            return $this->success($company,"Company change status success",200) ;
+        }
+        catch(Exception $e)
+        {
+            return $this->exception('Company error occurred', $e->getMessage(), 422);
         }
     }
 

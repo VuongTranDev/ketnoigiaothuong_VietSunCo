@@ -13,12 +13,10 @@
                 <li class="breadcrumb-item active" aria-current="page">Danh sách công ty</li>
             </ol>
         </nav>
-
         <div class="row">
             <div class="col-lg-3">
                 @include('frontend.company.components.filter-sidebar')
             </div>
-
             <div class="col-lg-9">
                 <div class="d-flex justify-content-end">
                     <div class="search-bar-field">
@@ -28,7 +26,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="row">
                     @foreach ($companies as $item)
                         <div class="col-6 col-lg-4 col-md-4 d-flex company-list">
@@ -46,18 +43,24 @@
                     @endforeach
                 </div>
 
-                <nav aria-label="Page navigation example ">
+                {{-- Phân trang --}}
+                <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+
+                        <li class="page-item {{ $paginate->current_page == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $paginate->current_page > 1 ? route('company.list-company', ['page' => $paginate->current_page - 1]) : '#' }}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+
+                        @for ($i = 1; $i <= $paginate->total_page; $i++)
+                            <li class="page-item {{ $i == $paginate->current_page ? 'active' : '' }}">
+                                <a class="page-link" href="{{ route('company.list-company', ['page' => $i]) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        <li class="page-item {{ $paginate->current_page == $paginate->total_page ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $paginate->current_page < $paginate->total_page ? route('company.list-company', ['page' => $paginate->current_page + 1]) : '#' }}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

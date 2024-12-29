@@ -17,7 +17,7 @@ class CommentsController extends BaseController
 
     public function createComment(Request $request)
     {
-        //$url = config('api.base_url') . "comments";
+        //$url = env('API_URL') . "comments";
 
         $response = $this->client->post(env('API_URL').'comments',
         [
@@ -44,7 +44,7 @@ class CommentsController extends BaseController
         }
     }
 
-    
+
 
 
 

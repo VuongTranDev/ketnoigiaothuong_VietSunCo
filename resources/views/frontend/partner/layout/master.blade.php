@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>General Dashboard &mdash; Stisla</title>
+    <title>Ketnoigiaothuong &mdash; Partner</title>
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
@@ -24,24 +24,15 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/styleNews.css') }}">
 
-
-    {{-- @if ($settings->layout === 'RTL')
-        <link rel="stylesheet" href="{{ asset('backend/assets/css/rtl.css') }}">
-    @endif
-
     <script>
         const USER = {
             id: "{{ auth()->user()->id }}",
-            name: "{{ auth()->user()->nmae }}",
-            image: "{{ asset(auth()->user()->image) }}"
-        }
-        const PUSHER = {
-            key: "{{ $pusherSetting->pusher_key }}",
-            cluster: "{{ $pusherSetting->pusher_cluster }}"
+            name: "{{ auth()->user()->name }}",
+            email: "{{ auth()->user()->email }}",
+            
         }
     </script>
-
-    @vite(['resources/js/app.js', 'resources/js/admin.js']) --}}
+    @vite('resources/js/app.js')
     @stack('style')
 </head>
 
@@ -49,7 +40,6 @@
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
             <div class="navbar-bg"></div>
-
             <!-- Navbar Content -->
             @include('frontend.partner.layout.navbar')
             <!-- Navbar Content End-->
@@ -67,8 +57,9 @@
     </div>
 
     <!-- General JS Scripts -->
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script src="{{ asset('backend/assets/modules/jquery.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="{{ asset('backend/assets/modules/popper.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/tooltip.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -88,7 +79,7 @@
     <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         @if ($errors->any())

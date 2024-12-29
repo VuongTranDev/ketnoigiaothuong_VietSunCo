@@ -21,9 +21,7 @@
                     <h2 class="title-b2b">Giới thiệu</h2>
                     <hr class="line-title">
                 </div>
-                <p style="text-align: justify">{{ @$company->content }}
-                </p>
-
+                <p style="text-align: justify">{{ @$company->content }}</p>
                 <div>
                     <h2 class="title-b2b">Thông tin chung</h2>
                     <hr class="line-title">
@@ -31,29 +29,37 @@
                 <div class="company-info">
                     <table class="info-table">
                         <tr>
-                            <td><strong>Tên công ty:</strong></td>
-                            <td>{{ @$company->company_name }}</td>
+                            <td><b>Tên công ty:</b></td>
+                            <td>{{ $company->company_name ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Tên viết tắt:</strong></td>
-                            <td>{{ @$company->short_name }}</td>
+                            <td><b>Tên viết tắt:</b></td>
+                            <td>{{ $company->short_name ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Người đại diện:</strong></td>
-                            <td>{{ @$company->representative }}</td>
+                            <td><b>Người đại diện:</b></td>
+                            <td>{{ $company->representative ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Lĩnh vực:</strong></td>
+                            <td><strong>Email:</strong></td>
+                            <td>{{ $company->email ?? 'Đang cập nhật' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mã số thuế:</strong></td>
+                            <td>{{ $company->taxcode ?? 'Đang cập nhật' }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Lĩnh vực:</b></td>
                             <td>
-                                @foreach ($categories as $category)
-                                    {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
-                                @endforeach
+                                @if (!empty($categories) && $categories->isNotEmpty())
+                                    @foreach ($categories as $category)
+                                        {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                @else
+                                    Đang cập nhật
+                                @endif
                             </td>
                         </tr>
-                        {{-- <tr>
-                            <td><strong>Khu vực:</strong></td>
-                            <td>Miền nam</td>
-                        </tr> --}}
                     </table>
                 </div>
                 <hr class="line-w-100">
@@ -170,11 +176,19 @@
         </div>
 
         <div class="mt-5 w-100 d-flex flex-column align-items-center">
+            <h2 class="title-b2b">Tin tức của công ty</h2>
+            <hr class="line-title ">
+        </div>
+
+        @include('frontend.company.components.company-news')
+
+        <div class="mt-5 w-100 d-flex flex-column align-items-center">
             <h2 class="title-b2b">Các công ty cùng lĩnh vực</h2>
             <hr class="line-title ">
         </div>
 
         {{-- @include('frontend.company.components.company-same-field') --}}
+
 
     </div>
 
@@ -425,7 +439,7 @@
             position: relative;
             display: inline-block;
 
-        
+
             overflow: hidden;
         }
 
