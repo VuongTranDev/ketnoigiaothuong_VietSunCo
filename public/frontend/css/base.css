@@ -126,3 +126,17 @@ button {
     column-count: 3;
     column-gap: 1rem;
 }
+
+a {
+    text-decoration: none;
+    color: #585858;
+}
+
+.active>.page-link, .page-link.active {
+    background-color: #3EAEF4;
+    border-color: #3EAEF4;
+}
+
+.page-link {
+    border-color: #3EAEF4;
+}

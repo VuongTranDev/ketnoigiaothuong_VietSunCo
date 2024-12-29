@@ -30,7 +30,9 @@ Route::post('footer-grid-three/change-status', [FooterGridThreeController::class
 Route::post('footer-grid-three/change-title', [FooterGridThreeController::class, 'changeTitle'])->name('footer-grid-three.change-title');
 
 Route::resource('footer-socials', FooterSocialController::class);
-Route::put('footer-socials/change-status', [FooterSocialController::class, 'changeStatus'])->name('footer-socials.change-status');
+Route::post('footer-socials/change-status', [FooterSocialController::class, 'changeStatus'])->name('footer-socials.change-status');
 
 Route::resource('send-contact', ContactsController::class);
 Route::post('send-contact/send-bulk-email', [ContactsController::class, 'sendBulkEmail'])->name('send-contact.send-bulk-email');
+
+Route::post('news/change-status', [NewsController::class, 'changeStatus'])->name('news.change-status');

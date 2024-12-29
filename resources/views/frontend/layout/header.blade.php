@@ -3,13 +3,12 @@
         <div class="container-xl">
             <div class="collapse navbar-collapse pt-1 pb-1">
                 <div class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-                    <a href="/" class="me-4"><i class="fa-solid fa-phone me-2"
+                    <a href="tel:0914.416.363" class="me-4"><i class="fa-solid fa-phone me-2"
                             style="color: #fff;"></i>0914.416.363</a>
-                    <a href="/"><i class="fa-solid fa-envelope me-2" style="color: #fff;"></i>hi@vietsunco.com</a>
+                    <a href="mailto:hi@vietsunco.com"><i class="fa-solid fa-envelope me-2" style="color: #fff;"></i>hi@vietsunco.com</a>
                 </div>
 
                 <div>
-
                     @if ((isset($company_id) && $company_id > 0) || !Session::has('user'))
                         <a class="ms-2">
                             <a class="ms-2" href="#" id="openForm" style="display:none">Đăng ký thành viên
@@ -24,14 +23,14 @@
                         </a>
                     @endif
 
-                    <a href="">
+                    {{-- <a href="">
                         <img class="ms-2" src="{{ asset('frontend/image/language-en.png') }}" alt="Tiếng Anh"
                             width="20" height="12">
                     </a>
                     <a href="">
                         <img class="ms-2" src="{{ asset('frontend/image/language-vn.png') }}" alt="Tiếng Việt"
                             width="20" height="12">
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </div>

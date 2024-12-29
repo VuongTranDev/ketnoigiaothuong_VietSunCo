@@ -21,13 +21,13 @@ class DashboardController extends Controller
 
     public function partner() {
         $user = Session::get('user') ;
-        $url = config('api.base_url') . "new/countNewsOfUser/{$user->id}";
+        $url = env('API_URL') . "new/countNewsOfUser/{$user->id}";
         $response= $this->client->request('GET', $url);
         if(!$response)
             return back()->with("error","Lỗi hệ thống") ;
         $totalNews = (json_decode($response->getBody(),false))->data ;
 
-        $url = config('api.base_url') . "report/countUser";
+        $url = env('API_URL') . "report/countUser";
         $response = $this->client->request('GET', $url);
         if(!$response)
             return back()->with("error","Lỗi hệ thống") ;

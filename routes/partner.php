@@ -22,3 +22,4 @@ Route::get('/dashboard', [DashboardController::class, 'partner'])->name('dashboa
 Route::get('/news/hotnews', [NewsController::class, 'hotNews'])->name('news.hotnews');
 Route::resource('news', NewsController::class);
 Route::resource('address', AddressController::class);
+Route::post('news/change-status', [NewsController::class, 'changeStatus'])->name('news.change-status');

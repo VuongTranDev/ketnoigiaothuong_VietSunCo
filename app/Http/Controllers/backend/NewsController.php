@@ -19,7 +19,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $url = config('api.base_url') . "new";
+        $url = env('API_URL') . "new";
         $response = $this->client->request('GET', $url);
         $data = json_decode($response->getBody());
         return view('frontend.admin.news.index')->with('data', $data);
@@ -39,7 +39,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $data = $request->only(['title', 'tag_name', 'content', 'user_id', 'cate_id']);
-        $url = config('api.base_url') . "new";
+        $url = env('API_URL') . "new";
         $response = $this->client->request('POST', $url,
         [
             'form_params' => $data
@@ -65,7 +65,7 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        $url = config('api.base_url') . "new/{$id}";
+        $url = env('API_URL') . "new/{$id}";
         $response = $this->client->request('GET', $url);
         $responseData = json_decode($response->getBody());
         $new = $responseData->data;
@@ -80,7 +80,7 @@ class NewsController extends Controller
         $data = $request->only(['title', 'tag_name', 'content']);
         $data['cate_id'] = 1;
         $data['user_id'] = 1;
-        $url = config('api.base_url') . "new/{$id}";
+        $url = env('API_URL') . "new/{$id}";
         $response = $this->client->request('PUT', $url, [
             'form_params' => $data
         ]);

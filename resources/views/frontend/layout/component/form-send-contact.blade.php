@@ -18,23 +18,26 @@
                 </ul>
             </div>
             <div class="col-md-6">
-                <form class="row g-3 needs-validation" action="{{ route('send.contact') }}" method="POST" novalidate>
+                <form class="row g-3 needs-validation" id="contactForm" action="{{ route('send.contact') }}"
+                    method="POST" novalidate>
                     @csrf
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Họ và tên" required>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Họ và tên"
+                            required>
                         <div class="invalid-feedback">
                             Vui lòng nhập họ và tên.
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại"
-                            required>
+                        <input type="text" class="form-control" name="phone" id="phone"
+                            placeholder="Số điện thoại" required>
                         <div class="invalid-feedback">
                             Vui lòng nhập số điện thoại.
                         </div>
                     </div>
                     <div class="col-12">
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+                            required>
                         <div class="invalid-feedback">
                             Vui lòng nhập email hợp lệ.
                         </div>
@@ -46,11 +49,26 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane me-2"></i>Gửi
-                            thông tin</button>
+                        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane me-2"></i>Gửi thông
+                            tin</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+@push('scripts')
+    <script>
+        const form = document.getElementById('contactForm');
+
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    </script>
+@endpush

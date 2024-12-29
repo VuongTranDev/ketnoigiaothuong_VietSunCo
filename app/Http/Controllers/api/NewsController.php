@@ -157,4 +157,31 @@ class NewsController extends BaseController
 
         return $this->success($data,  'news retrieved successfully', 200);
     }
+
+    public function changeStatus(Request $request)
+    {
+        $data = $this->newsService->changeStatus($request);
+        return $this->success($data,  'news retrieved successfully', 200);
+    }
+
+    public function showNewsByCompanyId(Request $request, $id)
+    {
+        $limit = $request->input('limit', 12);
+        $page = $request->input('page', 1);
+        $news = $this->newsService->showNewsByCompanyId($id, $limit, $page);
+
+
+        $formattedData = collect($news->items())->map(function ($item) {
+            return $this->newsService->formatDataSlug($item);
+        })->toArray();
+
+        $formattedPagination = $this->newsService->formatPaginate($news);
+
+
+        return $this->successWithPagination(
+            $formattedPagination,
+            $formattedData,
+            200,
+        );
+    }
 }

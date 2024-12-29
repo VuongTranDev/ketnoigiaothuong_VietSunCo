@@ -24,20 +24,15 @@ class HomeController extends BaseController
     public function index()
     {
         try {
-            $apiUrl = $this->url . "company";
-            $response = $this->client->request('GET', $apiUrl);
-            $data = json_decode($response->getBody()->getContents());
-
-
-            $companies = $data->data ?? [];
-
+            $companies = $this->fetchDataFromApi("company");
+            $news = $this->fetchDataFromApi("new?limit=3");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $companies = [];
 
         }
 
-        return view('index', compact('companies'));
+        return view('index', compact('companies', 'news'));
     }
 
     public function sendContact(Request $request)

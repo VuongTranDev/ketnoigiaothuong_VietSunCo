@@ -41,6 +41,14 @@
                             <td>{{ $company->representative ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
+                            <td><strong>Email:</strong></td>
+                            <td>{{ $company->email ?? 'Đang cập nhật' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mã số thuế:</strong></td>
+                            <td>{{ $company->taxcode ?? 'Đang cập nhật' }}</td>
+                        </tr>
+                        <tr>
                             <td><b>Lĩnh vực:</b></td>
                             <td>
                                 @if (!empty($categories) && $categories->isNotEmpty())
@@ -52,11 +60,6 @@
                                 @endif
                             </td>
                         </tr>
-
-                        {{-- <tr>
-                            <td><strong>Khu vực:</strong></td>
-                            <td>Miền nam</td>
-                        </tr> --}}
                     </table>
                 </div>
                 <hr class="line-w-100">
@@ -144,7 +147,7 @@
                             <a href="mailto:">{{ $company->email ?? 'Đang cập nhật' }}</a>
                         </p> --}}
                         <p><i class="fas fa-envelope"></i>
-                            <a href="mailto:">hi@vietsunco.com</a>
+                            <a href="mailto:{{ $company->email ?? '#' }}">{{ $company->email ?? 'Đang cập nhật' }}</a>
                         </p>
                         <p><i class="fa-solid fa-globe"></i>
                             <a href="{{ $company->link ?? '#' }}">{{ $company->link ?? 'Đang cập nhật' }}</a>
@@ -170,11 +173,19 @@
         </div>
 
         <div class="mt-5 w-100 d-flex flex-column align-items-center">
+            <h2 class="title-b2b">Tin tức của công ty</h2>
+            <hr class="line-title ">
+        </div>
+
+        @include('frontend.company.components.company-news')
+
+        <div class="mt-5 w-100 d-flex flex-column align-items-center">
             <h2 class="title-b2b">Các công ty cùng lĩnh vực</h2>
             <hr class="line-title ">
         </div>
 
         {{-- @include('frontend.company.components.company-same-field') --}}
+
 
     </div>
 

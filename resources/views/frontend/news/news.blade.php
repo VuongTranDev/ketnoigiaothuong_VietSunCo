@@ -16,14 +16,12 @@
                     <div class="news-group">
                         <a href="{{ route('news.detail', $item->slug) }}" class="news-item d-flex align-items-start p-3 mb-3">
                             <div class="news-image flex-shrink-0">
-                                <img src="{{ asset($item->image) }}" alt="News Image"
-                                    class="img-fluid rounded">
+                                <img src="{{ asset($item->image) }}" alt="News Image" class="img-fluid rounded">
                             </div>
                             <div class="news-content pl-3">
                                 <h5 class="news-title font-weight-bold mb-1">{{ $item->title }}</h5>
                                 <div class="news-meta text-muted mb-2">
-                                    <span class="news-author font-weight-bold">{{ $item->company_name }}</span> - <span
-                                        class="news-date">{{  date('d/m/Y', strtotime($item->created_at)) }}</span>
+                                    <span class="news-author font-weight-bold">{{ $item->company_name }}</span> - <span class="news-date">{{ date('d/m/Y', strtotime($item->created_at)) }}</span>
                                 </div>
                                 <p class="news-description mb-0">
                                     {{ strip_tags($item->content) }}
@@ -33,18 +31,26 @@
                     </div>
                 @endforeach
 
+                {{-- Phân trang --}}
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                        {{-- Nút Previous --}}
+                        <li class="page-item {{ $paginate->current_page == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $paginate->current_page > 1 ? route('news', ['page' => $paginate->current_page - 1]) : '#' }}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+
+                        {{-- Các trang --}}
+                        @for ($i = 1; $i <= $paginate->total_page; $i++)
+                            <li class="page-item {{ $i == $paginate->current_page ? 'active' : '' }}">
+                                <a class="page-link" href="{{ route('news', ['page' => $i]) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        {{-- Nút Next --}}
+                        <li class="page-item {{ $paginate->current_page == $paginate->total_page ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $paginate->current_page < $paginate->total_page ? route('news', ['page' => $paginate->current_page + 1]) : '#' }}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

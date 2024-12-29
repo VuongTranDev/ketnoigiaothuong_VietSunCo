@@ -30,19 +30,29 @@ class CompaniesController extends BaseController
 
         $categories = collect($this->fetchDataFromApi('category/company/' . $company->id));
 
-        return view('frontend.company.company-detail', compact('company', 'address', 'categories'));
+        $news = $this->fetchDataFromApi("new/company/{$company->id}?limit=4");
+
+        return view('frontend.company.company-detail', compact('company', 'address', 'categories', 'news'));
     }
 
 
-    public function companyList()
+    public function companyList(Request $request)
     {
+        $currentPage = $request->input('page', 1);
+        $limit = 15;
+
         try {
-            $companies = $this->fetchDataFromApi("company");
+            $url = env('API_URL') . "company?limit={$limit}&page={$currentPage}";
+            $response = $this->client->request('GET', $url);
+            $companysResponse = json_decode($response->getBody());
+
+            $companies = $companysResponse->data;
+            $paginate = $companysResponse->paginate;
         } catch (RequestException $exception) {
             Log::error('API request failed: ' . $exception->getMessage());
             $companies = [];
         }
-        return view('frontend.company.list-company', compact('companies'));
+        return view('frontend.company.list-company', compact('companies', 'paginate'));
     }
 
 
