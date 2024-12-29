@@ -72,6 +72,32 @@ class CompanyCategoryService {
         return CompanyCategory::create($request->only('cate_id', 'company_id', 'description'));
     }
 
+    public function deleteCategoryCompany($company_id,$cate_id)
+    {
+        try {
+
+            $record = CompanyCategory::where('company_id', $company_id)
+                                      ->where('cate_id', $cate_id)
+                                      ->first();
+
+
+            if ($record) {
+
+                $record->delete();
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error deleting CompanyCategory', [
+                'message' => $e->getMessage(),
+                'company_id' => $company_id,
+                'cate_id' => $cate_id
+            ]);
+            return 0;
+        }
+    }
+
     /**
      * Update an existing company category record in the database by its ID.
      * @param Request $request
@@ -96,7 +122,7 @@ class CompanyCategoryService {
         return $companycategory;
     }
 
-    
+
 
     public function store(Request $request)
     {
