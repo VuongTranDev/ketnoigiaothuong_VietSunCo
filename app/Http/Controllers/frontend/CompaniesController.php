@@ -3,18 +3,79 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categories;
+use App\Models\Companies;
+use App\Models\CompanyCategory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Session;
+
+use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Auth;
 
 class CompaniesController extends BaseController
 {
-    public function companyDetail()
+    protected $client;
+    protected $url;
+    public function __construct(Client $client)
     {
-        return view('frontend.company.company-detail');
+        $this->client = $client;
+        $this->url = env('API_URL');
+    }
+
+    public function checkCompanyStatus()
+    {
+        $userId = Session::get('user')->id;
+        $company = $this->fetchDataFromApi("company/{$userId}");
+        $status=$this->fetchDataFromApi("checkCompanyStatus/{$userId}");
+        if($status===0)
+        {
+            return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang được chờ để xét duyệt !');
+        }
+        else if($status===1)
+        {
+            return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang hoạt động !');
+        }
+        else
+        {
+            return redirect()->back()->with('error', 'Tài khoản chưa đăng ký, xin vui lòng đăng ký thành viên ở góc trên bên phải trang web !');
+        }
+    }
+
+
+    public function companyDetail($slug)
+    {
+
+        $company = $this->fetchDataFromApi("company/slug/{$slug}");
+
+
+        if (is_object($company)) {
+
+            $address = $this->fetchDataFromApi("address/company/{$company->id}");
+
+
+            $categories = collect($this->fetchDataFromApi("category/company/{$company->id}"));
+
+            $ratings=  $this->fetchDataFromApi("ratings/company/{$company->id}");
+
+            $companyPoint=$this->fetchDataFromApi("avgPointCompany/{$company->id}");
+            $starRating=$this->fetchDataFromApi("countStarRating/{$company->id}");
+            $allRating=$this->fetchDataFromApi("countAllRating/{$company->id}");
+            $this->sendDataToApi("updatePointCompany/{$company->id}/{$companyPoint}");
+            if (!Session::has('user') || Session::get('user') === null) {
+                return view('frontend.company.company-detail', compact('companyPoint','starRating','allRating','ratings','company', 'address', 'categories'));
+            }
+            $userId=Session::get('user')->id;
+            $checkRating= $this->fetchDataFromApi("checkRating/$userId/{$company->id}");
+            return view('frontend.company.company-detail', compact('companyPoint','starRating','allRating','userId','checkRating','ratings','company', 'address', 'categories'));
+
+        }
+
+
+        return redirect()->route('company.not-found');
     }
 
 
@@ -81,6 +142,7 @@ class CompaniesController extends BaseController
                 'company_name' => $request->company_name,
                 'short_name' => $request->short_name,
                 'phone_number' => $request->phone_number,
+                'point' => 0,
                 'slug' => $slug,
                 'content' => $request->content,
                 'link' => $request->link,
@@ -172,12 +234,18 @@ class CompaniesController extends BaseController
             }
         }
 
-
         if ($data->status == 'success') {
             return redirect()->back()->withSuccess('Công ty đã được tạo thành công');
         } else {
             return redirect()->back()->withErrors($data->errors)->withInput();
         }
+
     }
+
+
+
+
+
+
 
 }

@@ -7,7 +7,7 @@
     <div class="row">
         @foreach ($companies as $item)
             <div class="col-6 col-lg-3 col-md-3 d-flex company-list">
-                <a href="{{ route('company.detail') }}" class="company-link">
+                <a href="{{ route('company.detail', $item->slug) }}" class="company-link">
                     <div class="company-detail" align="center" data-aos="fade-up">
                         <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company"
                             loading="lazy">

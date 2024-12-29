@@ -25,6 +25,15 @@ class CompanyCategoryService {
         return CompanyCategory::with('companies', 'categories')->find($id);
     }
 
+    public function showCategoryByCompanyId($id) {
+        return CompanyCategory::query()
+            ->leftJoin('categories', 'company_category.cate_id', '=', 'categories.id')
+            ->leftJoin('companies', 'company_category.company_id', '=', 'companies.id')
+            ->where('company_id', $id)
+            ->select('categories.*')
+            ->get();
+    }
+
     /**
      * Format company category data for a structured API response.
      * @param CompanyCategory $companycategory
@@ -63,6 +72,32 @@ class CompanyCategoryService {
         return CompanyCategory::create($request->only('cate_id', 'company_id', 'description'));
     }
 
+    public function deleteCategoryCompany($company_id,$cate_id)
+    {
+        try {
+
+            $record = CompanyCategory::where('company_id', $company_id)
+                                      ->where('cate_id', $cate_id)
+                                      ->first();
+
+
+            if ($record) {
+
+                $record->delete();
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error deleting CompanyCategory', [
+                'message' => $e->getMessage(),
+                'company_id' => $company_id,
+                'cate_id' => $cate_id
+            ]);
+            return 0;
+        }
+    }
+
     /**
      * Update an existing company category record in the database by its ID.
      * @param Request $request
@@ -87,7 +122,7 @@ class CompanyCategoryService {
         return $companycategory;
     }
 
-    
+
 
     public function store(Request $request)
     {

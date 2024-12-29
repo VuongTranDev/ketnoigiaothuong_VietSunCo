@@ -46,34 +46,19 @@ class AddressController extends BaseController
      */
     public function store(Request $request)
     {
-        $validator = $this->addressService->validateData($request);
+        try {
+            $validator = $this->addressService->validateData($request);
 
-        if ($validator->fails()) {
-            return $this->failed($validator->errors(), 422);
+            if ($validator->fails()) {
+                return $this->failed($validator->errors(), 422);
+            }
+
+            $address = $this->addressService->create($request);
+
+            return $this->success($this->addressService->formatData($address), 'Address created successfully', 201);
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while creating address', $e->getMessage(), 500);
         }
-
-        $address = Address::create([
-            'details' => $request->details,
-            'address' => $request->address,
-            'company_id' => $request->company_id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $format = [
-            'id' => $address->id,
-            'details' => $address->details,
-            'address' => $address->address,
-            'company_id' => $address->companies,
-            'created_at' => $address->created_at,
-            'updated_at' => $address->updated_at
-        ];
-
-        return response()->json([
-            'status' => 'Success',
-            'message' => 'Address created successfully',
-            'data' => $format,
-        ], 201);
     }
 
     /**
@@ -81,34 +66,30 @@ class AddressController extends BaseController
      */
     public function show(string $id)
     {
-        $address = Address::with('companies')->find($id);
+        try {
+            $address = $this->addressService->showById($id);
 
-        if ($address == null) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Address not found!'
-            ], 500);
+            if ($address == null) {
+                return $this->failed('Address not found', 404);
+            }
+
+            return $this->success($this->addressService->formatData($address), 'address retrieved successfully', 200);
+        } catch (\Exception $e) {
+            return $this->exception('an error occurred while retrieving address', $e->getMessage(), 500);
         }
+    }
 
-        $format = [
-            'id' => $address->id,
-            'details' => $address->details,
-            'address' => $address->address,
-            'company_id' => $address->companies,
-            'created_at' => $address->created_at,
-            'updated_at' => $address->updated_at
-        ];
+    public function showAddressByIdCompany($id) {
+        try {
+            $address = $this->addressService->showAddressByIdCompany($id);
 
-        if ($format == null) {
-            return response()->json([
-                'status' => "Error",
-                'message' => 'Address not found!'
-            ], 404);
-        } else {
-            return response()->json([
-                'status' => 'Success',
-                'data' => $format,
-            ], 200);
+            if ($address == null) {
+                return $this->failed('Address not found', 404);
+            }
+
+            return $this->success($this->addressService->formatData($address), 'address retrieved successfully', 200);
+        } catch (\Exception $e) {
+            return $this->exception('an error occurred while retrieving address', $e->getMessage(), 500);
         }
     }
 
@@ -118,49 +99,19 @@ class AddressController extends BaseController
     public function update(Request $request, string $id)
     {
         try {
-            // Validate data
-            $validatedData = $request->validate([
-                'details' => 'required',
-                'address' => 'required',
-                'company_id' => 'required',
-            ]);
+            $validator = $this->addressService->validateData($request);
 
-            $address = Address::findOrFail($id);
-            $address->update($validatedData);
+            if ($validator->fails()) {
+                return $this->failed($validator->errors(), 422);
+            }
 
-            $format = [
-                'id' => $address->id,
-                'details' => $address->details,
-                'address' => $address->address,
-                'company_id' => $address->companies,
-                'created_at' => $address->created_at,
-                'updated_at' => $address->updated_at
-            ];
+            $address = $this->addressService->update($request, $id);
 
-            return response()->json([
-                'status' => "Success",
-                'message' => "Update address success",
-                'data' => $format
-            ]);
-        } catch (ValidationException $e) {
-            // Handling authentication errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => $e->validator->errors()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->success($this->addressService->formatData($address),  'Address updated successfully', 200);
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the address is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Address not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('Address not found!', 422);
         } catch (\Exception $e) {
-            // Handle other errors (e.g. database errors)
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('An error occurred', $e->getMessage(), 500);
         }
     }
 
@@ -170,25 +121,12 @@ class AddressController extends BaseController
     public function destroy(string $id)
     {
         try {
-            $address = Address::findOrFail($id);
-            $address->delete();
-            return response()->json([
-                'status' => "Success",
-                'message' => 'Address deleted successfully'
-            ], Response::HTTP_OK);
+            $this->addressService->delete($id);
+            return $this->success([],  'Address deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
-            // Handling cases where the address is not found
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'Address not found'
-            ], Response::HTTP_NOT_FOUND);
+            return $this->failed('Address not found', 404);
         } catch (\Exception $e) {
-            // Handle other errors
-            return response()->json([
-                'status' => 'Error',
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->exception('An error occurred', $e->getMessage(), 500);
         }
     }
 }

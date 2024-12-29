@@ -19,6 +19,7 @@ class Companies extends Model
         'link',
         'user_id',
         'status',
+        'point',
         'image',
         'tax_code',
         'email'

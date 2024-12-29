@@ -27,6 +27,10 @@ class AddressService {
         return Address::with('companies')->find($id);
     }
 
+    public function showAddressByIdCompany($id) {
+        return Address::where('company_id', $id)->with('companies')->first();
+    }
+
     /**
      * Summary of validateData
      * @param Request $request

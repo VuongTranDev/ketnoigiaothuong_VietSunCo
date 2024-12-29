@@ -26,9 +26,9 @@ class CategoriesController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $category = $this->categoryService->show($request);
+        $category = $this->categoryService->show();
 
         if ($category == null) {
             return $this->failed('category not found', 404);
@@ -101,7 +101,8 @@ class CategoriesController extends BaseController
         }
     }
 
-    // Trong controller của bạn
+
+    // Trong controller của Điền
     public function getAllCategory()
     {
         try {
@@ -135,4 +136,5 @@ class CategoriesController extends BaseController
             ], 500);
         }
     }
+
 }

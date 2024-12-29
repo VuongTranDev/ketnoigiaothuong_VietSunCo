@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Session;
+
 
 class CompaniesController extends BaseController
 {
@@ -28,13 +31,10 @@ class CompaniesController extends BaseController
         try {
             $limit = $request->input('limit', 12);
             $page = $request->input('page', 1);
-
             $companies = $this->companyService->show($page, $limit);
-
             $formattedData = collect($companies->items())->map(function ($item) {
                 return $this->companyService->formatData($item);
             })->toArray();
-
             $formattedPagination = $this->companyService->formatPaginate($companies);
 
             return $this->successWithPagination(
@@ -93,6 +93,21 @@ class CompaniesController extends BaseController
         }
 
         return $this->success(
+            $company,
+            'company retrieved successfully',
+            200
+        );
+    }
+
+    public function showBySlug($slug)
+    {
+        $company = $this->companyService->showBySlug($slug);
+
+        if (!$company) {
+            return $this->failed('company not found!', 404);
+        }
+
+        return $this->success(
             $this->companyService->formatData($company),
             'company retrieved successfully',
             200
@@ -145,6 +160,18 @@ class CompaniesController extends BaseController
         return $check;
     }
 
+    public function checkCompanyStatus($user_id)
+    {
+        $status=$this->companyService->checkCompanyStatus($user_id);
+        return $status;
+    }
+
+    public function checkCompanyByUserIdWithStatus(string $id)
+    {
+        $check=$this->companyService->checkCompanyByIdWithStatus($id);
+        return $check;
+    }
+
     public function findCompanyByName(string $slug)
     {
         $company=$this->companyService->showAllLikeSlug($slug);
@@ -155,5 +182,43 @@ class CompaniesController extends BaseController
     {
         $companies=$this->companyService->getCompaniesByCategory($cateId);
         return $companies;
+    }
+
+    public function updateCompany(Request $request)
+    {
+        try {
+
+            \Log::info('AllrequestAPI', $request->all());
+
+
+            $result = $this->companyService->updateCompany($request);
+
+            return response()->json(['result' => $result]);
+        } catch (\Exception $e) {
+
+            return response()->json(['result' => 0, 'error' => 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại.']);
+        }
+    }
+
+    public function updatePointCompany($company_id,$point)
+    {
+        try {
+
+            $updatedCompany = $this->companyService->updatePointCompany($company_id, $point);
+
+            if (!$updatedCompany) {
+                return $this->failed('company not found or update failed', 404);
+            }
+
+            return $this->success(
+
+                'company point updated successfully',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->failed('company not found', 404);
+        } catch (\Exception $e) {
+            return $this->exception('an error occurred while updating company point', $e->getMessage(), 500);
+        }
     }
 }

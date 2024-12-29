@@ -71,7 +71,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\News $news
- * @property-read \App\Models\Users $users
+ * @property-read \App\Models\Users $user
  * @method static \Illuminate\Database\Eloquent\Builder|Comments newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comments newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comments query()
@@ -101,6 +101,7 @@ namespace App\Models{
  * @property string $image
  * @property string|null $content
  * @property string|null $link
+ * @property float $point
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -122,6 +123,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies wherePoint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereRepresentative($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereShortName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereSlug($value)
@@ -404,6 +406,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Companies $company
+ * @property-read \App\Models\Users|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings query()
@@ -427,6 +430,8 @@ namespace App\Models{
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Users> $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Roles newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Roles newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Roles query()
@@ -446,14 +451,17 @@ namespace App\Models{
  * @property int $id
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property mixed $password
+ * @property string $password
  * @property int|null $status
  * @property int $role_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Companies|null $company
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ratings> $rating
+ * @property-read int|null $rating_count
  * @property-read \App\Models\Roles $roles
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count

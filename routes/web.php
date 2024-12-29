@@ -4,7 +4,9 @@ use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\auth\LoginController;
 
 use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\backend\CompaniesController as BackendCompaniesController;
 use App\Http\Controllers\backend\HomeController as BackendHomeController;
+use App\Http\Controllers\frontend\CommentsController;
 use App\Http\Controllers\frontend\CompaniesController as FrontendCompaniesController;
 use App\Http\Controllers\frontend\DashboardController;
 
@@ -25,11 +27,16 @@ require __DIR__ . '/auth.php';
 |
 */
 
+
 Route::post('createRating', [RatingController::class, 'createRating'])->name('createRating');
 Route::post('insertCompany', [FrontendCompaniesController::class, 'createCompany'])->name('insertCompany');
 Route::post('findCompanies', [FrontendCompaniesController::class, 'findCompany'])->name('findCompany');
+Route::put('updateCompanyFromView', [BackendCompaniesController::class, 'updateCompany'])->name('updateCompanyFromView');
 Route::get('findCompaniesByCate/{cateId}', [FrontendCompaniesController::class, 'findCompanyByCate'])->name('findCompanyByCate');
+Route::get('checkStatusCompany', [FrontendCompaniesController::class, 'checkCompanyStatus'])->name('checkStatusCompany');
 
+
+require __DIR__ . '/auth.php';
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -37,7 +44,21 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tin-tuc', [NewsController::class, 'news'])->name('news');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'newsDetail'])->name('news.detail');
 
-Route::get('/chi-tiet-cong-ty', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
+Route::get('/chi-tiet-cong-ty/{slug}', [FrontendCompaniesController::class, 'companyDetail'])->name('company.detail');
+
+
+
+Route::get('/login/get', [LoginController::class, 'create'])->name('auth.login');
+Route::post('/login/post', [LoginController::class, 'store'])->name('auth.post-login');
+// Route::get('/loginGG/post', [LoginController::class, 'loginGoole'])->name('auth.login-google');
+// Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+
+
+Route::get('/regis', [RegisterController::class, 'create'])->name('get.register');
+Route::post('/register/post', [RegisterController::class, 'store'])->name('auth.register');
+Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
+
 
 Route::get('/danh-sach-cong-ty', [FrontendCompaniesController::class, 'companyList'])->name('company.list-company');
 
@@ -45,6 +66,5 @@ Route::get('getsession',[LoginController::class,'someFunction']);
 
 Route::get('clearsession',[LoginController::class,'clearSession']);
 
-
-
+Route::post('/postComment',[CommentsController::class,'createComment'])->name('postComment');
 

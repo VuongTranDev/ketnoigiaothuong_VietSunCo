@@ -19,11 +19,13 @@
                         </a>
 
                     @else
+                    <a class="ms-2">
                         <a class="ms-2" href="#" id="openForm">Đăng ký thành viên
                             <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
-
                         </a>
 
+
+                    </a>
                     @endif
 
                     <a href="">
@@ -111,9 +113,6 @@
         </div>
     </div>
 
-
-
-
     <nav class="navbar navbar-expand-lg navbar-bottom">
         <div class="container-xl">
             <!-- Button trigger offcanvas -->
@@ -178,16 +177,32 @@
                                     <i class="fa-solid fa-user" style="font-size: 20px;"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
+                                    <li><a class="dropdown-item"href="
+                                            @if (session('user')->role_id == '1')
+                                               {{  route('admin.dashboard') }}
+                                            @else
+                                                {{ route('partner.dashboard') }}
+
+                                            @endif">
+
+                                            @if (session('user')->role_id == '1')
+                                                Trang quản trị
+                                            @else
+                                                Hồ sơ
+                                            @endif
+                                        </a>
+                                    </li>
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST"
+                                            style="display: none;">
                                             @csrf <!-- Include CSRF token for security -->
                                         </form>
-                                        <a class="dropdown-item" href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <a class="dropdown-item" href=""
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Đăng xuất
                                         </a>
                                     </li>
@@ -210,11 +225,12 @@
     </nav>
 </header>
 
-@push('script')
+@push('scripts')
 <script>
     // JavaScript để hiển thị và ẩn form
     document.getElementById('openForm').addEventListener('click', function(event) {
         event.preventDefault(); // Ngăn không cho link chuyển trang
+       
         document.getElementById('registerForm').style.display = 'flex';
     });
 
@@ -294,5 +310,4 @@
         });
     });
 </script>
-
 @endpush

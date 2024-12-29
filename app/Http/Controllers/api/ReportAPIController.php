@@ -4,43 +4,44 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users;
+use App\Services\ReportServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use User;
+use Validator;
 
-class ReportAPIController extends Controller
+class ReportAPIController extends BaseController
 {
+    public $reportService;
+    public function __construct(ReportServices $reportService)
+    {
+        $this->reportService = $reportService;
+    }
     public function __invoke(Request $request)
     {
-        // Your logic here
+    
     }
     public function statisticMember(Request $request)
     {
-        // Lấy tháng và năm từ request, nếu không có sẽ mặc định là tháng và năm hiện tại
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
-        if (!$start_date || !$end_date) {
-            return response()->json([
-                'message' => 'Both start_date and end_date are required.',
-                'status' => false,
-            ], 400);
-        }
-
-        // Đếm số lượng người dùng được tạo trong tháng và năm chỉ định
-        $startDate = Carbon::parse($start_date)->startOfDay();
-        $endDate = Carbon::parse($end_date)->endOfDay();
-
-        // Đếm số lượng người dùng được tạo trong khoảng thời gian này
-        $userCount = Users::whereBetween('created_at', [$startDate, $endDate])->count();
-
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'start_date' => 'required',
+                'end_date' => 'required'
+            ]
+        );
+        if ($validator->fails())
+            return $this->failed("validate error", 422, $validator);
+        $userCount = $this->reportService->statisticMember($request);
         // Trả về kết quả dưới dạng JSON
-        return response()->json([
-            'message' => 'Số lượng người gia nhập',
-            'start_date' => $startDate->toDateString(),
-            'end_date' => $endDate->toDateString(),
-            'user_count' => $userCount,
-            'status' => true,
-        ], 200);
-
+        return $this->success($userCount, "Danh sách các tải khoản đã tạo trong 1 khoản thời gian", 200);
     }
+
+    public function countUser()
+    {
+        $data = $this->reportService->countUser();
+        \Log::info("data". json_encode($data)) ;
+        return $this->success($data,"Số lượng người dùng",200);
+    }
+
 }

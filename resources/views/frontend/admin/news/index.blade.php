@@ -70,7 +70,6 @@
     <script>
         $(document).ready(function() {
             var table = $('#example').DataTable({
-
                 ajax: {
                     url: '{{ route('api.new') }}',
                     dataSrc: 'data'
