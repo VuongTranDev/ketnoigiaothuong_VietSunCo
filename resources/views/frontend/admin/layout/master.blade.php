@@ -24,23 +24,6 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
 
 
-    {{-- @if ($settings->layout === 'RTL')
-        <link rel="stylesheet" href="{{ asset('backend/assets/css/rtl.css') }}">
-    @endif
-
-    <script>
-        const USER = {
-            id: "{{ auth()->user()->id }}",
-            name: "{{ auth()->user()->nmae }}",
-            image: "{{ asset(auth()->user()->image) }}"
-        }
-        const PUSHER = {
-            key: "{{ $pusherSetting->pusher_key }}",
-            cluster: "{{ $pusherSetting->pusher_cluster }}"
-        }
-    </script>
-
-    @vite(['resources/js/app.js', 'resources/js/admin.js']) --}}
     @stack('style')
 </head>
 
@@ -86,7 +69,7 @@
     <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         @if ($errors->any())
