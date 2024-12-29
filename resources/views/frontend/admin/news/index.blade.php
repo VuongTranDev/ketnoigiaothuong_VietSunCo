@@ -103,6 +103,7 @@
                         data: null,
                         className: "dt-center",
                         orderable: false,
+                        width: "100px",
                         render: function(data, type, row) {
 
                             let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row

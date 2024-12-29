@@ -101,10 +101,6 @@
     font-size: 26px;
 }
 
-.pagination .page-item .page-link {
-    color: #007bff;
-    border: 1px solid #007bff;
-}
 
 .pagination .page-item .page-link.active {
     background-color: #007bff;

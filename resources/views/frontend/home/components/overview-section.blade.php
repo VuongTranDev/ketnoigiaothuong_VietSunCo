@@ -11,7 +11,7 @@
                 phẩm, dịch vụ và phát triển cùng nhau trong một môi trường kết nối đa dạng và hiệu quả.
             </p>
 
-            <a class="see-more" href="/">Xem thêm</a>
+            {{-- <a class="see-more" href="/">Xem thêm</a> --}}
         </div>
 
         <div class="col-lg-4 order-lg-2 order-1 my-3">
@@ -37,7 +37,7 @@
                 mật, đánh giá và phản hồi để doanh nghiệp an tâm khi giao dịch và xây dựng mạng lưới kết nối hiệu quả.
             </p>
 
-            <a class="see-more" href="/">Chi tiết</a>
+            {{-- <a class="see-more" href="/">Chi tiết</a> --}}
         </div>
     </div>
 </div>
