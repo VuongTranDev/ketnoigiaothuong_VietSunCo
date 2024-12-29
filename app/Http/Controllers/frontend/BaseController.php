@@ -18,11 +18,15 @@ class BaseController extends Controller
     }
     public function fetchDataFromApi(string $endpoint)
     {
-        try
-        {
+        try {
             $apiUrl = $this->url . $endpoint;
             $response = $this->client->request('GET', $apiUrl);
             $responseData = json_decode($response->getBody()->getContents(), false);
+
+            if (!isset($responseData->status)) {
+                return $responseData;
+            }
+
             if ($responseData->status == 'success') {
                 return $responseData->data;
             } else {
@@ -31,6 +35,28 @@ class BaseController extends Controller
         } catch (\Exception $e) {
             Log::error('API request failed: ' . $e->getMessage());
             return [];
+        }
+    }
+
+    public function sendDataToApi(string $endpoint)
+    {
+        try {
+            $apiUrl = $this->url . $endpoint;
+            $response = $this->client->request('PUT', $apiUrl);
+            $responseData = json_decode($response->getBody()->getContents(), false);
+
+            if (!isset($responseData->status)) {
+                return $responseData;
+            }
+
+            if ($responseData->status === 'success') {
+                return $responseData->data;
+            } else {
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('API request failed: ' . $e->getMessage());
+            return null;
         }
     }
 

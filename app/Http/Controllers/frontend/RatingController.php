@@ -23,7 +23,18 @@ class RatingController extends BaseController
             ]);
         }
 
+
+
         $userId = Session::get('user')->id;
+
+        $company= $this->fetchDataFromApi("checkCompanyWithStatus/{$userId}");
+        if($company===0)
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Chỉ có tài khoản đã đăng ký công ty và công ty còn hoạt động mới được đánh giá',
+            ]);
+        }
 
         $client = new Client();
         $response = $client->post(env('API_URL') . 'rating', [

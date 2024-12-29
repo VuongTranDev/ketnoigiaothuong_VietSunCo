@@ -34,6 +34,12 @@
                             href="{{ route('partner.news.hotnews') }}">Tin tức hot </a></li>
                 </ul>
             </li>
+            <li class=" {{ setActive([]) }}">
+                <a href="{{ route('partner.company.index') }}" class="nav-link " ><i
+                        class="fas fa-building"></i></i>
+                    <span>Thông tin công ty</span></a>
+
+            </li>
 
             <li><a class="nav-link {{ setActive(['user.messages.index']) }}" href="{{ route('user.message.index') }}"><i
                         class="fas fa-user"></i>

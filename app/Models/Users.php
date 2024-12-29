@@ -55,4 +55,13 @@ class Users extends Authenticatable
     public function companies(){
         return $this->hasMany(Companies::class, 'user_id');
     }
+    public function company()
+    {
+        return $this->hasOne(Companies::class, 'user_id');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany(Ratings::class, 'user_id');
+    }
 }

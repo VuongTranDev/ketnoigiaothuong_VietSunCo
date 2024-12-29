@@ -165,4 +165,9 @@ class CompanyCategoryController extends BaseController
         }
         return $this->success($result['data'], 'Create company success', 201);
     }
+
+    public function deleteCompanyCategory(Request $request)
+    {
+        return $this->companyCategoryService->deleteCategoryCompany($request->company_id,$request->cate_id);
+    }
 }

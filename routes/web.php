@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\auth\LoginController;
 
 use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\backend\CompaniesController as BackendCompaniesController;
 use App\Http\Controllers\backend\HomeController as BackendHomeController;
 use App\Http\Controllers\frontend\CommentsController;
 use App\Http\Controllers\frontend\CompaniesController as FrontendCompaniesController;
@@ -30,6 +31,11 @@ require __DIR__ . '/auth.php';
 
 Route::post('createRating', [RatingController::class, 'createRating'])->name('createRating');
 Route::post('insertCompany', [FrontendCompaniesController::class, 'createCompany'])->name('insertCompany');
+Route::post('findCompanies', [FrontendCompaniesController::class, 'findCompany'])->name('findCompany');
+Route::put('updateCompanyFromView', [BackendCompaniesController::class, 'updateCompany'])->name('updateCompanyFromView');
+Route::get('findCompaniesByCate/{cateId}', [FrontendCompaniesController::class, 'findCompanyByCate'])->name('findCompanyByCate');
+Route::get('checkStatusCompany', [FrontendCompaniesController::class, 'checkCompanyStatus'])->name('checkStatusCompany');
+
 
 require __DIR__ . '/auth.php';
 

@@ -56,7 +56,13 @@ class CompanyService
         $company->slug = $request->slug;
         $company->content = $request->content;
         $company->link = $request->link;
+        $company->email = $request->email;
+        $company->tax_code = $request->tax_code;
+        $company->status = $request->status;
+        $company->point = $request->point;
+        $company->image = $request->image;
         $company->user_id = $request->user_id;
+
         $company->save();
 
         return [
@@ -87,12 +93,61 @@ class CompanyService
                         ->first();
     }
 
+    public function showAllLikeSlug($slug)
+    {
+        return Companies::with('user')
+            ->where('slug', 'LIKE', '%' . $slug . '%')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
 
+    // public function getCompaniesByCategory($categoryId)
+    // {
+    //     return Companies::whereHas('companyCategory', function ($query) use ($categoryId) {
+    //         $query->where('cate_id', $categoryId);
+    //     })->get();
+    // }
+
+    public function getCompaniesByCategory($categoryId)
+    {
+        return Companies::with(['companyCategory.categories']) // Load mối quan hệ companyCategory và categories
+            ->whereHas('companyCategory', function ($query) use ($categoryId) {
+                $query->where('cate_id', $categoryId);
+            })
+            ->get()
+            ->map(function ($company) {
+                $categories = $company->companyCategory->map(function ($companyCategory) {
+                    return $companyCategory->categories->name; // Lấy tên của từng category
+                });
+                $company->setAttribute('category_names', $categories); // Gắn danh sách tên categories vào thuộc tính tạm thời
+                return $company;
+            });
+    }
 
     public function showBySlug($slug)
     {
-        return Companies::with('user')->where('slug', $slug)->first();
+        $company = Companies::with(['user', 'companyCategory.categories']) // Load user và các categories liên quan
+            ->where('slug', $slug)
+            ->first();
+
+        if ($company) {
+            $categories = $company->companyCategory->map(function ($companyCategory) {
+                return $companyCategory->categories->name; // Lấy tên của từng category
+            });
+            $company->setAttribute('category_names', $categories); // Gắn danh sách tên categories vào thuộc tính tạm thời
+        }
+
+        return $company;
     }
+
+
+
+
+
+    // public function showBySlug($slug)
+    // {
+    //     return Companies::with('user')->where('slug', $slug)->first();
+    // }
 
 
     /**
@@ -127,7 +182,8 @@ class CompanyService
      * @param mixed $company
      * @return array
      */
-    public function formatPaginate($company) {
+    public function formatPaginate($company)
+    {
         return [
             'current_page' => $company->currentPage(),
             'total_page' => $company->lastPage(),
@@ -198,20 +254,83 @@ class CompanyService
         return $companies;
     }
 
+    public function updateCompany(Request $request)
+    {
+        try {
+            \Log::info('AllrequestAPITT', $request->all());
+            $company = Companies::findOrFail($request->id);
+
+            $data = $request->only('image', 'representative', 'company_name', 'short_name', 'phone_number', 'email', 'tax_code', 'content', 'link');
+            $slugs = \Str::slug($request->company_name);
+            $data['slug'] = $slugs;
+            // Cập nhật công ty
+            $updated = $company->update($data);
+
+            // Trả về kết quả
+            return $updated ? 1 : 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    public function checkCompanyByIdWithStatus($user_id)
+    {
+        $company = Companies::with('user')
+            ->where('user_id', $user_id)
+            ->where('status', '!=', 0)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return $company ? 1 : 0;
+    }
+
+    public function checkCompanyStatus($user_id)
+    {
+        $company = Companies::with('user')
+            ->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+
+        if (!$company) {
+            return 2;
+        }
+
+
+        return $company->status != 0 ? 1 : 0;
+    }
+
     public function checkCompanyById($user_id)
     {
         $company = Companies::with('user')
                 ->where('user_id', $user_id)
                 ->orderBy('created_at', 'desc')
                 ->first();  // Lấy bản ghi đầu tiên
-
         return $company ? 1 : 0;
     }
-    public function changeStatus(Request $request,$id)
+
+    public function updatePointCompany($company_id, $point)
     {
-        $company = Companies::findOrFail($id);
-        $company->status = $request->status;
-        $company->save() ;
-        return $company;
+        $company = Companies::find($company_id);
+
+
+        if (!$company) {
+            return [
+                'status' => false,
+                'message' => 'Company not found',
+            ];
+        }
+
+
+        $company->point = $point;
+
+
+        $company->save();
+
+        return [
+            'status' => true,
+            'message' => 'Point updated successfully',
+            'data' => $company,
+        ];
     }
 }

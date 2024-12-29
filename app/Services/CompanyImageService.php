@@ -40,4 +40,26 @@ class CompanyImageService {
             'data' => $companyImage
         ];
     }
+
+    public function destroyCompanyImage(Request $request)
+    {
+        try {
+
+            $companyImage = CompanyImage::find($request->id);
+
+
+            if (!$companyImage) {
+                return 0;
+            }
+
+
+            $companyImage->delete();
+
+
+            return 1;
+        } catch (\Exception $e) {
+
+            return 0;
+        }
+    }
 }
