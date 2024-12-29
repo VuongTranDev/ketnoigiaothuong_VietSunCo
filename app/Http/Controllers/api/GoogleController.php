@@ -56,12 +56,12 @@ class GoogleController extends BaseController
      */
     public function destroy(string $id)
     {
-        //
     }
     public function getGoogleSignInUrl()
     {
         try {
             $url = $this->googleService->getGoogleSignInUrl();
+            \Log::info("getGoogleSignInUrl started");
             return $this->success($url, "success", 200);
         } catch (\Exception $e) {
             return $this->exception("Google sign in failed", $e->getMessage(), 400);
@@ -73,14 +73,10 @@ class GoogleController extends BaseController
     {
         try
         {
-
-            // Log khi bắt đầu hàm
             \Log::info("loginCallback started");
-            // Gọi service để lấy user từ Google
             $user = $this->googleService->loginCallback();
             return $this->success($user, "Đăng nhập thành công", 200);
         } catch (\Exception $exception) {
-            // Log thông tin lỗi nếu có
             \Log::error("Exception in loginCallback", [
                 'message' => $exception->getMessage(),
                 'stack' => $exception->getTraceAsString(),

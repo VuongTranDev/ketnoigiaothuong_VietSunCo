@@ -16,14 +16,14 @@
                     <div class="news-group">
                         <a href="{{ route('news.detail', $item->slug) }}" class="news-item d-flex align-items-start p-3 mb-3">
                             <div class="news-image flex-shrink-0">
-                                <img src="{{ asset('frontend/image/media.jpg') }}" alt="News Image"
+                                <img src="{{ asset($item->image) }}" alt="News Image"
                                     class="img-fluid rounded">
                             </div>
                             <div class="news-content pl-3">
                                 <h5 class="news-title font-weight-bold mb-1">{{ $item->title }}</h5>
                                 <div class="news-meta text-muted mb-2">
-                                    <span class="news-author font-weight-bold">VietSunCo</span> - <span
-                                        class="news-date">02/11/2024</span>
+                                    <span class="news-author font-weight-bold">{{ $item->company_name }}</span> - <span
+                                        class="news-date">{{  date('d/m/Y', strtotime($item->created_at)) }}</span>
                                 </div>
                                 <p class="news-description mb-0">
                                     {{ strip_tags($item->content) }}

@@ -13,12 +13,10 @@
                 <li class="breadcrumb-item active" aria-current="page">Danh sách công ty</li>
             </ol>
         </nav>
-
         <div class="row">
             <div class="col-lg-3">
                 @include('frontend.company.components.filter-sidebar')
             </div>
-
             <div class="col-lg-9">
                 <div class="d-flex justify-content-end">
                     <div class="search-bar-field">
@@ -28,7 +26,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="row">
                     @foreach ($companies as $item)
                         <div class="col-6 col-lg-4 col-md-4 d-flex company-list">
@@ -45,7 +42,6 @@
                         </div>
                     @endforeach
                 </div>
-
                 <nav aria-label="Page navigation example ">
                     <ul class="pagination justify-content-end">
                         <li class="page-item">

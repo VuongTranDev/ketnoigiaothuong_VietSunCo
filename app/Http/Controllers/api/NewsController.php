@@ -26,7 +26,7 @@ class NewsController extends BaseController
             $news = $this->newsService->show($page, $limit);
 
             $formattedData = collect($news->items())->map(function ($item) {
-                return $this->newsService->formatData($item);
+                return $this->newsService->formatDataSlug($item);
             })->toArray();
 
             $formattedPagination = $this->newsService->formatPaginate($news);
@@ -54,7 +54,7 @@ class NewsController extends BaseController
         }
 
         $news = $this->newsService->create($request);
-        return $this->success($this->newsService->formatData($news), 201, 'news created successfully');
+        return $this->success($this->newsService->formatData($news), 'news created successfully', 201);
     }
 
     /**
@@ -87,7 +87,7 @@ class NewsController extends BaseController
             return $this->failed('news not found', 404);
         }
 
-        return $this->success($this->newsService->formatData($news),  'news retrieved successfully', 200);
+        return $this->success($this->newsService->formatDataSlug($news),  'news retrieved successfully', 200);
     }
 
     /**
@@ -103,7 +103,7 @@ class NewsController extends BaseController
 
         try {
             $news = $this->newsService->update($request, $id);
-            return $this->success($this->newsService->formatData($news), 200, 'news updated successfully');
+            return $this->success($this->newsService->formatData($news), 'news updated successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('news not found', 404);
         }
@@ -116,7 +116,7 @@ class NewsController extends BaseController
     {
         try {
             $this->newsService->delete($id);
-            return $this->success([], 200, 'news deleted successfully');
+            return $this->success([], 'news deleted successfully', 200);
         } catch (ModelNotFoundException $e) {
             return $this->failed('news not found', 404);
         } catch (\Exception $e) {
@@ -126,26 +126,35 @@ class NewsController extends BaseController
 
     public function showAllComments($slug)
     {
-        $data = $this->newsService->showAllCommentInnews($slug) ;
-        return $this->success($data,"Danh sách comment được lấy thành công",200) ;
+        $data = $this->newsService->showAllCommentInnews($slug);
+        return $this->success($data, "Danh sách comment được lấy thành công", 200);
     }
 
     public function show5NewOfUser($user_id)
     {
         $data = $this->newsService->show5NewOfUser($user_id);
-        \Log::info("data". json_encode($data)) ;
-        return $this->success($data,"Danh sách bài viết của công ty được lấy thành công",200);
+        \Log::info("data" . json_encode($data));
+        return $this->success($data, "Danh sách bài viết của công ty được lấy thành công", 200);
     }
 
 
     public function countNewsOfUser($user_id)
     {
         $data = $this->newsService->countNewsOfUser($user_id);
-        \Log::info("data". json_encode($data)) ;
-        return $this->success($data,"Số lượng bài viết của công ty",200);
+        \Log::info("data" . json_encode($data));
+        return $this->success($data, "Số lượng bài viết của công ty", 200);
     }
 
+    public function showNewsByUserId($user_id)
+    {
+        $data = $this->newsService->showNewsByUserId($user_id);
+        return $this->success($data, "Danh sách bài viết của công ty được lấy thành công", 200);
+    }
 
+    public function searchNews(Request $request)
+    {
+        $data = $this->newsService->searchNews($request);
 
-
+        return $this->success($data,  'news retrieved successfully', 200);
+    }
 }

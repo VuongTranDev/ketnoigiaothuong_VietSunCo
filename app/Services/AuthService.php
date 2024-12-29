@@ -101,6 +101,7 @@ class AuthService
     {
         $user = $request->user();
         if ($user) {
+
             $user->remember_token = null;
             $request->user()->currentAccessToken()->delete();
             $user->save();

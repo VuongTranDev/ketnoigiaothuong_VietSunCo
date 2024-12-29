@@ -5,6 +5,7 @@ namespace App\Http\Controllers\partner;
 use App\DataTables\NewsDatatables;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\frontend\BaseController;
+use App\Traits\ImageUploadTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Session;
 
 class NewsController extends BaseController
 {
+    use ImageUploadTrait;
     protected $client;
     public function __construct(Client $client)
     {
@@ -42,22 +44,27 @@ class NewsController extends BaseController
      */
     public function store(Request $request)
     {
-        $data = $request->only(['title', 'tag_name', 'content']);
-        $data['cate_id'] = 1;
-        $data['user_id'] = 1;
-        $url = config('api.base_url') . "new";
-        $response = $this->client->request('POST', $url, [
-            'form_params' => $data
-        ]);
+        $data = $request->only(['title', 'tag_name', 'content', 'user_id', 'cate_id']);
 
-        if($response->getStatusCode() == 201) {
+        $imagePath = $this->uploadImage($request, 'image', 'frontend/image/news');
+        $data['image'] = $imagePath;
+
+        $url = env('API_URL') . "new";
+        $response = $this->client->request(
+            'POST',
+            $url,
+            [
+                'form_params' => $data
+            ]
+        );
+
+        if ($response->getStatusCode() == 201) {
             return redirect()->route('partner.news.index')->with('success', 'Thêm tin tức mới thành công!');
-        }
-        else {
+        } else {
             return redirect()->route('partner.news.index')->with('error', 'Thêm tin tức mới thất bại!');
         }
     }
-    
+
     /**
      * Display the specified resource.
      */
@@ -71,12 +78,13 @@ class NewsController extends BaseController
      */
     public function edit($id)
     {
-        $url = config('api.base_url') . "new/{$id}";
+        $url = env('API_URL') . "new/{$id}";
 
         $response = $this->client->request('GET', $url);
 
         $responseData = json_decode($response->getBody());
         $new = $responseData->data;
+
         return view('frontend.partner.news.edit')->with('new', $new);
     }
 
@@ -85,14 +93,29 @@ class NewsController extends BaseController
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->only(['title', 'tag_name', 'content']);
-        $data['cate_id'] = 1;
-        $data['user_id'] = 1;
+        $url = env('API_URL') . "new/{$id}";
+        $response = $this->client->request('GET', $url);
+        $responseData = json_decode($response->getBody());
 
-        $url = config('api.base_url') . "new/{$id}";
-        $response = $this->client->request('PUT', $url, [
-            'form_params' => $data
-        ]);
+        $currentImage = $responseData->data->image;
+
+        $data = $request->only(['id', 'title', 'tag_name', 'content', 'image', 'user_id', 'cate_id']);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $this->updateImage($request, 'image', 'frontend/image/news',  $currentImage);
+            $data['image'] = $imagePath;
+        } else {
+            $data['image'] = $currentImage;
+        }
+
+        $url = env('API_URL') . "new/{$id}";
+        $response = $this->client->request(
+            'PUT',
+            $url,
+            [
+                'form_params' => $data
+            ]
+        );
 
         if($response->getStatusCode() == 200) {
             return redirect()->route('partner.news.index')->with('success', 'Cập nhật tin tức thành công!');

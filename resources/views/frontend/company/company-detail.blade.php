@@ -21,9 +21,7 @@
                     <h2 class="title-b2b">Giới thiệu</h2>
                     <hr class="line-title">
                 </div>
-                <p style="text-align: justify">{{ @$company->content }}
-                </p>
-
+                <p style="text-align: justify">{{ @$company->content }}</p>
                 <div>
                     <h2 class="title-b2b">Thông tin chung</h2>
                     <hr class="line-title">
@@ -31,25 +29,30 @@
                 <div class="company-info">
                     <table class="info-table">
                         <tr>
-                            <td><strong>Tên công ty:</strong></td>
-                            <td>{{ @$company->company_name }}</td>
+                            <td><b>Tên công ty:</b></td>
+                            <td>{{ $company->company_name ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Tên viết tắt:</strong></td>
-                            <td>{{ @$company->short_name }}</td>
+                            <td><b>Tên viết tắt:</b></td>
+                            <td>{{ $company->short_name ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Người đại diện:</strong></td>
-                            <td>{{ @$company->representative }}</td>
+                            <td><b>Người đại diện:</b></td>
+                            <td>{{ $company->representative ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Lĩnh vực:</strong></td>
+                            <td><b>Lĩnh vực:</b></td>
                             <td>
-                                @foreach ($categories as $category)
-                                    {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
-                                @endforeach
+                                @if (!empty($categories) && $categories->isNotEmpty())
+                                    @foreach ($categories as $category)
+                                        {{ $category->name }}{{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                @else
+                                    Đang cập nhật
+                                @endif
                             </td>
                         </tr>
+
                         {{-- <tr>
                             <td><strong>Khu vực:</strong></td>
                             <td>Miền nam</td>
@@ -105,6 +108,27 @@
                         </div>
                     </div>
 
+                    <div class="modal-rating" id="modalRating" style="display:none;">
+                        <div class="modal-content">
+                            <span class="close-btn">&times;</span>
+                            <div class="rating-header">
+                                <h3>Số sao:</h3>
+                                <div class="stars">
+                                    <span data-star="1">&#9733;</span>
+                                    <span data-star="2">&#9733;</span>
+                                    <span data-star="3">&#9733;</span>
+                                    <span data-star="4">&#9733;</span>
+                                    <span data-star="5">&#9733;</span>
+                                </div>
+                            </div>
+                            <textarea class="content-rating" placeholder="Nhập đánh giá của bạn..."></textarea>
+                            <div class="modal-buttons">
+                                <button class="cancel-btn">Hủy</button>
+                                <button class="submit-btn-rating" id="submitbtnRating">Gửi</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="review-actions">
                         <button class="view-more-btn me-3">Xem thêm đánh giá</button>
                         <button class="write-review-btn">Viết đánh giá</button>
@@ -116,10 +140,30 @@
                 <div class="card">
                     <h3 class="company-name-detail">{{ @$company->company_name }}</h3>
                     <div class="info">
-                        <p><i class="fas fa-envelope"></i> hi@vietsunco.com</p>
-                        <p><i class="fa-solid fa-globe"></i> <a href="{{ $company->link }}">{{ @$company->link }}</a></p>
-                        <p><i class="fas fa-phone-alt"></i> {{ @$company->phone_number }}</p>
-                        <p><i class="fas fa-map-marker-alt"></i> {{ @$address->address }}</p>
+                        {{-- <p><i class="fas fa-envelope"></i>
+                            <a href="mailto:">{{ $company->email ?? 'Đang cập nhật' }}</a>
+                        </p> --}}
+                        <p><i class="fas fa-envelope"></i>
+                            <a href="mailto:">hi@vietsunco.com</a>
+                        </p>
+                        <p><i class="fa-solid fa-globe"></i>
+                            <a href="{{ $company->link ?? '#' }}">{{ $company->link ?? 'Đang cập nhật' }}</a>
+                        </p>
+                        <p><i class="fas fa-phone-alt"></i>
+                            <a
+                                href="callto:{{ $company->phone_number ?? '' }}">{{ $company->phone_number ?? 'Đang cập nhật' }}</a>
+                        </p>
+                        @if (@$address->address == null)
+                            <p><i class="fas fa-map-marker-alt"></i> Đang cập nhật</p>
+                        @else
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode(@$address->address) }}"
+                                    target="_blank">
+                                    {{ @$address->address }}
+                                </a>
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -310,5 +354,113 @@
             margin-right: 5px;
             color: #3EAEF4;
         }
+
+        .info p a {
+            color: #444;
+            transition: all linear 0.2s;
+        }
+
+        .info p a:hover {
+            color: #1380c4;
+        }
     </style>
 @endsection
+
+
+@push('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("modalRating");
+            const openBtn = document.querySelector(".write-review-btn");
+            const closeBtn = document.querySelector(".close-btn");
+            const cancelBtn = document.querySelector(".cancel-btn");
+            const submitBtn = document.querySelector(".submit-btn-rating");
+            const stars = document.querySelectorAll(".stars span");
+            const textarea = document.querySelector(".content-rating");
+
+            let selectedRating = 0;
+
+
+            if (openBtn) {
+                openBtn.addEventListener("click", function() {
+                    modal.style.display = "block";
+                });
+            }
+
+
+            if (closeBtn) closeBtn.addEventListener("click", closeModal);
+            if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+
+            function closeModal() {
+                modal.style.display = "none";
+            }
+
+
+            stars.forEach((star, index) => {
+                star.addEventListener("mouseover", function() {
+                    highlightStars(index + 1);
+                });
+
+                star.addEventListener("mouseout", function() {
+                    highlightStars(selectedRating); // Reset to selected rating
+                });
+
+                star.addEventListener("click", function() {
+                    selectedRating = index + 1;
+                    highlightStars(selectedRating);
+                });
+            });
+
+            function highlightStars(rating) {
+                stars.forEach((star, index) => {
+                    star.classList.toggle("hovered", index < rating);
+                });
+            }
+
+
+            if (submitBtn) {
+                submitBtn.addEventListener("click", function() {
+                    console.log("Submit button clicked");
+                    const content = textarea.value.trim();
+                    const numberstart = selectedRating;
+                    const company_id = 41;
+                    console.log('Selected rating:', selectedRating);
+                    console.log('Content:', content);
+                    closeModal();
+                    if (content && numberstart > 0) {
+
+                        $.ajax({
+                            url: "{{ route('createRating') }}",
+                            method: 'POST',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                content: content,
+                                numberstart: numberstart,
+                                company_id: company_id
+                            },
+
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    toastr.success(response.message);
+
+
+                                } else {
+                                    toastr.error(response.message);
+                                }
+
+
+
+                            },
+                            error: function(data) {
+                                alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                                console.error("Error:", data);
+                            }
+                        });
+                    } else {
+                        alert("Vui lòng nhập nội dung và chọn số sao.");
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

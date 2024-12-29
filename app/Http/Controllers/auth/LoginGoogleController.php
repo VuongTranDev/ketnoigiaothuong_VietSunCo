@@ -20,25 +20,24 @@ class LoginGoogleController extends Controller
     }
     public function redirectToGoogle()
     {
+        \Log::info("Start auth - redirect" ) ;
         return Socialite::driver('google')->stateless()->redirect();
     }
     public function handleGoogleCallback()
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
-
             $response = $this->client->request('GET', $this->url . 'auth/callback/google', [
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'query' => [
+                'query' =>
+                [
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
                 ]
-
             ]);
-
             $apiResponse = json_decode($response->getBody()->getContents());
             if ($apiResponse->status === 'success') {
                 Session::put('token', $apiResponse->token);
