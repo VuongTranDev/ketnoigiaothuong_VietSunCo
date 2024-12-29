@@ -77,7 +77,7 @@ Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCate
 
 Route::apiResource('/company-category', CompanyCategoryController::class);
 
-Route::apiResource('/address', AddressController::class);
+Route::apiResource('address', AddressController::class);
 Route::apiResource('/comments',CommentAPIController::class);
 Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('address.showAddressByIdCompany');
 
@@ -113,10 +113,12 @@ Route::middleware('auth:sanctum')->post('changeStatus/{id}', [AuthController::cl
 // Message
 Route::middleware('auth:sanctum')->post('/messages/send', [MessageController::class, 'sendMessage'])->name('messages.send');
 Route::middleware('auth:sanctum')->get('/messages/{userId}', [MessageController::class, 'getMessages'])->name('messages.get');
-Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
-
-//
-
+Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAllAsRead'])->name('messages.read');
+Route::middleware('auth:sanctum')->get('/messages/user/{id}', [MessageController::class, 'getUser'])->name('messages.getUser');
+Route::middleware('auth:sanctum')->get('/messages/{receiverId}/exist', [MessageController::class, 'existMessage']);
+Route::middleware('auth:sanctum')->get('/getCompanyByUser', [MessageController::class, 'getCompanyByUser'])->name('messages.index');
+Route::middleware('auth:sanctum')->post('/createTransaction', [MessageController::class, 'createTransaction'])->name('messages.createTransaction');
+Route::middleware('auth:sanctum')->get('/getTransaction/{receiverId}', [MessageController::class, 'getTransaction'])->name('messages.getTransaction');
 
 Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl'])->name('loginGoogle');
 Route::middleware('web')->get('/auth/google/callback', [GoogleController::class, 'loginCallback']);

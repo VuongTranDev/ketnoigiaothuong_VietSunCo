@@ -12,7 +12,7 @@
                 <img alt="image" style="width: 40px;height: 40px;
         object-fit: cover;"
                     src="{{ asset('frontend/image/icon.png') }}" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block">Hi, </div>
+                <div class="d-sm-none d-lg-inline-block">Hi {{ Auth::id() }} </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="" class="dropdown-item has-icon">
@@ -23,10 +23,10 @@
                     <i class="fas fa-cog"></i> Settings
                 </a>
                 <div class="dropdown-divider"></div>
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('auth.logout') }}">
                     @csrf
-                    <a href="" onclick="event.preventDefault();
-                this.closest('form').submit();"
+                    <a onclick="event.preventDefault();
+                         this.closest('form').submit();"
                         class="dropdown-item has-icon text-danger">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>

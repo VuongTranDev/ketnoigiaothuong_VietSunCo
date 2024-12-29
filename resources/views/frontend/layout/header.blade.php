@@ -162,11 +162,13 @@
                                     {{ session('user')->email }}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                            href="
-                                            @if (session('user')->role_id == '1') {{ route('admin.dashboard') }}
+                                    <li><a class="dropdown-item"href="
+                                            @if (session('user')->role_id == '1')
+                                                {{ route('admin.dashboard') }}
                                             @else
-                                                {{ route('partner.dashboard') }} @endif">
+                                                {{ route('partner.dashboard') }}
+                                            @endif">
+n
 
                                             @if (session('user')->role_id == '1')
                                                 Trang quản trị
@@ -184,7 +186,7 @@
                                             style="display: none;">
                                             @csrf <!-- Include CSRF token for security -->
                                         </form>
-                                        <a class="dropdown-item" href=""
+                                        <a class="dropdown-item"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Đăng xuất
                                         </a>
