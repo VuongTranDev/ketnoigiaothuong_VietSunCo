@@ -37,12 +37,8 @@ class ViewServiceProvider extends ServiceProvider
                 $response = $client->get($apiUrlCheckCompanyByUser);
 
 
-                $result = json_decode($response->getBody(), true);
-
-
-                if (isset($result['status']) && $result['status'] === 1) {
-                    $checkCompany = 1;
-                }
+                $result = (int) trim($response->getBody()->getContents()); 
+                $checkCompany = $result;
 
             }
             // Địa chỉ API

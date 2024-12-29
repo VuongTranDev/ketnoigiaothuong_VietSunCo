@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>General Dashboard &mdash; Stisla</title>
+    <title>Ketnoigiaothuong &mdash; Admin</title>
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
@@ -26,23 +26,6 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style_detail_company.css') }}">
 
-    {{-- @if ($settings->layout === 'RTL')
-        <link rel="stylesheet" href="{{ asset('backend/assets/css/rtl.css') }}">
-    @endif
-
-    <script>
-        const USER = {
-            id: "{{ auth()->user()->id }}",
-            name: "{{ auth()->user()->nmae }}",
-            image: "{{ asset(auth()->user()->image) }}"
-        }
-        const PUSHER = {
-            key: "{{ $pusherSetting->pusher_key }}",
-            cluster: "{{ $pusherSetting->pusher_cluster }}"
-        }
-    </script>
-
-    @vite(['resources/js/app.js', 'resources/js/admin.js']) --}}
     @stack('style')
 </head>
 
@@ -89,7 +72,7 @@
     <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         @if ($errors->any())

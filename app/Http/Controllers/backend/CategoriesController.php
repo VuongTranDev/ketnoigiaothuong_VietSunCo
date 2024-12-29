@@ -20,6 +20,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+      
         return view('frontend.admin.categories.index');
     }
     public function create()
@@ -64,7 +65,7 @@ class CategoriesController extends Controller
      */
     public function edit(string $id)
     {
-        $url = config('api.base_url') . "categories/{$id}";
+        $url = env('API_URL') . "categories/{$id}";
         $response = $this->client->request('GET', $url);
         $responseData = json_decode($response->getBody());
         $category = $responseData->data;
@@ -78,7 +79,7 @@ class CategoriesController extends Controller
     {
         try {
             $data = $request->only('name', 'id');
-            $url = config('api.base_url') . "categories/{$request->id}";
+            $url = env('API_URL') . "categories/{$request->id}";
             $response = $this->client->request(
                 'PUT',
                 $url,
@@ -103,7 +104,7 @@ class CategoriesController extends Controller
      */
     // public function destroy(string $id)
     // {
-    //     $url = config('api.base_url') . "categories";
+    //     $url = env('API_URL') . "categories";
     //     $response = $this->client->request(
     //         'DELETE',
     //         $url,

@@ -36,16 +36,17 @@ class RatingController extends BaseController
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'content' => 'required|string',
-            'numberstart' => 'required|integer|min:1|max:5',
-            'company_id' => 'required|integer',
-            'user_id' => 'required|integer',
-        ]);
+        \Log::info('AllrequestAPI', $request->all());
+        // $validator = Validator::make($request->all(), [
+        //     'content' => 'required|string',
+        //     'numberstart' => 'required|integer|min:1|max:5',
+        //     'company_id' => 'required|integer',
+        //     'user_id' => 'required|integer',
+        // ]);
 
-        if ($validator->fails()) {
-            return $this->failed('Validation failed', 400, $validator->errors());
-        }
+        // if ($validator->fails()) {
+        //     return $this->failed('Validation failed', 400, $validator->errors());
+        // }
 
 
         $result = $this->service->create($request);
@@ -54,6 +55,48 @@ class RatingController extends BaseController
         }
 
         return $this->success($result['data'], 'Create rating success', 201);
+    }
+
+    public function showRatingByCompanyId($id) {
+        try {
+
+            $rating = $this->service->showRatingByCompanyId($id);
+
+
+            if ($rating->isEmpty()) {
+                return $this->failed('Ratings not found', 404);
+            }
+
+
+            return $this->success($rating, 'Ratings retrieved successfully', 200);
+        } catch (\Exception $e) {
+
+            return $this->exception(
+                'An error occurred while retrieving ratings',
+                $e->getMessage(),
+                500
+            );
+        }
+    }
+
+    public function checkRating($userId,$company_id)
+    {
+        return $this->service->checkRating($userId,$company_id);
+    }
+
+    public function avgPointCompany($company_id)
+    {
+        return $this->service->avgPointCompany($company_id);
+    }
+
+    public function countAllRating($company_id)
+    {
+        return $this->service->countAllRating($company_id);
+    }
+
+    public function countStarRating($company_id)
+    {
+        return $this->service->countStarRating($company_id);
     }
 
     /**

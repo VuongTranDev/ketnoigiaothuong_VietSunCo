@@ -22,11 +22,11 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Tiêu đề</th>
-                                        <th>Tag</th>
+                                        <th>Hình ảnh</th>
                                         <th>Nội dung</th>
                                         <th>Trạng thái</th>
+                                        <th>Người đăng</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày cập nhật</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -41,6 +41,8 @@
 
 @push('scripts')
     <script>
+        const assetBaseUrl = "{{ asset('') }}";
+
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 ajax: {
@@ -57,7 +59,10 @@
                         data: 'title'
                     },
                     {
-                        data: 'tag_name'
+                        data: 'image',
+                        render: function(data, type, row) {
+                            return `<img src="${assetBaseUrl}${data}" alt="" width="100">`;
+                        }
                     },
                     {
                         data: 'content',
@@ -84,11 +89,23 @@
                     {
                         data: 'created_at',
                         render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
+                            let checked = data == 1 ? 'checked' : '';
+                            return `
+                                <label class="custom-switch mt-2">
+                                    <input type="checkbox" ${checked}
+                                        name="custom-switch-checkbox"
+                                        data-id="${row.id}"
+                                        class="custom-switch-input change-status">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            `;
                         }
                     },
                     {
-                        data: 'updated_at',
+                        data: 'company_name',
+                    },
+                    {
+                        data: 'created_at',
                         render: function(data, type, row) {
                             return moment(data).format('DD-MM-YYYY');
                         }
@@ -97,6 +114,7 @@
                         data: null,
                         className: "dt-center",
                         orderable: false,
+                        width: "100px",
                         render: function(data, type, row) {
 
                             let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row
@@ -106,6 +124,7 @@
                                 <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
                                     <i class='far fa-edit'></i>
                                 </a>
+
                                 <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
                                     <i class='far fa-trash-alt'></i>
                                 </button>
@@ -172,6 +191,28 @@
                                 );
                             }
                         });
+                    }
+                });
+            });
+
+            $('body').on('change', '.change-status', function() {
+                let isChecked = $(this).is(':checked');
+                let id = $(this).data('id');
+
+                $.ajax({
+                    url: "{{ route('admin.news.change-status') }}",
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        status: isChecked ? 'true' : 'false',
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        toastr.success(response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
+                        console.log(xhr.responseText);
                     }
                 });
             });

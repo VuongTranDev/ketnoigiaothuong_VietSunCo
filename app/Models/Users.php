@@ -20,15 +20,14 @@ class Users extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'id', // Nếu bạn cần cho phép gán giá trị cho id, thêm nó vào đây
+        'id',
         'name',
         'email',
         'password',
         'remember_token',
         'status',
         'role_id',
-        'google_id', // Nếu bạn đang dùng trường role_id
-        // Các trường khác cần được cho phép
+        'google_id',
     ];
 
     /**
@@ -52,5 +51,17 @@ class Users extends Authenticatable
     public function roles()
     {
         return $this->belongsTo(Roles::class, 'role_id', 'id');
+    }
+    public function companies(){
+        return $this->hasMany(Companies::class, 'user_id');
+    }
+    public function company()
+    {
+        return $this->hasOne(Companies::class, 'user_id');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany(Ratings::class, 'user_id');
     }
 }

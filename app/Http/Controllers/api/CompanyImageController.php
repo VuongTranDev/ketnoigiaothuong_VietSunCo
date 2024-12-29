@@ -23,4 +23,9 @@ class CompanyImageController extends BaseController
         }
         return $this->success($result['data'], 'Create company image success', 201);
     }
+
+    public function destroyCompanyImage(Request $request)
+    {
+        return $this->service->destroyCompanyImage($request);
+    }
 }
