@@ -6,7 +6,6 @@
         </li>
     </form>
     <ul class="navbar-nav navbar-right">
-
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" style="width: 40px;height: 40px;
@@ -23,7 +22,7 @@
                     <i class="fas fa-cog"></i> Settings
                 </a>
                 <div class="dropdown-divider"></div>
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('auth.logout') }}">
                     @csrf
                     <a href="" onclick="event.preventDefault();
                 this.closest('form').submit();"

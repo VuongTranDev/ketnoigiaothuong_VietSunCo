@@ -20,10 +20,6 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        // $url = config('api.base_url') . "categories";
-        // $response = $this->client->request('GET', $url);
-        // $data = json_decode($response->getBody());
-        // ->with('data', $data);
         return view('frontend.admin.categories.index');
     }
     public function create()
@@ -40,13 +36,13 @@ class CategoriesController extends Controller
 
             $data = $request->only('name');
             $url = config('api.base_url') . "categories";
-            $response = $this->client->request(
-                'POST',
-                $url,
-                [
-                    'form_params' => $data
-                ]
-            );
+                $response = $this->client->request(
+                    'POST',
+                    $url,
+                    [
+                        'form_params' => $data
+                    ]
+                );
             if ($response->getStatusCode() == 201) {
                 return redirect()->route('admin.categories.index')->with('success', 'Thêm lĩnh vực mới thành công!');
             } else {

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Services\NewsService;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-
+use Log;
 
 class NewsController extends BaseController
 {
@@ -120,6 +121,20 @@ class NewsController extends BaseController
         } catch (ModelNotFoundException $e) {
             return $this->failed('news not found', 404);
         } catch (\Exception $e) {
+            return $this->exception('an error occurred', $e->getMessage(), 500);
+        }
+    }
+
+    public function changeStatus(Request $request,$id)
+    {
+        try
+        {
+            $company =  $this->newsService->changeStatus($request,$id) ;
+            return $this->success($company,"News change status success",200) ;
+        }
+        catch(Exception $e)
+        {
+            Log::info('Fail',$e->getMessage()) ;
             return $this->exception('an error occurred', $e->getMessage(), 500);
         }
     }

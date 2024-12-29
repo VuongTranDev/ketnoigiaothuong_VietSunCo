@@ -8,13 +8,10 @@ use App\Models\Companies;
 use App\Models\CompanyCategory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class CompaniesController extends BaseController
 {

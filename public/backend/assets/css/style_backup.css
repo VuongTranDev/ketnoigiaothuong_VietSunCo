@@ -1,0 +1,97 @@
+.backup-container {
+    margin: 20px auto;
+}
+
+.backup-header {
+    background-color: #2563eb;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backup-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.backup-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.backup-card {
+    background-color: white;
+    flex: 1 1 calc(50% - 20px);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backup-card h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #1f2937;
+}
+
+.backup-card p {
+    margin: 10px 0 20px;
+    color: #4b5563;
+}
+
+.btn-backup {
+    background-color: #2563eb;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-backup:hover {
+    background-color: #1e40af;
+}
+
+.btn-backup i {
+    margin-right: 8px;
+}
+
+.backup-schedule-options {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.backup-schedule-options label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.backup-schedule-options input,
+.backup-schedule-options select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.custom-hr {
+    width: 100%;
+    height: 2px;
+    background-color: #333;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.backup-file-upload {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 10px;
+}

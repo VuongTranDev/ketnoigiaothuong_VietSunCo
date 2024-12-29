@@ -12,6 +12,7 @@ use App\Http\Controllers\api\NewsController;
 use App\Http\Controllers\frontend\DashboardController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\BackupController;
 use App\Http\Controllers\api\CompanyImageController;
 use App\Http\Controllers\api\GoogleController;
 use App\Http\Controllers\api\MessageController;
@@ -55,6 +56,8 @@ Route::apiResource('/rating', RatingController::class);
 
 Route::post('/report/statisticMember', [ReportAPIController::class,'statisticMember']) ;
 Route::get('report/countUser',[ReportAPIController::class,'countUser']);
+Route::post('/report/statisticNews', [ReportAPIController::class,'statisticNews']) ;
+
 
 
 Route::apiResource('/company', CompaniesController::class);
@@ -68,7 +71,7 @@ Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.
 Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
 Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
 Route::get('new/countNewsOfUser/{user_id}',[NewsController::class,'countNewsOfUser']);
-
+Route::put('new/status/{id}',[NewsController::class,'changeStatus'])->name('news.changeStatus');
 Route::apiResource('/categories', CategoriesController::class)->names(['index' => 'api.categories']);
 Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
 
@@ -112,10 +115,13 @@ Route::middleware('auth:sanctum')->post('/messages/send', [MessageController::cl
 Route::middleware('auth:sanctum')->get('/messages/{userId}', [MessageController::class, 'getMessages'])->name('messages.get');
 Route::middleware('auth:sanctum')->post('/messages/{messageId}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
 
-//
+// Backup and restore
+Route::post('/backupDB', [BackupController::class, 'backup'])->name('backup');
+Route::post('/backup', [BackupController::class, 'backupSchedule'])->name('post.backup');
+Route::get('/backup', [BackupController::class, 'showListBackup'])->name('get.backup');
+Route::delete('/backup/{id}', [BackupController::class, 'removeschedule'])->name('delete.schedule');
+Route::delete('/backup', [BackupController::class, 'removeAllSchedule'])->name('delete.Allschedule');
 
 
 Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl'])->name('loginGoogle');
 Route::middleware('web')->get('/auth/google/callback', [GoogleController::class, 'loginCallback']);
-
-

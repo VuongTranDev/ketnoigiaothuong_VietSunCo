@@ -172,9 +172,16 @@ class NewsService
 
     public function countNewsOfUser($user_id)
     {
-        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::where('user_id', $user_id)
         ->count();
+    }
+
+    public function changeStatus(Request $request,$id)
+    {
+        $company = News::findOrFail($id);
+        $company->status = $request->status;
+        $company->save() ;
+        return $company;
     }
 
 }
