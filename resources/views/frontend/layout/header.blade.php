@@ -128,9 +128,9 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"href="
                                             @if (session('user')->role_id == '1')
-                                                route('admin.dashboard')
+                                                {{ route('admin.dashboard') }}
                                             @else
-                                                route('partner.dashboard')
+                                                {{ route('partner.dashboard') }}
                                             @endif">
 
                                             @if (session('user')->role_id == '1')
@@ -149,7 +149,7 @@
                                             style="display: none;">
                                             @csrf <!-- Include CSRF token for security -->
                                         </form>
-                                        <a class="dropdown-item" href=""
+                                        <a class="dropdown-item"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Đăng xuất
                                         </a>

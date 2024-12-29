@@ -34,9 +34,9 @@ class AuthController extends BaseController
     {
         $result =  $this->authService->login($request);
         if ($result['status'] == false) {
-            return $this->failed('Login failed',  400, $result['errors']);
+            return $this->failed($result['errors'],  400, $result['errors']);
         }
-        return $this->success([$result['token'],$result['role']], $request['message'], 200);
+        return $this->success([$result['token'], $result['role']], $request['message'], 200);
     }
 
     public function getInfo(Request $request)
@@ -63,30 +63,23 @@ class AuthController extends BaseController
 
     public function logout(Request $request)
     {
-        try {
-            $user = $request->user();
-
-            if ($user) {
-                $request->user()->currentAccessToken()->delete();
-                $user->remember_token = null;
-                $user->save();
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Đăng xuất thành công.'
-                ], 200);
-            }
+        $user = $request->user();
+        Log::info('Attempting to log out user.');
+        if ($user) {
+            $request->user()->currentAccessToken()->delete();
+            $user->remember_token = null;
+            $user->save();
 
             return response()->json([
-                'status' => 'error',
-                'message' => 'Không thể đăng xuất. Người dùng không xác thực.'
-            ], 401);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Đã xảy ra lỗi trong quá trình đăng xuất: ' . $e->getMessage()
-            ], 500);
+                'status' => 'success',
+                'message' => 'Đăng xuất thành công.'
+            ], 200);
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Không thể đăng xuất. Người dùng không xác thực.'
+        ], 401);
     }
 
     public function changeStatusUser($id)
@@ -109,10 +102,10 @@ class AuthController extends BaseController
                     'google_id' => $request->google_id,
                     'email' => $request->email,
                     'role_id' => 2,
-                    'status'=>1
+                    'status' => 1
                 ]
             );
-            Log::info('Attempting to authenticate Google user. '. json_encode($user));
+            Log::info('Attempting to authenticate Google user. ' . json_encode($user));
 
             $token = $user->createToken('auth_token')->plainTextToken;
             $user->remember_token = $token;

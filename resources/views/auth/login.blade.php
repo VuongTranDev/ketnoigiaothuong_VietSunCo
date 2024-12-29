@@ -11,9 +11,9 @@
                     <div class="wrapper">
                         <div class="inp-group">
                             <i class="fas fa-user"></i>
-                            <input type="text" name="email" class="inp-login"
-                                placeholder="Nhập email của bạn" />
+                            <input type="text" name="email" class="inp-login " placeholder="Nhập email của bạn"  required/>
                         </div>
+
                     </div>
                 </div>
                 <div class="login-group">
@@ -21,7 +21,7 @@
                     <div class="wrapper">
                         <div class="inp-group">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="password" name="password" class="inp-login" placeholder="Nhập mật khẩu của bạn" />
+                            <input type="password" name="password" class="inp-login" placeholder="Nhập mật khẩu của bạn" required />
                         </div>
                     </div>
                 </div>
@@ -36,14 +36,14 @@
                 <div class="google-login">
 
                     <a href="{{ route('google.login') }}">
-                        <img src="{{ asset('frontend/image/ic-google.png') }}"  alt="Google Logo">
+                        <img src="{{ asset('frontend/image/ic-google.png') }}" alt="Google Logo">
                     </a>
                 </div>
             </form>
         </div>
     </div>
 
-    @push('script')
+    @push('scripts')
         <script>
             (function(window, document) {
                 'use strict';
@@ -61,6 +61,18 @@
                 });
 
             })(window, document);
+        </script>
+        <script>
+            $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+
+
+            });
         </script>
     @endpush
 @endsection

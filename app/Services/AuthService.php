@@ -53,16 +53,15 @@ class AuthService
                 'errors' => 'User is already logged in. Please logout first.'
             ];
         }
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!Hash::check($request->password, $user->password)) {
             return [
                 'message' => 'Unauthorized',
-                'errors' => 'The provided credentials are incorrect.',
+                'errors' => 'Sai email hoặc mật khẩu!!.',
                 'status' => false
             ];
         }
 
-        $token = $user->createToken('auth_token', ['*'], now()->addMinutes(30))->plainTextToken;
+        $token = $user->createToken('auth_token', ['*'], now()->addMinutes(120))->plainTextToken;
         $user->remember_token = $token;
         $user->save();
 
