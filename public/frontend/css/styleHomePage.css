@@ -328,6 +328,12 @@
     line-height: 36px;
 }
 
+.news-one__title a {
+    color: #555;
+    text-decoration: none;
+    transition: .5s
+}
+
 .news-one__content {
     position: relative;
     display: block;
