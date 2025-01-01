@@ -145,6 +145,13 @@ class NewsController extends BaseController
         return $this->success($data, "Danh sách comment được lấy thành công", 200);
     }
 
+
+    public function showAllCommentInNewsById($id)
+    {
+        $data = $this->newsService->showAllCommentInNewsById($id);
+        return $this->success($data, "Danh sách comment được lấy thành công", 200);
+    }
+
     public function show5NewOfUser($user_id)
     {
         $data = $this->newsService->show5NewOfUser($user_id);
@@ -173,7 +180,7 @@ class NewsController extends BaseController
         return $this->success($data,  'news retrieved successfully', 200);
     }
 
-    
+
 
     public function showNewsByCompanyId(Request $request, $id)
     {

@@ -12,7 +12,7 @@
                 <a href="{{ route('partner.dashboard') }}" class="nav-link"><i
                         class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
-            <li class="menu-header">Mamager</li>
+            <li class="menu-header">Manager</li>
 
             <li class="dropdown {{ setActive(['']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
@@ -38,7 +38,6 @@
                 <a href="{{ route('partner.company.index') }}" class="nav-link " ><i
                         class="fas fa-building"></i></i>
                     <span>Thông tin công ty</span></a>
-
             </li>
 
             <li><a class="nav-link {{ setActive(['user.messages.index']) }}" href="{{ route('user.message.index') }}"><i

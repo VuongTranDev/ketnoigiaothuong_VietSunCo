@@ -70,7 +70,7 @@
                 <div class="backup-card">
                     <h2>Phục hồi</h2>
                     <p>Chọn vào nút ở dưới để bắt đầu quá trình phục hồi dữ liệu.</p>
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.restore') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="backup_file" class="backup-file-upload">
                         <button class="btn-backup text-light">

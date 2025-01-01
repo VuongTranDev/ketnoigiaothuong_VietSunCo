@@ -23,6 +23,7 @@ Route::get('detailCompany/{id}', [CompaniesController::class,'detailCompany'])->
 Route::get('index', [BackupController::class,'index'])->name('backup.index');
 Route::post('backup', [BackupController::class,'backup'])->name('backupDB');
 Route::post('backupSchedule', [BackupController::class,'backupSchedule'])->name('backup.schedule');
+Route::post('restore', [BackupController::class,'restore'])->name('restore');
 // Footer
 Route::resource('footer-grid-info', FooterGridInfoController::class);
 

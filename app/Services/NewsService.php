@@ -208,9 +208,18 @@ class NewsService
         return $data;
     }
 
+    public function showAllCommentInNewsById($id)
+    {
+        /// $data = DB::select('CALL proc_selectCommentInNews(?)', [$slug]);
+        $comments = News::with('comments.user')  // Tải các comment và user của comment
+                    ->where('id',$id)  // Lọc theo bài viết
+                    ->firstOrFail()  // Nếu không tìm thấy bài viết, trả về lỗi 404
+                    ->comments;
+        return $comments;
+    }
+
     public function show5NewOfUser($user_id)
     {
-        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::withCount('comments')
             ->where('user_id', $user_id)
             ->orderBy('comments_count', 'desc')
@@ -265,7 +274,6 @@ class NewsService
         $news = News::findOrFail($request->id);
         $news->status = $request->status === 'true' ? 1 : 0;
         $news->save();
-
         return $news;
     }
 }

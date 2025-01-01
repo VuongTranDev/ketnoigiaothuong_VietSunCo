@@ -29,7 +29,7 @@
             id: "{{ auth()->user()->id }}",
             name: "{{ auth()->user()->name }}",
             email: "{{ auth()->user()->email }}",
-            
+
         }
     </script>
     @vite('resources/js/app.js')
@@ -80,6 +80,7 @@
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         @if ($errors->any())

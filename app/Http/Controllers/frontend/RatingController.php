@@ -22,9 +22,6 @@ class RatingController extends BaseController
                 'message' => 'Vui lòng đăng nhập để đánh giá công ty',
             ]);
         }
-
-
-
         $userId = Session::get('user')->id;
 
         $company= $this->fetchDataFromApi("checkCompanyWithStatus/{$userId}");

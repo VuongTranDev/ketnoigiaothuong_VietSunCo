@@ -58,6 +58,12 @@ Route::apiResource('/rating', RatingController::class);
 Route::post('/report/statisticMember', [ReportAPIController::class,'statisticMember']) ;
 Route::get('report/countUser',[ReportAPIController::class,'countUser']);
 Route::post('/report/statisticNews', [ReportAPIController::class,'statisticNews']) ;
+Route::get('/report/showNewsHot', [ReportAPIController::class,'showNewsHot']) ;
+Route::get('/report/companiesHot', [ReportAPIController::class,'companiesHot']) ;
+Route::get('/report/countTransactions/{user_id}', [ReportAPIController::class,'countTransactions']) ;
+Route::get('/report/countCompaniesConnect/{user_id}', [ReportAPIController::class,'countCompaniesConnect']) ;
+Route::get('/report/countCategoriesOfCompany/{user_id}', [ReportAPIController::class,'countCategoriesOfCompany']) ;
+Route::get('/report/statisticActivity/{user_id}', [ReportAPIController::class,'statisticActivity']) ;
 
 
 
@@ -75,6 +81,9 @@ Route::get('new/countNewsOfUser/{user_id}',[NewsController::class,'countNewsOfUs
 Route::put('new/status/{id}',[NewsController::class,'changeStatus'])->name('news.changeStatus');
 Route::get('new/user/{user_id}',[NewsController::class,'showNewsByUserId'])->name('api.news.showNewsByUserId');
 Route::get('new/search/search_query={search_query}', [NewsController::class, 'searchNews'])->name('api.news.search');
+Route::get('new/showAllCommentInNewsById/{id}', [NewsController::class, 'showAllCommentInNewsById'])->name('api.new.showAllCommentInNewsById');
+
+
 
 Route::apiResource('/categories', CategoriesController::class)->names(['index' => 'api.categories']);
 Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
@@ -141,6 +150,7 @@ Route::get('/backup', [BackupController::class, 'showListBackup'])->name('get.ba
 Route::delete('/backup/{id}', [BackupController::class, 'removeschedule'])->name('delete.schedule');
 Route::delete('/backup', [BackupController::class, 'removeAllSchedule'])->name('delete.Allschedule');
 
+Route::post('/restore', [BackupController::class, 'restore'])->name('post.restore');
 
 Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl'])->name('loginGoogle');
 Route::middleware('web')->get('/auth/google/callback', [GoogleController::class, 'loginCallback']);

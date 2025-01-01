@@ -25,8 +25,6 @@ class CompanyService
     public function store(Request $request)
     {
         \Log::info('Request Data:', $request->all());
-
-
         $validator = Validator::make($request->all(), [
             'representative' => 'required|string|max:255',
             'company_name' => 'required|string|max:255|unique:companies,company_name',
@@ -37,8 +35,6 @@ class CompanyService
             'link' => 'nullable|url',
             'user_id' => 'required|exists:users,id',
         ]);
-
-
         if ($validator->fails()) {
             \Log::error('Validation Errors:', $validator->errors()->toArray());
             return [
@@ -46,8 +42,6 @@ class CompanyService
                 'errors' => $validator->errors()
             ];
         }
-
-
         $company = new Companies();
         $company->representative = $request->representative;
         $company->company_name = $request->company_name;
@@ -62,7 +56,6 @@ class CompanyService
         $company->point = $request->point;
         $company->image = $request->image;
         $company->user_id = $request->user_id;
-
         $company->save();
 
         return [

@@ -25,6 +25,9 @@ class CompaniesController extends BaseController
 
     public function checkCompanyStatus()
     {
+        if (!Session::has('user') || Session::get('user') === null) {
+            return redirect()->back()->with('error', 'Vui lòng đăng nhập để đăng ký thành viên !');
+        }
         $userId = Session::get('user')->id;
         $company = $this->fetchDataFromApi("company/{$userId}");
         $status=$this->fetchDataFromApi("checkCompanyStatus/{$userId}");
@@ -38,7 +41,7 @@ class CompaniesController extends BaseController
         }
         else
         {
-            return redirect()->back()->with('error', 'Tài khoản chưa đăng ký, xin vui lòng đăng ký thành viên ở góc trên bên phải trang web !');
+            return redirect()->back()->with('error', 'Tài khoản chưa đăng ký công ty, xin vui lòng nhấn vào mục đăng ký thành viên ở góc trên bên phải trang web !');
         }
     }
 

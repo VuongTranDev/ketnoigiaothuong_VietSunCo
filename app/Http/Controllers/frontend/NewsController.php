@@ -61,13 +61,14 @@ class NewsController extends BaseController
     {
         try {
             $news = $this->fetchDataFromApi("new/slug/{$slug}");
+            dd($news) ;
             $moreNews = $this->fetchDataFromApi("new?limit=5");
             $newComment = $this->fetchDataFromApi("new/comment/{$slug}");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];
             $moreNews = [];
-            $comments = [];
+            $newComment = [];
         }
         return view('frontend.news.new-detail', compact('news', 'moreNews', 'newComment'));
     }

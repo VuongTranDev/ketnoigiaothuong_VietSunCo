@@ -32,6 +32,12 @@ class CompaniesController extends BaseController
         return view('frontend.partner.company.index', compact('company'));
     }
 
+    public function detailCompany($id)
+    {
+        $company = $this->fetchDataFromApi("company/detail/{$id}");
+        return view ('frontend.admin.companies.detail',compact('company'));
+    }
+
     public function companyCategory()
     {
         $userId = Session::get('user')->id;
