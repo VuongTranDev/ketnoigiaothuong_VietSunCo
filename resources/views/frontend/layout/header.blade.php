@@ -181,21 +181,19 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"href="
-                                            @if (session('user')->role_id == '1')
-                                               {{  route('admin.dashboard') }}
-                                            @else
-                                                {{ route('partner.dashboard') }}
+                                        @if (session('user')->role_id == '1')
+                                           {{ route('admin.dashboard') }}
+                                        @else
+                                         {{    route('partner.dashboard')}}
+                                        @endif">
 
-                                            @endif">
-n
-
-                                            @if (session('user')->role_id == '1')
-                                                Trang quản trị
-                                            @else
-                                                Hồ sơ
-                                            @endif
-                                        </a>
-                                    </li>
+                                        @if (session('user')->role_id == '1')
+                                            Trang quản trị
+                                        @else
+                                            Hồ sơ
+                                        @endif
+                                    </a>
+                                </li>
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">

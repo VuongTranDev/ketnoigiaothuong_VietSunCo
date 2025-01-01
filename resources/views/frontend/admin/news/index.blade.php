@@ -78,6 +78,17 @@
                     {
                         data: 'status',
                         render: function(data, type, row) {
+                            let checked = data === 1 ? 'checked' : ''; // Kiểm tra nếu status là 1
+                            return `
+            <label class="custom-switch mt-2">
+                <input type="checkbox" ${checked} name="custom-switch-checkbox" data-id="${row.id}" class="custom-switch-input change-status">
+                <span class="custom-switch-indicator"></span>
+            </label>`;
+                        }
+                    },
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
                             let checked = data == 1 ? 'checked' : '';
                             return `
                                 <label class="custom-switch mt-2">
@@ -122,10 +133,34 @@
                     }
                 ]
             });
+            $('#example').on('change', '.change-status', function() {
+                let id = $(this).data('id');
+                let status = $(this).is(':checked') ? 1 : 0;
+                $.ajax({
+                    url: `/api/new/status/${id}`,
+                    type: 'PUT',
+                    data: {
+                        status: status
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            'Thành công!',
+                            'Cập nhật trạng thái thành công.',
+                            'success'
+                        );
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Đã xảy ra lỗi khi cập nhật trạng thái.',
+                            'error'
+                        );
+                    }
+                });
+            });
 
             $('#example').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
-
                 Swal.fire({
                     title: 'Bạn có chắc chắn muốn xóa mục này?',
                     text: "Hành động này không thể hoàn tác!",
@@ -142,7 +177,6 @@
                             type: 'DELETE',
                             success: function(response) {
                                 table.ajax.reload();
-
                                 Swal.fire(
                                     'Thành công!',
                                     'Xóa tin tức thành công.',

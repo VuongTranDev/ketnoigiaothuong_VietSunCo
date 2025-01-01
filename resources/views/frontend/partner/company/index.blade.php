@@ -22,7 +22,7 @@
                                 <div class="form-group">
                                     <label>Hình ảnh công ty</label>
                                     <input type="file" class="form-control" name="image">
-                                    <img src="{{ asset($company->image) }}" width="100" alt="Current Image">
+                                    <img src="" width="100" alt="Current Image">
                                 </div>
                                 <div class="form-group" style="display:none">
                                     <label>Id</label>

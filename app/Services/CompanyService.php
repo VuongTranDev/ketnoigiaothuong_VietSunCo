@@ -333,4 +333,11 @@ class CompanyService
             'data' => $company,
         ];
     }
+    public function changeStatus(Request $request,$id)
+    {
+        $company = Companies::findOrFail($id);
+        $company->status = $request->status;
+        $company->save() ;
+        return $company;
+    }
 }

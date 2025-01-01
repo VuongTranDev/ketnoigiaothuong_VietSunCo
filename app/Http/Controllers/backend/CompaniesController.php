@@ -20,7 +20,11 @@ class CompaniesController extends BaseController
         $this->client = $client;
         $this->url = env('API_URL');
     }
+    public function index1 ()
+    {
 
+        return view('frontend.admin.companies.index');
+    }
     public function index()
     {
         $userId = Session::get('user')->id;

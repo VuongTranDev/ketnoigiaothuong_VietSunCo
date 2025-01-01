@@ -220,7 +220,6 @@ class NewsService
 
     public function countNewsOfUser($user_id)
     {
-        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::where('user_id', $user_id)
             ->count();
     }
