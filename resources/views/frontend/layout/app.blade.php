@@ -45,6 +45,8 @@
 
     @include('frontend.layout.footer')
 
+    @include('frontend.layout.component.abs-fixed')
+
     {{-- @include('frontend.layout.component.loadingPage')3 --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
