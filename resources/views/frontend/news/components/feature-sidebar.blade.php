@@ -1,8 +1,8 @@
 <div class="wsus__blog_sidebar" id="sticky_sidebar">
     <div class="wsus__blog_search">
         <h4>Tìm kiếm</h4>
-        <form action="" method="GET">
-            <input type="text" placeholder="Tìm kiếm..." name="search">
+        <form action="{{ route('news.search') }}" method="GET">
+            <input type="text" placeholder="Tìm kiếm..." name="search_query">
             <button type="submit" class="common_btn"><i class="fas fa-search"></i></button>
         </form>
     </div>
@@ -11,7 +11,7 @@
         @foreach ($moreNews as $item)
             <div class="wsus__blog_post_single">
                 <a href="{{ route('news.detail', $item->slug) }}" class="wsus__blog_post_img">
-                    <img style="height: 71px;" src="{{ asset('frontend/image/DaNang.png') }}" alt="blog"
+                    <img style="height: 71px;" src="{{ asset($item->image) }}" alt="blog"
                         class="imgofluid w-100">
                 </a>
                 <div class="wsus__blog_post_text">

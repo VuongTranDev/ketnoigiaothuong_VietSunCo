@@ -60,16 +60,17 @@ class CompanyCategoryController extends BaseController
                 'Company category created successfully',
                 201
             );
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->errorInfo[1] == 1062) {
-                return $this->failed('Duplicate entry detected', 409);
-            }
-            return $this->exception('Database query error occurred', $e->getMessage(), 500);
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     if ($e->errorInfo[1] == 1062) {
+        //         return $this->failed('Duplicate entry detected', 409);
+        //     }
+        //     return $this->exception('Database query error occurred', $e->getMessage(), 500);
         } catch (ValidationException $e) {
             return $this->failed($e->errors(), 422);
-        } catch (\Exception $e) {
-            return $this->exception('An error occurred while creating the company category', $e->getMessage(), 500);
         }
+        // } catch (\Exception $e) {
+        //     return $this->exception('An error occurred while creating the company category', $e->getMessage(), 500);
+        // }
     }
 
     /**
@@ -154,5 +155,19 @@ class CompanyCategoryController extends BaseController
         } catch (\Exception $e) {
             return $this->exception('An error occurred while deleting the company category', $e->getMessage(), 500);
         }
+    }
+
+    public function createCompanyCategory(Request $request)
+    {
+        $result = $this->companyCategoryService->store($request);
+        if (!$result['status']) {
+            return $this->failed('Create company failed', 400, $result['errors']);
+        }
+        return $this->success($result['data'], 'Create company success', 201);
+    }
+
+    public function deleteCompanyCategory(Request $request)
+    {
+        return $this->companyCategoryService->deleteCategoryCompany($request->company_id,$request->cate_id);
     }
 }

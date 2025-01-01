@@ -1,5 +1,7 @@
+
+
 <div class="filter-container mt-3">
-    <div class="sort-dropdown">
+    {{-- <div class="sort-dropdown">
         <div class="dropdown">
             <label
                 class="btn btn-secondary btn-dropdown justify-content-between d-flex justify-between align-items-center"
@@ -13,13 +15,13 @@
                 <li><a class="dropdown-item" href="#">Theo thứ tự Z-A</a></li>
             </ul>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="filter-section">
+    {{-- <div class="filter-section">
         <h3>Bộ lọc tìm kiếm</h3>
         <button class="clear-filter">Bỏ chọn tất cả ✕</button>
         <hr class="line">
-    </div>
+    </div> --}}
 
     <div class="rating-section mb-3">
         <label class="btn w-100 btn-dropdown text-start" type="button" data-bs-toggle="collapse"
@@ -53,7 +55,7 @@
         <hr class="line">
     </div>
 
-    <div class="verification-section mb-3">
+    {{-- <div class="verification-section mb-3">
         <button class="btn w-100 btn-dropdown text-start" type="button" data-bs-toggle="collapse"
             data-bs-target="#verificationCollapse" aria-expanded="false" aria-controls="verificationCollapse">
             Verified
@@ -70,9 +72,9 @@
             </div>
         </div>
         <hr class="line">
-    </div>
+    </div> --}}
 
-    <div class="field-section mb-3">
+    {{-- <div class="field-section mb-3">
         <label class="btn w-100 btn-dropdown text-start" type="button" data-bs-toggle="collapse"
             data-bs-target="#fieldCollapse" aria-expanded="false" aria-controls="fieldCollapse">
             Lĩnh vực
@@ -112,5 +114,5 @@
                 <label class="form-check-label" for="Ecommerce">Ecommerce</label>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
