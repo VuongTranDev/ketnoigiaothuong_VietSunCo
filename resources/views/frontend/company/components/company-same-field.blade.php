@@ -1,29 +1,39 @@
-<div class="company-carousel">
-    @for ($i = 0; $i < 10; $i++)
-        <div class="company-item">
-            <a href="" class="company-link">
-                <div class="company-detail" align="center">
-                    <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company" loading="lazy">
-                    <p class="name-company">VietSunCo</p>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <span class="me-2" style="font-size: 13px">1231212đ</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    @endfor
-</div>
+@if (count($news) > 0)
+    <div class="mt-5 w-100 d-flex flex-column align-items-center">
+        <h2 class="title-b2b">Các công ty cùng lĩnh vực</h2>
+        <hr class="line-title ">
+    </div>
 
-@push('script')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('.company-carousel').slick({
-                infinite: true,
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 2000,
+    <div class="company-carousel">
+        @for ($i = 0; $i < 10; $i++)
+            <div class="company-item">
+                <a href="" class="company-link">
+                    <div class="company-detail" align="center">
+                        <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company"
+                            loading="lazy">
+                        <p class="name-company">VietSunCo</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2" style="font-size: 13px">1231212đ</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @endfor
+    </div>
+
+    @push('script')
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.company-carousel').slick({
+                    infinite: true,
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 2000,
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+@else
+
+@endif

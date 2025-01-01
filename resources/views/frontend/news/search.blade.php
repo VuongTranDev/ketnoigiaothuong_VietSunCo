@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="col-lg-9" style="color: #777;">
-                @if (count($news) === 0)
+                @if (empty($news))
                     <div class="row">
                         <div class="card">
                             <div class="card-body text-center">

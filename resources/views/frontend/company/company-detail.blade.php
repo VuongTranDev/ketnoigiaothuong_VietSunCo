@@ -12,7 +12,7 @@
         </nav>
 
         <div class="img-company-detail pt-5 pb-5 d-flex justify-content-center w-100">
-            <img src="{{ asset('frontend/image/logo.png') }}" alt="Công ty ..." width="600px">
+            <img src="{{ asset($company->image) }}" alt="Công ty ..." width="600px">
         </div>
 
         <div class="row">
@@ -46,7 +46,7 @@
                         </tr>
                         <tr>
                             <td><strong>Mã số thuế:</strong></td>
-                            <td>{{ $company->taxcode ?? 'Đang cập nhật' }}</td>
+                            <td>{{ $company->tax_code ?? 'Đang cập nhật' }}</td>
                         </tr>
                         <tr>
                             <td><b>Lĩnh vực:</b></td>
@@ -163,29 +163,40 @@
             </div>
             <div class="col-lg-4">
                 <div class="card">
-                    <h3 class="company-name-detail">{{ @$company->company_name }}</h3>
+                    <h3 class="company-name-detail"><a
+                            href="{{ $company->link }}">{{ $company->company_name ?? 'Đang cập nhật' }}</a></h3>
                     <div class="info">
-                        <p><i class="fas fa-envelope"></i> hi@vietsunco.com</p>
-                        <p><i class="fa-solid fa-globe"></i> <a href="{{ $company->link }}">{{ @$company->link }}</a>
+                        <p><i class="fas fa-envelope"></i>
+                            <a href="mailto:{{ $company->email ?? '#' }}">{{ $company->email ?? 'Đang cập nhật' }}</a>
                         </p>
-                        <p><i class="fas fa-phone-alt"></i> {{ @$company->phone_number }}</p>
-                        <p><i class="fas fa-map-marker-alt"></i> {{ @$address->address }}</p>
+                        <p><i class="fa-solid fa-globe"></i>
+                            <a href="{{ $company->link ?? '#' }}">{{ $company->link ?? 'Đang cập nhật' }}</a>
+                        </p>
+                        <p><i class="fas fa-phone-alt"></i>
+                            <a
+                                href="callto:{{ $company->phone_number ?? '' }}">{{ $company->phone_number ?? 'Đang cập nhật' }}</a>
+                        </p>
+                        @if (@$address->address == null)
+                            <p><i class="fas fa-map-marker-alt"></i> Đang cập nhật</p>
+                        @else
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode(@$address->address) }}"
+                                    target="_blank">
+                                    {{ @$address->address }}
+                                </a>
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="mt-5 w-100 d-flex flex-column align-items-center">
-            <h2 class="title-b2b">Tin tức của công ty</h2>
-            <hr class="line-title ">
-        </div>
+
 
         @include('frontend.company.components.company-news')
 
-        <div class="mt-5 w-100 d-flex flex-column align-items-center">
-            <h2 class="title-b2b">Các công ty cùng lĩnh vực</h2>
-            <hr class="line-title ">
-        </div>
+
 
         {{-- @include('frontend.company.components.company-same-field') --}}
 

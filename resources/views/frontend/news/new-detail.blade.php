@@ -6,7 +6,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa-solid fa-house"></i></a></li>
                 <li class="breadcrumb-item"><a href="{{ route('news') }}">Tin tức</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $news->title }}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ @$news->title }}</li>
             </ol>
         </nav>
 

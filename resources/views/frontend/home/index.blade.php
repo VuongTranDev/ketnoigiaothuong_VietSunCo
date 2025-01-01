@@ -10,13 +10,9 @@
                     đến gần hơn với hàng ngàn đối tác tiềm năng, gia tăng cơ hội hợp tác và phát triển bền vững. Tham
                     gia ngay để chinh phục những thành công mới cùng chúng tôi!
                 </p>
-                <div class="register-member btn">
-                    <a href="{{ route('checkStatusCompany') }}">
-
-                        Đăng ký thành viên
-
-                    </a>
-                </div>
+                <a class="register-member" href="{{ route('checkStatusCompany') }}">
+                    Đăng ký thành viên
+                </a>
             </div>
         </div>
     </div>

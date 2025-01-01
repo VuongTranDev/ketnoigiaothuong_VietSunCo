@@ -61,13 +61,12 @@
             </div>
             <div class="col-xl-4 col-sm-7 col-md-8 col-lg-5">
                 <div class="wsus__footer_content wsus__footer_content_2">
-                    <h3>Subscribe To Our Newsletter</h3>
-                    <p>Get all the latest information on Events, Sales and Offers.
-                        Get all the latest information on Events.</p>
+                    <h3>Đăng ký nhận bản tin của chúng tôi</h3>
+                    <p>Nhận tất cả thông tin mới nhất về dịch vụ, sự kiện</p>
                     <form action="" method="POST" id="newsletter" class="d-flex">
                         @csrf
                         <input type="text" placeholder="Email" name="email" class="newsletter_email">
-                        <button type="submit" class="common_btn subscribe_btn">subscribe</button>
+                        <button type="submit" class="common_btn subscribe_btn">Đăng ký</button>
                     </form>
                 </div>
             </div>

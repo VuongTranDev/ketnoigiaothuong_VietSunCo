@@ -256,4 +256,10 @@ class CompaniesController extends BaseController
             return redirect()->back()->withErrors('Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại.');
         }
     }
+
+    public function detailCompany($id)
+    {
+        $company = $this->fetchDataFromApi("company/detail/{$id}");
+        return view ('frontend.admin.companies.detail',compact('company'));
+    }
 }

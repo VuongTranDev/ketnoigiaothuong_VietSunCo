@@ -169,7 +169,8 @@ class CompanyService
             'link' => $companies->link,
             'status' => $companies->status,
             'email' =>$companies->email,
-            'masothue' => $companies->masothue,
+            'tax_code' => $companies->tax_code,
+            'image' => $companies->image,
             'user' => $companies->user,
             'created_at' => $companies->created_at,
             'updated_at' => $companies->updated_at

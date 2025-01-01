@@ -68,6 +68,7 @@ Route::get('company/detail/{id}', [CompaniesController::class, 'showById'])->nam
 Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailCompany'])->name('company.showDetailCompany');
 
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
+Route::get('/news', [NewsController::class, 'showByAdmin'])->name( 'api.newAdmin');
 Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
 Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
 Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);

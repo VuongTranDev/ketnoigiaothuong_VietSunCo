@@ -2,33 +2,33 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Categories</h1>
+        <h1>Lĩnh vực</h1>
     </div>
     <div class="section-body">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Edit category</h4>
+                        <h4>Sửa lĩnh vực</h4>
                         <div class="card-header-action">
                             <a href="{{ route('admin.categories.index') }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i>
-                                Back</a>
+                                Quay lại</a>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('admin.categories.update',$category->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.categories.update', $categories->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col-md-12">
-                                    <input type="text" name="id" value="{{ $category->id }}" hidden>
+                                    <input type="text" name="id" value="{{ $categories->id }}" hidden>
                                     <div class="form-group">
-                                        <label>Name category</label>
-                                        <input type="text" class="form-control" name="name" value="{{ $category->name }}" required>
+                                        <label>Tên lĩnh vực</label>
+                                        <input type="text" class="form-control" name="name" value="{{ $categories->name }}" required>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </form>
                     </div>
                 </div>

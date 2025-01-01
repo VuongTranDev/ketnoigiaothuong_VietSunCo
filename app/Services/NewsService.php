@@ -29,6 +29,19 @@ class NewsService
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
             ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
             ->groupBy('news.id')
+            ->where('news.status', 1)
+            ->orderBy('news.id', 'desc')
+            ->paginate($limit, ['*'], 'page', $page);
+    }
+
+    public function showAdmin($page, $limit)
+    {
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
+            ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
             ->paginate($limit, ['*'], 'page', $page);
     }
@@ -257,7 +270,7 @@ class NewsService
             ->where('news.status', 1)
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
-            ->paginate(9);
+            ->get();
     }
 
     public function changeStatus($request)
