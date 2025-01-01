@@ -97,7 +97,13 @@ class  CommentsServices
 
     }
 
-
+    public function changeStatus(Request $request,$id)
+    {
+        $company = Comments::findOrFail($id);
+        $company->status = $request->status;
+        $company->save() ;
+        return $company;
+    }
 
 
 

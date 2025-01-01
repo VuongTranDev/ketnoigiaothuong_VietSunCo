@@ -23,27 +23,47 @@ class CompaniesController extends BaseController
         $this->url = env('API_URL');
     }
 
+    // public function checkCompanyStatus()
+    // {
+    //     if (!Session::has('user') || Session::get('user') === null) {
+    //         return redirect()->back()->with('error', 'Vui lòng đăng nhập để đăng ký thành viên !');
+    //     }
+    //     $userId = Session::get('user')->id;
+    //     $company = $this->fetchDataFromApi("company/{$userId}");
+    //     $status=$this->fetchDataFromApi("checkCompanyStatus/{$userId}");
+    //     if($status===0)
+    //     {
+    //         return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang được chờ để xét duyệt !');
+    //     }
+    //     else if($status===1)
+    //     {
+    //         return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang hoạt động !');
+    //     }
+    //     else
+    //     {
+    //         return redirect()->back()->with('error', 'Tài khoản chưa đăng ký công ty, xin vui lòng nhấn vào mục đăng ký thành viên ở góc trên bên phải trang web !');
+    //     }
+    // }
     public function checkCompanyStatus()
     {
         if (!Session::has('user') || Session::get('user') === null) {
-            return redirect()->back()->with('error', 'Vui lòng đăng nhập để đăng ký thành viên !');
+            return redirect()->back()->with('error', 'Vui lòng đăng nhập để đăng ký thành viên!');
         }
+
         $userId = Session::get('user')->id;
-        $company = $this->fetchDataFromApi("company/{$userId}");
-        $status=$this->fetchDataFromApi("checkCompanyStatus/{$userId}");
-        if($status===0)
-        {
-            return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang được chờ để xét duyệt !');
-        }
-        else if($status===1)
-        {
-            return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang hoạt động !');
-        }
-        else
-        {
-            return redirect()->back()->with('error', 'Tài khoản chưa đăng ký công ty, xin vui lòng nhấn vào mục đăng ký thành viên ở góc trên bên phải trang web !');
+
+        // Kết hợp hai yêu cầu API
+        $response = $this->fetchDataFromApi("checkCompanyStatus/{$userId}");
+
+        if ($response->status === 0) {
+            return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang được chờ để xét duyệt!');
+        } elseif ($response->status === 1) {
+            return redirect()->back()->with('success', 'Tài khoản đã đăng ký công ty và đang hoạt động!');
+        } else {
+            return redirect()->back()->with('error', 'Tài khoản chưa đăng ký công ty, xin vui lòng nhấn vào mục đăng ký thành viên ở góc trên bên phải trang web!');
         }
     }
+
 
 
     public function companyDetail($slug)
@@ -53,26 +73,27 @@ class CompaniesController extends BaseController
 
 
         if (is_object($company)) {
-
             $address = $this->fetchDataFromApi("address/company/{$company->id}");
 
 
             $categories = collect($this->fetchDataFromApi("category/company/{$company->id}"));
 
-            $ratings=  $this->fetchDataFromApi("ratings/company/{$company->id}");
+            $ratings =  $this->fetchDataFromApi("ratings/company/{$company->id}");
 
-            $companyPoint=$this->fetchDataFromApi("avgPointCompany/{$company->id}");
-            $starRating=$this->fetchDataFromApi("countStarRating/{$company->id}");
-            $allRating=$this->fetchDataFromApi("countAllRating/{$company->id}");
+            $companyPoint = $this->fetchDataFromApi("avgPointCompany/{$company->id}");
+            $starRating = $this->fetchDataFromApi("countStarRating/{$company->id}");
+            $allRating = $this->fetchDataFromApi("countAllRating/{$company->id}");
             $news = $this->fetchDataFromApi("new/company/{$company->id}?limit=4");
             $this->sendDataToApi("updatePointCompany/{$company->id}/{$companyPoint}");
             if (!Session::has('user') || Session::get('user') === null) {
-                return view('frontend.company.company-detail', compact('news','companyPoint','starRating','allRating','ratings','company', 'address', 'categories'));
+                return view('frontend.company.company-detail', compact('news', 'companyPoint', 'starRating', 'allRating', 'ratings', 'company', 'address', 'categories'));
             }
-            $userId=Session::get('user')->id;
-            $checkRating= $this->fetchDataFromApi("checkRating/$userId/{$company->id}");
-            return view('frontend.company.company-detail', compact('news','companyPoint','starRating','allRating','userId','checkRating','ratings','company', 'address', 'categories'));
+            $userId = Session::get('user')->id;
+            $checkRating = $this->fetchDataFromApi("checkRating/$userId/{$company->id}");
 
+            $totalTransaction = $this->fetchDataFromApi("report/countTransactions/{$company->user->id}");
+            $totalConnect = $this->fetchDataFromApi("report/countCompaniesConnect/{$company->user->id}");
+            return view('frontend.company.company-detail', compact('totalTransaction', 'totalConnect', 'news', 'companyPoint', 'starRating', 'allRating', 'userId', 'checkRating', 'ratings', 'company', 'address', 'categories'));
         }
 
 
@@ -101,11 +122,11 @@ class CompaniesController extends BaseController
 
     public function findCompany(Request $request)
     {
-        $slug=\Str::slug($request->name);
+        $slug = \Str::slug($request->name);
         $client = new Client();
         $responseCompany = $client->get(env('API_URL') . 'getAllCompany/'  . $slug);
         $companiesData = json_decode($responseCompany->getBody()->getContents());
-        return view('frontend.company.list-find-companies',compact('companiesData'));
+        return view('frontend.company.list-find-companies', compact('companiesData'));
     }
 
     public function findCompanyByCate(int $cateId)
@@ -114,7 +135,7 @@ class CompaniesController extends BaseController
         $client = new Client();
         $responseCompany = $client->get(env('API_URL') . 'getCompanyByCate/'  . $cateId);
         $companiesData = json_decode($responseCompany->getBody()->getContents());
-        return view('frontend.company.list-find-companies',compact('companiesData'));
+        return view('frontend.company.list-find-companies', compact('companiesData'));
     }
 
     public function createCompany(Request $request)
@@ -125,7 +146,7 @@ class CompaniesController extends BaseController
         }
         // Tạo slug từ tên công ty
         $slug = \Str::slug($request->company_name);
-        $userId=Session::get('user')->id;
+        $userId = Session::get('user')->id;
 
         $avatar = $request->company_avatar;
         $avatarPath = null;
@@ -155,7 +176,7 @@ class CompaniesController extends BaseController
                 'content' => $request->content,
                 'link' => $request->link,
                 'user_id' => $userId,
-                'image' =>$avatarPath,
+                'image' => $avatarPath,
                 'email' => $request->email,
                 'status' => 0,
                 'tax_code' => $request->tax_code,
@@ -168,11 +189,11 @@ class CompaniesController extends BaseController
         $clientCompanyId = new Client();
         $responseCompanyId = $clientCompanyId->get(env('API_URL') . 'company/'  . $userId);
         $companyDataByUser = json_decode($responseCompanyId->getBody()->getContents());
-        $company_id=$companyDataByUser->data->id;
+        $company_id = $companyDataByUser->data->id;
 
         $categoryIds = $request->input('category_id');
         $categoryIds = json_decode($categoryIds[0], true);
-        Log::info('category',$categoryIds);
+        Log::info('category', $categoryIds);
         foreach ($categoryIds as $categoryId) {
             // Kiểm tra nếu $categoryId là chuỗi JSON và giải mã nó
             $categoryId = json_decode($categoryId);
@@ -201,7 +222,7 @@ class CompaniesController extends BaseController
             }
         }
 
-         // Lưu ảnh vào thư mục uploads
+        // Lưu ảnh vào thư mục uploads
         $imageCompany = $request->company_images;
         $imagePaths = [];
 
@@ -247,13 +268,5 @@ class CompaniesController extends BaseController
         } else {
             return redirect()->back()->withErrors($data->errors)->withInput();
         }
-
     }
-
-
-
-
-
-
-
 }

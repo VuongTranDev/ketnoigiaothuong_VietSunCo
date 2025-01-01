@@ -74,6 +74,7 @@ Route::get('company/detail/{id}', [CompaniesController::class, 'showById'])->nam
 Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailCompany'])->name('company.showDetailCompany');
 
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
+Route::get('/news', [NewsController::class, 'showByAdmin'])->name( 'api.newAdmin');
 Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
 Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
 Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
@@ -92,6 +93,9 @@ Route::apiResource('/company-category', CompanyCategoryController::class);
 
 Route::apiResource('address', AddressController::class);
 Route::apiResource('/comments',CommentAPIController::class);
+
+Route::put('comments/status/{id}',[CommentAPIController::class,'changeStatus'])->name('comments.changeStatus');
+
 Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('address.showAddressByIdCompany');
 
 Route::get('ratings/company/{id}', [RatingController::class, 'showRatingByCompanyId'])->name('rating.showRatingByCompanyId');

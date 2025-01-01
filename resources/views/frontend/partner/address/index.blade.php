@@ -1,4 +1,4 @@
-@extends('frontend.admin.layout.master')
+@extends('frontend.partner.layout.master')
 
 @section('content')
     <section class="section">

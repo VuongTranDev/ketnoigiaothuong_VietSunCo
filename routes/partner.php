@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\CompaniesController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\partner\CommentController;
 use App\Http\Controllers\frontend\DashboardController;
 use App\Http\Controllers\partner\NewsController;
 use App\Http\Controllers\partner\AddressController;

@@ -117,7 +117,6 @@ class CompaniesController extends BaseController
 
             $imagesData = json_decode($responseCategory->getBody()->getContents(), true);
 
-
             if ($imagesData === 1) {
                 return redirect()->back()->with('success', 'Xóa ảnh  thành công!');
             } else {
@@ -262,4 +261,6 @@ class CompaniesController extends BaseController
             return redirect()->back()->withErrors('Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại.');
         }
     }
+
+
 }

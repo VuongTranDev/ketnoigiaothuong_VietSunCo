@@ -105,7 +105,7 @@
                     {
                         data: 'status',
                         render: function(data, type, row) {
-                            let checked = data == 1 ? 'checked' : '';
+                            let checked = data == 1 ?  'checked' : '';
                             return `
                                 <label class="custom-switch mt-2">
                                     <input type="checkbox" ${checked}
@@ -143,7 +143,7 @@
                                     <i class='far fa-trash-alt'></i>
                                 </button>
                                 <a href="${listNewsUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
-                                    <i class='far fa-edit'></i>
+                                    <i class='far fa-eye'></i>
                                 </a>
                             `;
                         }

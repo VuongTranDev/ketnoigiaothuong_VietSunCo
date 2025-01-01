@@ -6,7 +6,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa-solid fa-house"></i></a></li>
                 <li class="breadcrumb-item"><a href="{{ route('news') }}">Tin tức</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $news->title }}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ @$news->title }}</li>
             </ol>
         </nav>
 
@@ -20,7 +20,7 @@
                     <h2>{{ $news->title }}</h2>
                     <div class="wsus__main_blog_header">
                         <span><i class="fas fa-user-tie"></i> by {{ $news->company_name }}</span>
-                        <span><i class="fas fa-calendar-alt"></i> {{  date('d/m/Y', strtotime($news->created_at)) }}</span>
+                        <span><i class="fas fa-calendar-alt"></i> {{ date('d/m/Y', strtotime($news->created_at)) }}</span>
                     </div>
 
                     <div class="wsus__description_area">
@@ -77,7 +77,14 @@
                                         <img src="{{ $commentItem->user->email }}" alt="Profile picture of a user">
                                         <div class="comment-content">
                                             <div class="comment-header">
-                                                <h4>{{ $commentItem->user->email }}</h4>
+
+                                                @if ( session('user')->id  && $commentItem->user->id === session('user')->id )
+                                                <h4>Bạn </h4>
+                                                @else
+                                                    <h4>{{ optional($commentItem->user->company)->company_name ?? $commentItem->user->email }}
+                                                    </h4>
+                                                @endif
+
                                                 <span>{{ date('d/m/Y', strtotime($commentItem->updated_at)) }}</span>
                                                 <input type="text" hidden name="userComment_id"
                                                     value="{{ $commentItem->user_id }}">
@@ -85,7 +92,6 @@
                                             <p id="comment-text-{{ $commentItem->id }}" class="comment-text">
                                                 {{ $commentItem->content }}</p>
                                             <div class="comment-actions">
-                                                <button>Like</button>
                                                 @if ($commentItem->user_id == session('user')->id)
                                                     <button class="edit-comment"
                                                         data-comment-id="{{ $commentItem->id }}">Edit</button>

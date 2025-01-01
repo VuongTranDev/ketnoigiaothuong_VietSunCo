@@ -42,7 +42,6 @@ class DashboardController extends Controller
             'totalConnect' => "report/countCompaniesConnect/{$user->id}",
             'totalCategories' => "report/countCategoriesOfCompany/{$user->id}",
         ];
-
         $data = [];
         foreach ($endpoints as $key => $endpoint) {
             $data[$key] = $this->fetchApiData("{$baseUrl}{$endpoint}", "Lỗi khi lấy dữ liệu từ {$key}");

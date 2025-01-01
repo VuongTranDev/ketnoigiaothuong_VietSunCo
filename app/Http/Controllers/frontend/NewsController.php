@@ -61,7 +61,6 @@ class NewsController extends BaseController
     {
         try {
             $news = $this->fetchDataFromApi("new/slug/{$slug}");
-            dd($news) ;
             $moreNews = $this->fetchDataFromApi("new?limit=5");
             $newComment = $this->fetchDataFromApi("new/comment/{$slug}");
         } catch (RequestException $e) {

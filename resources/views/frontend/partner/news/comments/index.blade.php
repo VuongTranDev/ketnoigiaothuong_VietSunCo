@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>All {{-- comment --}}</h1>
+            <h1>All comment </h1>
         </div>
         <div class="section-body">
             <div class="row">
@@ -21,7 +21,6 @@
                                         <th>Người gửi</th>
                                         <th>Trạng thái</th>
                                         <th>Ngày tạo</th>
-                                    {{-- <th>Hành động</th> --}}
                                     </tr>
                                 </thead>
                             </table>
@@ -35,103 +34,79 @@
 
 @push('scripts')
     <script>
+
+
         $(document).ready(function() {
-            var table = $('#example').DataTable({
+            $('#example').DataTable({
+                processing: true,
+                serverSide: true,
                 ajax: {
                     url: '{{ route('api.new.showAllCommentInNewsById', ['id' => $id]) }}',
-                    dataSrc: 'data'
+                    dataSrc: function(response) {
+                        if (response.status === "success" && response.data) {
+                            return response.data; // Lấy dữ liệu từ 'data'
+                        } else {
+                            console.error("API trả về dữ liệu không hợp lệ:", response);
+                            return [];
+                        }
+                    }
                 },
                 columns: [{
                         data: null,
                         className: "dt-center",
-                        render: function(data, type, row, meta) {
-                            return meta.row + 1;
-                        }
-                    },
-
+                        render: (data, type, row, meta) => meta.row + 1
+                    }, // STT
                     {
-                        data: 'content',
-                        render: function(data, type, row) {
-                            let parser = new DOMParser();
-                            let doc = parser.parseFromString(data, 'text/html');
-                            let textContent = doc.body.textContent || "";
-
-                            return textContent.length > 50 ? textContent.substring(0, 50) + '...' :
-                                textContent;
-                        }
-                    },
+                        data: 'content'
+                    }, // Nội dung
                     {
-                        data: 'user_id'
-                    },
+                        data: 'user.email',
+                        render: data => data || 'Không xác định'
+                    }, // Người gửi
                     {
                         data: 'status',
                         render: function(data, type, row) {
-                            let checked = data == 1 ? 'checked' : '';
+                            let checked = data === 1 ? 'checked' : ''; // Kiểm tra nếu status là 1
                             return `
-                                <label class="custom-switch mt-2">
-                                    <input type="checkbox" ${checked}
-                                        name="custom-switch-checkbox"
-                                        data-id="${row.id}"
-                                        class="custom-switch-input change-status">
-                                    <span class="custom-switch-indicator"></span>
-                                </label>
-                            `;
+            <label class="custom-switch mt-2">
+                <input type="checkbox" ${checked} name="custom-switch-checkbox" data-id="${row.id}" class="custom-switch-input change-status">
+                <span class="custom-switch-indicator"></span>
+            </label>`;
                         }
                     },
                     {
-                        data: 'created_at',
-                        render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
+                        data: 'user.created_at',
+                        render: data => data ? moment(data).format('DD-MM-YYYY') : 'Không xác định'
                     },
-                    {
-                        data: null,
-                        className: "dt-center",
-                        orderable: false,
-                        render: function(data, type, row) {
 
-                            let editUrl = `{{ route('partner.news.edit', ':id') }}`.replace(':id',
-                                row
-                                .id);
-
-                            return `
-                                <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
-                                    <i class='far fa-edit'></i>
-                                </a>
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
-                                    <i class='far fa-trash-alt'></i>
-                                </button>
-                            `;
-                        }
-                    }
                 ]
-            });
-
-
-
-            $('body').on('change', '.change-status', function() {
-                let isChecked = $(this).is(':checked');
-                let id = $(this).data('id');
-
-                $.ajax({
-                    url: "{{ route('partner.news.change-status') }}",
-                    method: 'POST',
-                    data: {
-                        id: id,
-                        status: isChecked ? 'true' : 'false',
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        toastr.success(response.message);
-                    },
-                    error: function(xhr, status, error) {
-                        toastr.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
-                        console.log(xhr.responseText);
-                    }
-                });
             });
         });
 
+        $('#example').on('change', '.change-status', function() {
+                let id = $(this).data('id');
+                let status = $(this).is(':checked') ? 1 : 0;
+                $.ajax({
+                    url: `/api/comments/status/${id}`,
+                    type: 'PUT',
+                    data: {
+                        status: status
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            'Thành công!',
+                            'Cập nhật trạng thái thành công.',
+                            'success'
+                        );
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Đã xảy ra lỗi khi cập nhật trạng thái.',
+                            'error'
+                        );
+                    }
+                });
+            });
     </script>
-
 @endpush

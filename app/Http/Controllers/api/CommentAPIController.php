@@ -8,6 +8,7 @@ use App\Services\CommentsServices;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class CommentAPIController extends BaseController
@@ -78,6 +79,17 @@ class CommentAPIController extends BaseController
         $this->commentServices->destroy($comment);
         return $this->success([], "Comment deleted", 200);
     }
-
+    public function changeStatus(Request $request, $id)
+    {
+        try
+        {
+            $company =  $this->commentServices->changeStatus($request,$id) ;
+            return $this->success($company,"Company change status success",200) ;
+        }
+        catch(Exception $e)
+        {
+            return $this->exception('Company error occurred', $e->getMessage(), 422);
+        }
+    }
 
 }

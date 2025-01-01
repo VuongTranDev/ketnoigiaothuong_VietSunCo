@@ -19,12 +19,35 @@ a {
     background: #555;
 }
 
-.breadcrumb-item a{
+.breadcrumb-item a {
     font-weight: 700;
 }
 
-.breadcrumb-item.active  {
+.breadcrumb-item.active {
     color: #1380c4;
 }
 
+.info a,
+.company-name-detail a {
+    color: #333;
+}
 
+.info a:hover,
+.company-name-detail a:hover {
+    color: #1380c4;
+}
+
+.active>.page-link,
+.page-link.active {
+    background-color: #3EAEF4;
+    border-color: #3EAEF4;
+}
+
+.page-link {
+    border-color: #3EAEF4;
+}
+
+.dropdown-menu-field {
+    column-count: 3;
+    column-gap: 1rem;
+}

@@ -80,56 +80,7 @@
             </div>
 
 
-            {{-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="far fa-file"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Subscribers</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
 
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="far fa-file"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Vendors</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <a href="">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="far fa-file"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Users</h4>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div> --}}
 
         </div>
         <style>
@@ -181,6 +132,23 @@
                 .then(responseData => {
                     const companyNames = responseData.data.map(item => item.company_name); // Tên công ty
                     const newsCounts = responseData.data.map(item => item.tong); // Số lượng bài viết
+
+                    // Tạo mảng màu sắc động cho từng cột
+                    const backgroundColors = responseData.data.map((_, index) => {
+                        // Chọn màu sắc cho từng cột (bạn có thể tùy chỉnh logic này)
+                        const colors = [
+                            'rgba(54, 162, 235, 0.2)', // Màu 1
+                            'rgba(255, 99, 132, 0.2)', // Màu 2
+                            'rgba(75, 192, 192, 0.2)', // Màu 3
+                            'rgba(153, 102, 255, 0.2)', // Màu 4
+                            'rgba(255, 159, 64, 0.2)' // Màu 5
+                        ];
+                        return colors[index % colors.length]; // Chọn màu theo index
+                    });
+
+                    const borderColors = backgroundColors.map(color => color.replace('0.2',
+                    '1')); // Thay đổi độ trong suốt của đường viền
+
                     new Chart(document.getElementById('companyBarChart'), {
                         type: 'bar',
                         data: {
@@ -188,8 +156,8 @@
                             datasets: [{
                                 label: 'Số lượng tin nhắn gửi đi',
                                 data: newsCounts,
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: backgroundColors, // Sử dụng mảng màu cho nền
+                                borderColor: borderColors, // Sử dụng mảng màu cho đường viền
                                 borderWidth: 1
                             }]
                         },
