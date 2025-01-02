@@ -83,7 +83,7 @@ Route::apiResource('/company-category', CompanyCategoryController::class);
 
 Route::apiResource('address', AddressController::class);
 Route::apiResource('/comments',CommentAPIController::class);
-Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('address.showAddressByIdCompany');
+Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('api.address.showAddressByIdCompany');
 
 Route::get('ratings/company/{id}', [RatingController::class, 'showRatingByCompanyId'])->name('rating.showRatingByCompanyId');
 
@@ -156,5 +156,11 @@ Route::middleware('web')->get('/auth/google/callback', [GoogleController::class,
 
 
 Route::apiResource('send-contact', ContactsApiController::class)->names(['index' => 'api.send-contact']);
+
+
+Route::get('/districts/{provinceId}', [AddressController::class, 'getDistricts']);
+Route::get('/wards/{districtId}', [AddressController::class, 'getWards']);
+
 Route::post('new/change-status', [NewsController::class, 'changeStatus'])->name('api.news.changeStatus');
 Route::get('new/company/{id}',[NewsController::class,'showNewsByCompanyId'])->name('api.news.showNewsByCompanyId');
+

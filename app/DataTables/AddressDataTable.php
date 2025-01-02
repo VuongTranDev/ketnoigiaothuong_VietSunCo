@@ -29,6 +29,7 @@ class AddressDataTable extends DataTable
                 $deleteBtn = "<a href='" . route('partner.address.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
                 return $editBtn . $deleteBtn;
             })
+            ->rawColumns(['action'])
             ->setRowId('id');
     }
 
@@ -37,7 +38,7 @@ class AddressDataTable extends DataTable
      */
     public function query(Address $model): QueryBuilder
     {
-        return $model->newQuery()->with('company');
+        return $model->with('companies')->newQuery();
     }
 
     /**
@@ -76,7 +77,6 @@ class AddressDataTable extends DataTable
             ->addClass('text-center'),
             Column::make('details')->title('Mô tả'),
             Column::make('address')->title('Địa chỉ'),
-            Column::make('company_id')->title('Công ty'),
             Column::make('created_at'),
             Column::computed('action')
             ->exportable(false)

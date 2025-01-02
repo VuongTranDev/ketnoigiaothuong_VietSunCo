@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Companies;
 
-class AddressService {
+class AddressService
+{
     /**
      * Retrieve all address data.
      * @param \Illuminate\Http\Request $request
@@ -27,26 +29,48 @@ class AddressService {
         return Address::with('companies')->find($id);
     }
 
-    public function showAddressByIdCompany($id) {
-        return Address::where('company_id', $id)->with('companies')->first();
+    public function showAddressByIdCompany($id)
+    {
+        // Lấy công ty kèm danh sách địa chỉ
+        $company = Companies::where('user_id', $id)->with('addresses')->first();
+        if (!$company) {
+            return response()->json(['status' => 'error', 'message' => 'Company not found'], 404);
+        }
+        return $company->addresses;
+
     }
+
 
     /**
      * Summary of validateData
      * @param Request $request
      * @return array
      */
-    public function formatData($address)
+    public function formatData($addresses)
     {
-        return [
-            'id' => $address->id,
-            'details' => $address->details,
-            'address' => $address->address,
-            'company_id' => $address->companies,
-            'created_at' => $address->created_at,
-            'updated_at' => $address->updated_at
-        ];
+        \Log::info('address: ' . json_encode($addresses));
+
+        // Kiểm tra nếu `$addresses` là mảng
+        if (!is_array($addresses) && !$addresses instanceof \Illuminate\Support\Collection) {
+            return [];
+        }
+
+        // Xử lý từng địa chỉ
+        $formattedData = [];
+        foreach ($addresses as $address) {
+            $formattedData[] = [
+                'id' => $address->id,
+                'details' => $address->details,
+                'address' => $address->address,
+                'company_id' => $address->companies, // Hoặc sử dụng $address->companies->id nếu muốn lấy ID từ quan hệ
+                'created_at' => $address->created_at,
+                'updated_at' => $address->updated_at
+            ];
+        }
+
+        return $formattedData;
     }
+
 
     /**
      * Create a new address record in the database.
@@ -69,7 +93,12 @@ class AddressService {
      */
     public function create($request)
     {
-        return Address::create($request->only('details', 'address', 'company_id'));
+        $companies = Companies::where('user_id', $request->company_id)->first();
+        return Address::create([
+            'details' => $request->details,
+            'address' => $request->address,
+            'company_id' => $companies->id
+        ]);
     }
 
     /**
