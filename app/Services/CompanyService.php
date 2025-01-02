@@ -18,7 +18,7 @@ class CompanyService
      */
     public function show($page, $limit)
     {
-        return Companies::with('user')->paginate($limit, ['*'], 'page', $page);
+        return Companies::with('user')->where('status', 1)->paginate($limit, ['*'], 'page', $page);
     }
 
     // Tạo mới công ty
@@ -74,26 +74,27 @@ class CompanyService
      */
     public function showById($id)
     {
-        return Companies::with('user','companyCategory.categories','addresses')->find($id);
+        return Companies::with('user', 'companyCategory.categories', 'addresses')->find($id);
     }
 
 
     public function showByUserId($user_id)
     {
         return Companies::with('user')
-                        ->where('user_id', $user_id)
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+            ->where('status', 1)
+            ->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 
     public function showAllLikeSlug($slug)
     {
         return Companies::with('user')
+            ->where('status', 1)
             ->where('slug', 'LIKE', '%' . $slug . '%')
             ->orderBy('created_at', 'desc')
             ->get();
     }
-
     // public function getCompaniesByCategory($categoryId)
     // {
     //     return Companies::whereHas('companyCategory', function ($query) use ($categoryId) {
@@ -161,7 +162,7 @@ class CompanyService
             'content' => $companies->content,
             'link' => $companies->link,
             'status' => $companies->status,
-            'email' =>$companies->email,
+            'email' => $companies->email,
             'tax_code' => $companies->tax_code,
             'image' => $companies->image,
             'user' => $companies->user,
@@ -215,7 +216,7 @@ class CompanyService
     public function create($request)
     {
         return Companies::create(
-            $request->only('representative', 'company_name', 'short_name', 'phone_number', 'slug','status','email','masothue', 'content', 'link', 'user_id')
+            $request->only('representative', 'company_name', 'short_name', 'phone_number', 'slug', 'status', 'email', 'masothue', 'content', 'link', 'user_id')
         );
     }
 
@@ -297,9 +298,9 @@ class CompanyService
     public function checkCompanyById($user_id)
     {
         $company = Companies::with('user')
-                ->where('user_id', $user_id)
-                ->orderBy('created_at', 'desc')
-                ->first();  // Lấy bản ghi đầu tiên
+            ->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc')
+            ->first();  // Lấy bản ghi đầu tiên
         return $company ? 1 : 0;
     }
 
@@ -327,11 +328,11 @@ class CompanyService
             'data' => $company,
         ];
     }
-    public function changeStatus(Request $request,$id)
+    public function changeStatus(Request $request, $id)
     {
         $company = Companies::findOrFail($id);
         $company->status = $request->status;
-        $company->save() ;
+        $company->save();
         return $company;
     }
 }

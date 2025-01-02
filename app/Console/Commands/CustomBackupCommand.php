@@ -128,6 +128,7 @@ class CustomBackupCommand extends Command
             $mail->attach($zipBackupFile);
         }
 
-        Mail::to('hoankien140703@gmail.com')->send($mail);
+        Mail::to(env('ADMIN_EMAIL'))->send($mail);
+
     }
 }

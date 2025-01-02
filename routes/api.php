@@ -65,8 +65,6 @@ Route::get('/report/countCompaniesConnect/{user_id}', [ReportAPIController::clas
 Route::get('/report/countCategoriesOfCompany/{user_id}', [ReportAPIController::class,'countCategoriesOfCompany']) ;
 Route::get('/report/statisticActivity/{user_id}', [ReportAPIController::class,'statisticActivity']) ;
 
-
-
 Route::apiResource('/company', CompaniesController::class);
 Route::put('company/status/{id}',[CompaniesController::class,'changeStatus'])->name('company.changeStatus');
 Route::get('company/slug/{slug}', [CompaniesController::class, 'showBySlug'])->name('company.showBySlug');

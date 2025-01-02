@@ -40,7 +40,7 @@
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 ajax: {
-                    url: '{{ route('company.index') }}',
+                    url: 'http://127.0.0.1:8002/api/company?limit=50&page=1',
                     dataSrc: 'data'
                 },
                 columns: [{
