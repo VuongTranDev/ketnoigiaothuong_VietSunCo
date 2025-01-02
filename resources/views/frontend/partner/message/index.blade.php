@@ -380,8 +380,6 @@
             });
             $('.create-transaction').on('click', function(e) {
                 e.preventDefault();
-                console.log(recei);
-
                 $.ajax({
                     url: '{{ route('user.message.fillInformation') }}',
                     method: 'GET',
@@ -409,92 +407,146 @@
                         console.error('Error sending message:', error);
                     }
                 });
-
-
             });
             $('.transaction').on('click', function(e) {
                 e.preventDefault();
-                let transaction_name = $('#transaction_name').text();
-                let transaction_date = $('#transaction_date').text();
-                let transaction_address = $('#transaction_address').text();
-                let transaction_description = $('#transaction_description').text();
 
-                if ($('#transaction_name').val() == "" || $('#transaction_date').val() == "" || $(
-                        '#transaction_address').val() == "" || $('#transaction_description').val() == "") {
+                let transactionDate = new Date($('#transaction_date').val()); // Lấy ngày giao dịch
+                let currentDate = new Date(); // Ngày hiện tại
+
+                // Đặt thời gian của currentDate về 00:00:00 để chỉ so sánh ngày
+                currentDate.setHours(0, 0, 0, 0);
+
+                if (transactionDate < currentDate) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Ngày giao dịch không được nhỏ hơn ngày hiện tại!',
+                    });
+                    return;
+                }
+
+                // Kiểm tra nếu bất kỳ trường nào bị bỏ trống
+                if ($('#transaction_name').val().trim() === "" ||
+                    $('#transaction_date').val().trim() === "" ||
+                    $('#transaction_address').val().trim() === "") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
                         text: 'Vui lòng điền đầy đủ thông tin!',
                     });
-                } else {
-                    $.ajax({
-                        url: '{{ route('user.message.createTransaction') }}',
-                        method: 'POST',
-                        data: {
-                            title: $('#transaction_name').val(),
-                            date_meet: $('#transaction_date').val(),
-                            address: $('#transaction_address').val(),
-                            content: $('#transaction_description').val(),
-                            receiver_id: recei,
-                        },
-                        success: function(response) {
-                            if (response.status == 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Thành công',
-                                    text: response.message,
-                                });
-                                $('#staticBackdrop').modal('hide');
-                                $('.create-transaction')
-                                    .removeClass('create-transaction btn-primary')
-                                    .addClass('view-transaction btn-success')
-                                    .text('Xem giao dịch')
-                                    .attr('data-transaction-id', response.data
-                                        .id); // Gán ID giao dịch để sử dụng sau
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error sending message:', error);
-                        }
-                    });
+                    return;
                 }
-            })
-            $( '.view-transaction').on('click', function(e) {
-                e.preventDefault();
-                console.log(recei);
 
+                // Gửi yêu cầu AJAX
                 $.ajax({
-                    $url: '{{ route('user.message.getTransaction') }}',
-                    method: 'GET',
-                    data:{
+                    url: '{{ route('user.message.createTransaction') }}',
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        title: $('#transaction_name').val(),
+                        date_meet: $('#transaction_date').val(),
+                        address: $('#transaction_address').val(),
+                        content: $('#transaction_description').val(),
                         receiver_id: recei,
                     },
                     success: function(response) {
                         if (response.status == 'success') {
-                            // Hiển thị thông tin giao dịch
-                            const transaction = response.data;
                             Swal.fire({
-                                title: 'Thông tin giao dịch',
-                                html: `
-                                    <p><b>Tên giao dịch:</b> ${transaction.title}</p>
-                                    <p><b>Ngày giao dịch:</b> ${transaction.date_meet}</p>
-                                    <p><b>Địa chỉ:</b> ${transaction.address}</p>
-                                    <p><b>Nội dung:</b> ${transaction.content}</p>
-                                    <p><b>Bên A:</b> ${transaction.party_a_name} (${transaction.party_a_representative})</p>
-                                    <p><b>Bên B:</b> ${transaction.party_b_name} (${transaction.party_b_representative})</p>
-                                `,
-                                icon: 'info',
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: response.message,
                             });
+                            $('#staticBackdrop').modal('hide');
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Error fetching transaction details:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: xhr.responseJSON?.message ||
+                                'Đã xảy ra lỗi, vui lòng thử lại sau!',
+                        });
+                        console.error('Error sending message:', error);
                     }
                 });
             });
 
 
+            $('.view-transaction').on('click', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ route('user.message.getTransaction') }}',
+                    method: 'GET',
+                    data: {
+                        receiver_id: recei,
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const transactions = response.data
+                                .data; // Giả sử mảng nằm trong response.data.data
+                            let transactionHtml = '';
 
+                            transactions.forEach((transaction, index) => {
+                                const formattedDate = formatDate(transaction.date_meet);
+
+                                transactionHtml += `
+                        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; background-color: #f9f9f9; text-align: left;">
+                            <h4 style="margin-bottom: 10px; color: #333; text-align: left;">Giao dịch ${index + 1}</h4>
+                            <div style="margin-bottom: 8px; text-align: left;">
+                                <span style="font-weight: bold; color: #555;">Tên giao dịch:</span>
+                                <span>${transaction.title}</span>
+                            </div>
+                            <div style="margin-bottom: 8px; text-align: left;">
+                                <span style="font-weight: bold; color: #555;">Ngày giao dịch:</span>
+                                <span>${formattedDate}</span>
+                            </div>
+                            <div style="margin-bottom: 8px; text-align: left;">
+                                <span style="font-weight: bold; color: #555;">Địa chỉ:</span>
+                                <span>${transaction.address}</span>
+                            </div>
+                            <div style="margin-bottom: 8px; text-align: left;">
+                                <span style="font-weight: bold; color: #555;">Nội dung:</span>
+                                <span>${transaction.content}</span>
+                            </div>
+                            <div style="margin-bottom: 8px; text-align: left;">
+                                <span style="font-weight: bold; color: #555;">Bên A:</span>
+                                <span>${transaction.company_sender_company_name} (${transaction.company_sender_name})</span>
+                            </div>
+                            <div style="text-align: left;">
+                                <span style="font-weight: bold; color: #555;">Bên B:</span>
+                                <span>${transaction.company_receiver_company_name} (${transaction.company_receiver_name})</span>
+                            </div>
+                        </div>
+                    `;
+                            });
+
+                            Swal.fire({
+                                title: 'Thông tin giao dịch',
+                                html: transactionHtml,
+                                icon: 'info',
+                                width: '700px',
+                                customClass: {
+                                    popup: 'swal-transaction-popup',
+                                },
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching transaction details:', error);
+                    },
+                });
+
+                // Hàm format ngày
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const day = String(date.getDate()).padStart(2,
+                        '0'); // Lấy ngày, thêm số 0 nếu nhỏ hơn 10
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (bắt đầu từ 0)
+                    const year = date.getFullYear(); // Lấy năm
+                    return `${day}-${month}-${year}`; // Trả về định dạng dd-mm-yyyy
+                }
+            });
 
             ChatApp.init();
         });

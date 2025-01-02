@@ -17,59 +17,58 @@ class LoginController extends Controller
         return view('auth.login');
     }
     public function store(LoginRequest $request)
-{
-    $credentials = $request->only('email', 'password');
-    $client = new Client();
+    {
+        $credentials = $request->only('email', 'password');
+        $client = new Client();
 
-    try {
-        $response = $client->post(env('API_URL') . 'login', [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'form_params' => [
-                'email' => $request->validated()['email'],
-                'password' => $request->validated()['password'],
-            ],
-        ]);
+        try {
+            $response = $client->post(env('API_URL') . 'login', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'form_params' => [
+                    'email' => $request->validated()['email'],
+                    'password' => $request->validated()['password'],
+                ],
+            ]);
 
-        $data = json_decode($response->getBody());
+            $data = json_decode($response->getBody());
 
-        if ($data->status == 'success') {
-            if (Auth::attempt($credentials)) {
-                Session::put('token', $data->data[0]);
-                Session::put('user', Auth::user());
+            if ($data->status == 'success') {
+                if (Auth::attempt($credentials)) {
+                    Session::put('token', $data->data[0]);
+                    Session::put('user', Auth::user());
 
-                if ($data->data[1] === 'admin') {
-                    return redirect()->route('admin.dashboard')->withSuccess('Đăng nhập thành công với quyền Admin!');
+                    if ($data->data[1] === 'admin') {
+                        return redirect()->route('admin.dashboard')->withSuccess('Đăng nhập thành công với quyền Admin!');
+                    } else {
+                        return redirect()->route('home')->withSuccess('Đăng nhập thành công!');
+                    }
                 } else {
-                    return redirect()->route('home')->withSuccess('Đăng nhập thành công!');
+                    return redirect()->back()->withErrors([
+                        'email' => 'Đăng nhập thất bại, không thể khởi tạo phiên.',
+                    ])->withInput();
                 }
             } else {
-                return redirect()->back()->withErrors([
-                    'email' => 'Đăng nhập thất bại, không thể khởi tạo phiên.',
-                ])->withInput();
+                return redirect()->back()->withErrors($data->message ?? 'Thông tin đăng nhập không hợp lệ.')->withInput();
             }
-        } else {
-            return redirect()->back()->withErrors($data->message ?? 'Thông tin đăng nhập không hợp lệ.')->withInput();
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            if ($e->getCode() === 400) {
+                $responseBody = $e->getResponse()->getBody()->getContents();
+                $responseBodyArray = json_decode($responseBody);
+                //dd($responseBodyArray->message);
+                Session::flash('error', $responseBodyArray->message);
+                return redirect()->back();
+            }
+            return redirect()->back()->withErrors([
+                'email' => 'Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.',
+            ])->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors([
+                'email' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+            ])->withInput();
         }
-
-    } catch (\GuzzleHttp\Exception\ClientException $e) {
-        if ($e->getCode() === 400) {
-            $responseBody = $e->getResponse()->getBody()->getContents();
-            $responseBodyArray = json_decode($responseBody);
-            //dd($responseBodyArray->message);
-            Session::flash('error', $responseBodyArray->message);
-            return redirect()->back();
-        }
-        return redirect()->back()->withErrors([
-            'email' => 'Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.',
-        ])->withInput();
-    } catch (\Exception $e) {
-        return redirect()->back()->withErrors([
-            'email' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
-        ])->withInput();
     }
-}
 
 
 
@@ -90,7 +89,6 @@ class LoginController extends Controller
         }
 
         try {
-            // Gửi yêu cầu logout đến API
             $response = $client->post(env('API_URL') . 'logout', [
                 'headers' => [
                     'Accept' => 'application/json',

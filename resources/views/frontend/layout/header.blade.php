@@ -162,20 +162,18 @@
                                     {{ session('user')->email }}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"href="
-                                            @if (session('user')->role_id == '1')
-                                                {{ route('admin.dashboard') }}
-                                            @else
-                                                {{ route('partner.dashboard') }}
-                                            @endif">
-n
-
-                                            @if (session('user')->role_id == '1')
+                                    <li>
+                                        @if (session('user')->role_id == '1')
+                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                                                 Trang quản trị
-                                            @else
-                                                Hồ sơ
+                                            </a>
+                                        @else
+                                            @if (isset($company_id) && $company_id > 0)
+                                                <a class="dropdown-item" href="{{ route('partner.dashboard') }}">
+                                                    Hồ sơ
+                                                </a>
                                             @endif
-                                        </a>
+                                        @endif
                                     </li>
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>

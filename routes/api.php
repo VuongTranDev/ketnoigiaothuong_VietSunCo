@@ -79,7 +79,7 @@ Route::apiResource('/company-category', CompanyCategoryController::class);
 
 Route::apiResource('address', AddressController::class);
 Route::apiResource('/comments',CommentAPIController::class);
-Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('address.showAddressByIdCompany');
+Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('api.address.showAddressByIdCompany');
 
 
 Route::get('/getAllCategory',[CategoriesController::class,'getAllCategory'])->name('getAllCategory');
@@ -125,3 +125,7 @@ Route::middleware('web')->get('/auth/google/callback', [GoogleController::class,
 
 
 Route::apiResource('send-contact', ContactsApiController::class)->names(['index' => 'api.send-contact']);
+
+Route::get('/districts/{provinceId}', [AddressController::class, 'getDistricts']);
+Route::get('/wards/{districtId}', [AddressController::class, 'getWards']);
+
