@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="example_wrapper" class="display" style="width:100%">
+                            <table id="example" class="display" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
@@ -40,56 +40,51 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            var table = $('#example_wrapper').DataTable({
+            const table = $('#example').DataTable({
                 ajax: {
-                    url: 'api/address/index',
-                    method: 'GET',
-                    dataSrc: 'data'
+                    url: '{{ route('api.address.showAddressByIdCompany', ['id' => session('user')->id]) }}',
+                    dataSrc: function(response) {
+                        return response.status === "success" && Array.isArray(response.data) ? response
+                            .data : [];
+                    }
                 },
                 columns: [{
                         data: null,
-                        className: "dt-center",
                         render: function(data, type, row, meta) {
-                            return meta.row + 1;
+                            return meta.row + 1; // STT
                         }
-                    }, {
-                        data: 'details'
                     },
                     {
-                        data: 'address'
+                        data: 'details' // Chi tiết
                     },
                     {
-                        data: 'company_id',
+                        data: 'address' // Địa chỉ
                     },
                     {
-                        data: 'created_at',
+                        data: 'company_id.company_name', // Tên công ty
+                        render: function(data, type, row) {
+                            return data ? data : 'Không có công ty';
+                        }
+                    },
+                    {
+                        data: 'created_at', // Ngày tạo
                         render: function(data, type, row) {
                             return moment(data).format('DD-MM-YYYY');
                         }
                     },
                     {
-                        data: 'updated_at',
+                        data: null, // Hành động
                         render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
-                    },
-                    {
-                        data: null,
-                        className: "dt-center",
-                        orderable: false,
-                        render: function(data, type, row) {
-
-                            let editUrl = `{{ route('partner.address.edit', ':id') }}`.replace(':id', row
-                                .id);
+                            let editUrl = `{{ route('partner.address.edit', ':id') }}`.replace(
+                                ':id', row.id);
 
                             return `
-                                <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
-                                    <i class='far fa-edit'></i>
-                                </a>
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/address/${row.id}">
-                                    <i class='far fa-trash-alt'></i>
-                                </button>
-                            `;
+                        <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
+                            <i class='far fa-edit'></i>
+                        </a>
+                        <button class="btn btn-danger btn-delete" data-id="${row.id}">
+                            Xóa
+                        </button>`;
                         }
                     }
                 ]
@@ -103,30 +98,20 @@
                     text: "Hành động này không thể hoàn tác!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
                     confirmButtonText: 'Xóa',
                     cancelButtonText: 'Hủy'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: `/api/new/${id}`,
+                            url: `/api/address/${id}`,
                             type: 'DELETE',
                             success: function(response) {
                                 table.ajax.reload();
-
-                                Swal.fire(
-                                    'Thành công!',
-                                    'Xóa tin tức thành công.',
-                                    'success'
-                                );
+                                Swal.fire('Thành công!', 'Địa chỉ đã được xóa.',
+                                    'success');
                             },
                             error: function(xhr) {
-                                Swal.fire(
-                                    'Lỗi!',
-                                    'Đã xảy ra lỗi khi xóa.',
-                                    'error'
-                                );
+                                Swal.fire('Lỗi!', 'Không thể xóa địa chỉ.', 'error');
                             }
                         });
                     }

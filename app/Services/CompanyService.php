@@ -24,7 +24,6 @@ class CompanyService
     // Tạo mới công ty
     public function store(Request $request)
     {
-        \Log::info('Request Data:', $request->all());
         $validator = Validator::make($request->all(), [
             'representative' => 'required|string|max:255',
             'company_name' => 'required|string|max:255|unique:companies,company_name',

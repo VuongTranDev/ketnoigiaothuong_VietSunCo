@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\partner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Provinces;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
 class AddressController extends Controller
 {
     protected $client;
+    protected $url;
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $this->url = env('API_URL');
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $url = config('api.base_url') . "address";
-        $response = $this->client->request('GET', $url);
-        $data = json_decode($response->getBody());
-        return view('frontend.partner.address.index')->with('data', $data);
+        return view('frontend.partner.address.index');
     }
 
     /**
@@ -29,7 +29,8 @@ class AddressController extends Controller
      */
     public function create()
     {
-        //
+        $provinces = Provinces::all();
+        return view('frontend.partner.address.create', compact('provinces'));
     }
 
     /**
@@ -37,7 +38,33 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $response = $this->client->request('POST', $this->url . 'address', [
+                'form_params' => [
+                    'company_id' => $request->user_id,
+                    'details' => $request->details,
+                    'address' => $request->address,
+                ]
+            ]);
+            $data = json_decode($response->getBody()->getContents());
+            if ($data->status == 'error') {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'message' => 'Tạo địa chỉ thất bại',
+                    ]
+                );
+            }
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Tạo địa chỉ thành công',
+                ]
+            );
+        } catch (\Exception $e) {
+            \Log::error('Unexpected error: ' . $e->getMessage());
+            return redirect()->back()->withErrors('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+        }
     }
 
     /**

@@ -14,14 +14,16 @@
             </li>
             <li class="menu-header">Manager</li>
 
+
             <li class="dropdown {{ setActive(['partner.company.*', 'partner.address.*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-building"></i></i>
                     <span>Quản lý công ty</span></a>
                 <ul class="dropdown-menu">
+
                     <li class="{{ setActive(['partner.company.index']) }}"><a class="nav-link" href="{{ route('partner.company.index') }}">Thông tin công ty</a></li>
                     {{-- <li class=""><a class="nav-link" href="">Lĩnh vực</a></li> --}}
-                    <li class="{{ setActive(['partner.address.index']) }}"><a class="nav-link" href="{{ route('partner.address.index') }}">Địa chỉ</a></li>
+                    <li class="{{ setActive(['partner.address.*']) }}"><a class="nav-link" href="{{ route('partner.address.index') }}">Địa chỉ</a></li>
                 </ul>
             </li>
             <li class="dropdown {{ setActive(['partner.news.*', 'partner.news.*']) }}">

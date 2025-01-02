@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\Address;
+use App\Models\Districts;
+use App\Models\Wards;
 use App\Services\AddressService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -46,6 +48,7 @@ class AddressController extends BaseController
      */
     public function store(Request $request)
     {
+        \Log::info('request: ' . json_encode($request->all()));
         try {
             $validator = $this->addressService->validateData($request);
 
@@ -80,6 +83,7 @@ class AddressController extends BaseController
     }
 
     public function showAddressByIdCompany($id) {
+
         try {
             $address = $this->addressService->showAddressByIdCompany($id);
 
@@ -128,5 +132,26 @@ class AddressController extends BaseController
         } catch (\Exception $e) {
             return $this->exception('An error occurred', $e->getMessage(), 500);
         }
+    }
+    public function getDistricts($provinceId)
+    {
+        $districts = Districts::where('province_id', $provinceId)->get();
+
+        if ($districts->isEmpty()) {
+            return response()->json([], 200);
+        }
+
+        return response()->json($districts, 200);
+    }
+
+    public function getWards($districtId)
+    {
+        $wards = Wards::where('district_id', $districtId)->get();
+
+        if ($wards->isEmpty()) {
+            return response()->json([], 200);
+        }
+
+        return response()->json($wards, 200);
     }
 }
