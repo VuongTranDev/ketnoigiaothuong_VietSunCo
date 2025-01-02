@@ -27,6 +27,7 @@ class RegisterController extends Controller
                 ],
             ]);
 
+
             $data = json_decode($response->getBody());
 
             if (isset($data->status) && $data->status == true) {
@@ -37,6 +38,7 @@ class RegisterController extends Controller
             }
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('Có lỗi xảy ra, vui lòng thử lại sau.')->withInput();
+
         }
     }
 

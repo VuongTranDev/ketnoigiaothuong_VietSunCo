@@ -47,7 +47,6 @@
         <script>
             (function(window, document) {
                 'use strict';
-
                 var inputs = document.querySelectorAll('.inp-login');
 
                 inputs.forEach(function(input) {

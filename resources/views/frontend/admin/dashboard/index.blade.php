@@ -294,6 +294,45 @@
             </div>
 
         </div>
+        <style>
+            .tour-statistics {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 6px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
+            .statistical {
+                gap: 20px;
+            }
+
+            #ageDistributionChart {
+                max-width: 600px;
+                max-height: 500px;
+                margin: 0 auto;
+            }
+        </style>
+
+        <div class="section-body pb-4 w-auto">
+            <!-- Hàng đầu tiên: Biểu đồ 1 và 2 -->
+            <div class="d-flex w-100 statistical">
+                <div class="tour-statistics" style="width: calc(100% / 3 * 2)">
+                    <h3 style="text-align:center">Tour phổ biến</h3>
+                    <canvas id="popularToursChart"></canvas>
+                </div>
+                <div class="tour-statistics">
+                    <h3 style="text-align:center">Tỷ lệ khách hàng theo độ tuổi</h3>
+                    <canvas id="ageDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Hàng thứ hai: Biểu đồ 3 và 4 -->
+            <div class="d-flex mt-4">
+                <div class="tour-statistics w-100">
+                    <h3 style="text-align:center">Số lượng khách hàng</h3>
+                    <canvas id="customerCountChart"></canvas>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection

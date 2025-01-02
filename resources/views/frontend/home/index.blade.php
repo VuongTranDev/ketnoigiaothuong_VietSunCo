@@ -11,7 +11,11 @@
                     gia ngay để chinh phục những thành công mới cùng chúng tôi!
                 </p>
                 <div class="register-member btn">
-                    <a href="#">Đăng ký thành viên</a>
+                    <a href="{{ route('checkStatusCompany') }}">
+
+                        Đăng ký thành viên
+
+                    </a>
                 </div>
             </div>
         </div>
@@ -25,6 +29,8 @@
 @include('frontend.home.components.criteria-section')
 
 @include('frontend.home.components.community-section')
+
+@include('frontend.home.components.news-suggest')
 
 @push('script')
     <script>

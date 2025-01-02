@@ -91,10 +91,10 @@ class AuthController extends BaseController
         return $this->success($result['data'], 'Change status success', 200);
     }
 
+
     public function handleGoogleCallback(Request $request)
     {
         try {
-
             Log::info('Attempting to authenticate Google user.');
             $user = Users::updateOrCreate(
                 ['email' => $request->email],
@@ -123,4 +123,5 @@ class AuthController extends BaseController
             ], 500);
         }
     }
+
 }

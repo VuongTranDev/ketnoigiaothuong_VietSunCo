@@ -59,7 +59,7 @@ class CompanyCategoryService {
         return Validator::make($request->all(), [
             'cate_id' => 'required',
             'company_id' => 'required',
-            'description' => 'required',
+            // 'description' => 'required',
         ]);
     }
 
@@ -70,6 +70,32 @@ class CompanyCategoryService {
      */
     public function create($request) {
         return CompanyCategory::create($request->only('cate_id', 'company_id', 'description'));
+    }
+
+    public function deleteCategoryCompany($company_id,$cate_id)
+    {
+        try {
+
+            $record = CompanyCategory::where('company_id', $company_id)
+                                      ->where('cate_id', $cate_id)
+                                      ->first();
+
+
+            if ($record) {
+
+                $record->delete();
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error deleting CompanyCategory', [
+                'message' => $e->getMessage(),
+                'company_id' => $company_id,
+                'cate_id' => $cate_id
+            ]);
+            return 0;
+        }
     }
 
     /**
@@ -95,4 +121,37 @@ class CompanyCategoryService {
         $companycategory->delete();
         return $companycategory;
     }
+
+
+
+    public function store(Request $request)
+    {
+        \Log::info('Request Data Cate:', $request->all());
+
+
+        $validator = Validator::make($request->all(), [
+            'cate_id' => 'required',
+            'company_id' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            \Log::error('Validation Errors:', $validator->errors()->toArray());
+            return [
+                'status' => false,
+                'errors' => $validator->errors()
+            ];
+        }
+
+
+        $companyCate = new CompanyCategory();
+        $companyCate->cate_id=$request->cate_id;
+        $companyCate->company_id=$request->company_id;
+        $companyCate->save();
+        return [
+            'status' => true,
+            'data' => $companyCate
+        ];
+    }
+
 }
