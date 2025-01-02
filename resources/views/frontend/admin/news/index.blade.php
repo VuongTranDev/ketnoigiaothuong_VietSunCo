@@ -23,8 +23,8 @@
                                         <th>STT</th>
                                         <th>Tiêu đề</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tag</th>
                                         <th>Nội dung</th>
+                                        <th>Trạng thái</th>
                                         <th>Người đăng</th>
                                         <th>Ngày tạo</th>
                                         <th>Hành động</th>
@@ -65,9 +65,6 @@
                         }
                     },
                     {
-                        data: 'tag_name'
-                    },
-                    {
                         data: 'content',
                         render: function(data, type, row) {
                             let parser = new DOMParser();
@@ -79,7 +76,33 @@
                         }
                     },
                     {
-                        data: 'user.email'
+                        data: 'status',
+                        render: function(data, type, row) {
+                            let checked = data === 1 ? 'checked' : ''; // Kiểm tra nếu status là 1
+                            return `
+            <label class="custom-switch mt-2">
+                <input type="checkbox" ${checked} name="custom-switch-checkbox" data-id="${row.id}" class="custom-switch-input change-status">
+                <span class="custom-switch-indicator"></span>
+            </label>`;
+                        }
+                    },
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            let checked = data == 1 ? 'checked' : '';
+                            return `
+                                <label class="custom-switch mt-2">
+                                    <input type="checkbox" ${checked}
+                                        name="custom-switch-checkbox"
+                                        data-id="${row.id}"
+                                        class="custom-switch-input change-status">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            `;
+                        }
+                    },
+                    {
+                        data: 'company_name',
                     },
                     {
                         data: 'created_at',
@@ -91,13 +114,11 @@
                         data: null,
                         className: "dt-center",
                         orderable: false,
+                        width: "100px",
                         render: function(data, type, row) {
 
                             let editUrl = `{{ route('admin.news.edit', ':id') }}`.replace(':id', row
                                 .id);
-                            // let deleteUrl = `{{ route('admin.news.destroy', ':id') }}`.replace(
-                            //     ':id', row
-                            //     .id);
 
                             return `
                                 <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
@@ -112,10 +133,34 @@
                     }
                 ]
             });
+            $('#example').on('change', '.change-status', function() {
+                let id = $(this).data('id');
+                let status = $(this).is(':checked') ? 1 : 0;
+                $.ajax({
+                    url: `/api/new/status/${id}`,
+                    type: 'PUT',
+                    data: {
+                        status: status
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            'Thành công!',
+                            'Cập nhật trạng thái thành công.',
+                            'success'
+                        );
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Đã xảy ra lỗi khi cập nhật trạng thái.',
+                            'error'
+                        );
+                    }
+                });
+            });
 
             $('#example').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
-
                 Swal.fire({
                     title: 'Bạn có chắc chắn muốn xóa mục này?',
                     text: "Hành động này không thể hoàn tác!",
@@ -132,7 +177,6 @@
                             type: 'DELETE',
                             success: function(response) {
                                 table.ajax.reload();
-
                                 Swal.fire(
                                     'Thành công!',
                                     'Xóa tin tức thành công.',
@@ -147,6 +191,28 @@
                                 );
                             }
                         });
+                    }
+                });
+            });
+
+            $('body').on('change', '.change-status', function() {
+                let isChecked = $(this).is(':checked');
+                let id = $(this).data('id');
+
+                $.ajax({
+                    url: "{{ route('admin.news.change-status') }}",
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        status: isChecked ? 'true' : 'false',
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        toastr.success(response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
+                        console.log(xhr.responseText);
                     }
                 });
             });

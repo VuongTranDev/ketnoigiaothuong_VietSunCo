@@ -24,17 +24,31 @@ class NewsController extends BaseController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function news()
+    public function news(Request $request)
     {
+        $currentPage = $request->input('page', 1);
+        $limit = 10;
+
         try {
-            $news = $this->fetchDataFromApi("new");
+            $url = env('API_URL') . "new?limit={$limit}&page={$currentPage}";
+            $response = $this->client->request('GET', $url);
+            $newsResponse = json_decode($response->getBody());
+            $news = $newsResponse->data;
+            $paginate = $newsResponse->paginate;
+
             $moreNews = $this->fetchDataFromApi("new?limit=5");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];
-            $moreNews = [];
+            $paginate = [
+                'current_page' => 1,
+                'total_page' => 1,
+                'total_items' => 0,
+                'items_per_page' => $limit
+            ];
         }
-        return view('frontend.news.news', compact('news', 'moreNews'));
+
+        return view('frontend.news.news', compact('news', 'paginate', 'moreNews'));
     }
 
     /**
@@ -53,9 +67,9 @@ class NewsController extends BaseController
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];
             $moreNews = [];
-            $comments= [];
+            $comments = [];
         }
-        return view('frontend.news.new-detail', compact('news', 'moreNews','newComment'));
+        return view('frontend.news.new-detail', compact('news', 'moreNews', 'newComment'));
     }
 
     public function search(Request $request)
@@ -63,7 +77,6 @@ class NewsController extends BaseController
         try {
             $news = $this->fetchDataFromApi("new/search/search_query={$request->search_query}");
             $moreNews = $this->fetchDataFromApi("new?limit=5");
-
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];
@@ -71,6 +84,4 @@ class NewsController extends BaseController
         }
         return view('frontend.news.search', compact('news', 'moreNews'));
     }
-
-
 }

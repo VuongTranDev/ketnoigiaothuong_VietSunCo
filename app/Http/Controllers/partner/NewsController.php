@@ -24,7 +24,7 @@ class NewsController extends BaseController
      */
     public function index()
     {
-        $url = config('api.base_url') . "new";
+        $url = env('API_URL') . "new";
         $response = $this->client->request('GET', $url);
         $data = json_decode($response->getBody());
         return view('frontend.partner.news.index')->with('data', $data);
@@ -134,7 +134,7 @@ class NewsController extends BaseController
         try {
             //
             $user = Session::get('user') ;
-            $url = config('api.base_url') . "new/show5NewOfUser/{$user->id}";
+            $url = env('API_URL') . "new/show5NewOfUser/{$user->id}";
             $response = $this->client->request('GET', $url);
             $news = (json_decode($response->getBody(),false))->data ;
 
@@ -145,5 +145,24 @@ class NewsController extends BaseController
         }
     }
 
+    public function changeStatus(Request $request)
+    {
+        $url = env('API_URL') . "new/change-status";
+        $response = $this->client->request(
+            'POST',
+            $url,
+            [
+                'form_params' => [
+                    'id' => $request->id,
+                    'status' => $request->status
+                ]
+            ]
+        );
 
+        if ($response->getStatusCode() == 200) {
+            return response()->json(['message' => 'Cập nhật trạng thái thành công!']);
+        } else {
+            return response()->json(['message' => 'Cập nhật trạng thái thất bại!']);
+        }
+    }
 }

@@ -51,6 +51,8 @@
                 </ul>
             </li>
 
+
+
             <li class="dropdown {{ setActive(['admin.news.*', 'admin.blog-comments.index']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fab fa-blogger-b"></i>
                     <span>Quản lý tin tức</span></a>
@@ -93,7 +95,7 @@
 
                     <li class="{{ setActive(['admin.footer-grid-two.*']) }}"><a class="nav-link"
                             href="{{ route('admin.footer-grid-two.index') }}">Footer Grid Two</a></li>
-                            
+
                     <li class="{{ setActive(['admin.footer-grid-three.*']) }}"><a class="nav-link"
                             href="{{ route('admin.footer-grid-three.index') }}">Footer Grid Three</a></li>
 
@@ -105,7 +107,8 @@
             {{-- <li><a class="nav-link {{ setActive(['admin.subscribers.*']) }}" href=""><i
                         class="fas fa-user"></i>
                     <span>Subscribers</span></a></li> --}}
-
+            <li><a class="nav-link" href="{{ route('admin.backup.index') }}"><i class="fas fa-wrench"></i>
+                    <span>Backup</span></a></li>
             <li><a class="nav-link" href=""><i class="fas fa-wrench"></i>
                     <span>Settings</span></a></li>
 

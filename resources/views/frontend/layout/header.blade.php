@@ -3,35 +3,40 @@
         <div class="container-xl">
             <div class="collapse navbar-collapse pt-1 pb-1">
                 <div class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-                    <a href="/" class="me-4"><i class="fa-solid fa-phone me-2"
+                    <a href="tel:0914.416.363" class="me-4"><i class="fa-solid fa-phone me-2"
                             style="color: #fff;"></i>0914.416.363</a>
-                    <a href="/"><i class="fa-solid fa-envelope me-2" style="color: #fff;"></i>hi@vietsunco.com</a>
+                    <a href="mailto:hi@vietsunco.com"><i class="fa-solid fa-envelope me-2" style="color: #fff;"></i>hi@vietsunco.com</a>
                 </div>
 
                 <div>
-
-                    @if ((isset($company_id) && $company_id > 0) || !Session::has('user'))
+                    @if ( isset($company_id ) && $company_id > 0 || !Session::has('user'))
                         <a class="ms-2">
                             <a class="ms-2" href="#" id="openForm" style="display:none">Đăng ký thành viên
                                 <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên"
                                     width="15">
                             </a>
+
+
                         </a>
+
                     @else
+                    <a class="ms-2">
                         <a class="ms-2" href="#" id="openForm">Đăng ký thành viên
-                            <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên"
-                                width="15">
+                            <img src="{{ asset('frontend/image/subscribe.png') }}" alt="Đăng ký thành viên" width="15">
                         </a>
+
+
+                    </a>
                     @endif
 
-                    <a href="">
+                    {{-- <a href="">
                         <img class="ms-2" src="{{ asset('frontend/image/language-en.png') }}" alt="Tiếng Anh"
                             width="20" height="12">
                     </a>
                     <a href="">
                         <img class="ms-2" src="{{ asset('frontend/image/language-vn.png') }}" alt="Tiếng Việt"
                             width="20" height="12">
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </div>
@@ -63,11 +68,27 @@
                     <input type="text" id="link" name="link" placeholder="Nhập tại đây" required>
                 </div>
                 <div class="form-group">
+                    <label for="tax_code">Mã số thuế</label>
+                    <input type="text" id="tax_code" name="tax_code" placeholder="Nhập tại đây" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email công ty</label>
+                    <input type="email" id="email" name="email" placeholder="Nhập tại đây" required>
+                </div>
+
+                <div class="form-group">
                     <label for="content">Thông tin công ty</label>
                     <textarea id="content" name="content" placeholder="Thông tin công ty"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="company_images">Ảnh công ty</label>
+                    <label for="company_avatar">Ảnh đại diện công ty (Một ảnh)</label>
+                    <div class="upload-container">
+                        <input type="file" id="company_avatar" name="company_avatar" accept="image/*" onchange="previewSingleImage()">
+                        <div class="preview-container" id="avatarPreview"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="company_images">Ảnh công ty (Nhiều ảnh)</label>
                     <div class="upload-container">
                         <input type="file" id="company_images" name="company_images[]" accept="image/*" multiple
                             onchange="previewImages()">
@@ -85,10 +106,7 @@
                         @else
                             <p>No categories available.</p>
                         @endif
-                        <!-- Vòng lặp để tạo button cho mỗi category -->
-                        {{-- @foreach ($category as $cate)
-                            <button type="button" class="category-btn" data-id="{{ $cate->id }}">{{ $cate->name }}</button>
-                        @endforeach --}}
+
                     </div>
                     <!-- Input ẩn để lưu các ID của category được chọn -->
                     <input type="hidden" name="category_id[]" id="selectedCategories">
@@ -129,12 +147,13 @@
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Lĩnh vực
                             </a>
-                            <ul class="dropdown-menu dropdown-column">
+                            <ul class="dropdown-menu">
                                 @foreach ($category as $item)
-                                    <li>
-                                        <a class="dropdown-item" href="/">{{ $item->name }}</a>
-                                    </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('findCompanyByCate', ['cateId' => $item->id]) }}">{{ $item->name }}</a>
+                                </li>
                                 @endforeach
+
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -145,11 +164,10 @@
                             <a href="" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
                         </form> --}}
                     <div class="d-flex align-items-center">
-                        <form class="d-flex align-items-center search me-3" role="search" action=""
-                            method="GET" autocomplete="off">
-                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..."
-                                aria-label="Search" name="query" value="{{ request('query') }}">
-                            <a class="search-btn" href="#">
+                        <form class="d-flex align-items-center search me-3" role="search" action="{{ route('findCompany') }}" method="POST" autocomplete="off">
+                            @csrf
+                            <input class="me-2 search-txt" type="text" placeholder="Tìm kiếm..." aria-label="Search" name="name" required>
+                            <a class="search-btn" href="javascript:void(0);" onclick="document.querySelector('.search').submit();">
                                 <i class="fas fa-search"></i>
                             </a>
                         </form>
@@ -175,6 +193,7 @@
                                             @endif
                                         @endif
                                     </li>
+
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
@@ -208,13 +227,14 @@
     </nav>
 </header>
 
-@push('script')
-    <script>
-        // JavaScript để hiển thị và ẩn form
-        document.getElementById('openForm').addEventListener('click', function(event) {
-            event.preventDefault(); // Ngăn không cho link chuyển trang
-            document.getElementById('registerForm').style.display = 'flex';
-        });
+@push('scripts')
+<script>
+    // JavaScript để hiển thị và ẩn form
+    document.getElementById('openForm').addEventListener('click', function(event) {
+        event.preventDefault(); // Ngăn không cho link chuyển trang
+
+        document.getElementById('registerForm').style.display = 'flex';
+    });
 
         // Đóng form khi nhấn vào khu vực bên ngoài form
         document.getElementById('registerForm').addEventListener('click', function(event) {
@@ -240,9 +260,30 @@
                     previewContainer.appendChild(img);
                 };
 
-                reader.readAsDataURL(file);
-            }
+            reader.readAsDataURL(file);
         }
+    }
+
+    function previewSingleImage()
+    {
+        const previewContainer = document.getElementById('avatarPreview');
+        const files = document.getElementById('company_avatar').files;
+
+        previewContainer.innerHTML = ''; // Xóa các hình ảnh trước đó
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
 
         // Đảm bảo xử lý sự kiện click cho các nút category-btn khi DOM đã sẵn sàng
         document.addEventListener("DOMContentLoaded", function() {

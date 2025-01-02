@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $details
@@ -37,7 +37,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $name
@@ -62,7 +62,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $content
@@ -87,7 +87,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $representative
@@ -97,8 +97,13 @@ namespace App\Models{
  * @property string|null $image
  * @property string|null $phone_number
  * @property string|null $slug
+ * @property string $email
+ * @property int $status
+ * @property int $tax_code
+ * @property string $image
  * @property string|null $content
  * @property string|null $link
+ * @property float $point
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -120,9 +125,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies wherePoint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereRepresentative($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereShortName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Companies whereTaxCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Companies whereUserId($value)
  */
@@ -131,7 +139,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $cate_id
@@ -156,7 +164,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $image
@@ -180,7 +188,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $province_id
@@ -204,7 +212,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $logo
@@ -231,7 +239,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -254,7 +262,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -277,7 +285,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $icon
@@ -302,7 +310,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $footer_grid_two_title
@@ -323,7 +331,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $sender_id
@@ -358,7 +366,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $title
@@ -393,7 +401,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -414,7 +422,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $content
@@ -424,6 +432,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Companies $company
+ * @property-read \App\Models\Users|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ratings query()
@@ -440,7 +449,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $name
@@ -463,7 +472,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $sender_id
@@ -492,16 +501,15 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string|null $password
+ * @property string $password
  * @property int|null $status
  * @property int $role_id
- * @property string|null $google_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -509,6 +517,8 @@ namespace App\Models{
  * @property-read int|null $companies_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ratings> $rating
+ * @property-read int|null $rating_count
  * @property-read \App\Models\Roles $roles
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
@@ -518,7 +528,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassword($value)
@@ -532,7 +541,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $district_id

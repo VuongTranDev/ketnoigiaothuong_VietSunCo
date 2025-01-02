@@ -27,7 +27,7 @@ class NewsService
             ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
             ->leftJoin('users', 'news.user_id', '=', 'users.id')
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
-            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
             ->paginate($limit, ['*'], 'page', $page);
@@ -47,6 +47,7 @@ class NewsService
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
             ->select('news.*', 'categories.name', 'users.*', 'companies.company_name')
             ->where('news.slug', $slug)
+            ->where('news.status', 1)
             ->orderBy('news.id', 'desc')
             ->first();
     }
@@ -74,6 +75,7 @@ class NewsService
             'tag_name' => $news->tag_name,
             'content' => $news->content,
             'image' => $news->image,
+            'status' => $news->status,
             'categorie' => $news->categories,
             'user' => $news->users,
             'created_at' => $news->created_at,
@@ -90,7 +92,9 @@ class NewsService
             'tag_name' => $news->tag_name,
             'content' => $news->content,
             'image' => $news->image,
+            'status' => $news->status,
             'company_name' => $news->company_name,
+            'company_id' => $news->company_id,
             'categorie' => $news->categories,
             'user' => $news->users,
             'created_at' => $news->created_at,
@@ -146,6 +150,7 @@ class NewsService
             'slug' => $slug,
             'tag_name' => $request->tag_name,
             'image' => $request->image,
+            'status' => $request->status,
             'content' => $request->content,
             'cate_id' => $request->cate_id,
             'user_id' => $request->user_id,
@@ -171,6 +176,7 @@ class NewsService
             'slug' => $slug,
             'tag_name' => $request->tag_name,
             'image' => $request->image,
+            'status' => $request->status,
             'content' => $request->content,
             'cate_id' => $request->cate_id,
             'user_id' => $request->user_id,
@@ -214,7 +220,6 @@ class NewsService
 
     public function countNewsOfUser($user_id)
     {
-        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::where('user_id', $user_id)
             ->count();
     }
@@ -227,6 +232,20 @@ class NewsService
             ->get();
     }
 
+    public function showNewsByCompanyId($id, $limit, $page)
+    {
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
+            ->where('companies.id', $id)
+            ->where('news.status', 1)
+            ->groupBy('news.id')
+            ->orderBy('news.id', 'desc')
+            ->paginate($limit, ['*'], 'page', $page);
+    }
+
     public function searchNews($request)
     {
         return News::query()
@@ -235,8 +254,18 @@ class NewsService
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
             ->select('news.*', 'categories.name', 'users.email', 'companies.company_name')
             ->where('title', 'like', '%' . $request->search_query . '%')
+            ->where('news.status', 1)
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
             ->paginate(9);
+    }
+
+    public function changeStatus($request)
+    {
+        $news = News::findOrFail($request->id);
+        $news->status = $request->status === 'true' ? 1 : 0;
+        $news->save();
+
+        return $news;
     }
 }

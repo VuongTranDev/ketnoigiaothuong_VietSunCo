@@ -69,6 +69,18 @@
                                     <textarea class="form-control summernote" name="content">{{ $new->content }}</textarea>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Trạng thái</label>
+                                            <select class="form-control" name="status" required>
+                                                <option {{ $new->status === 1 ? 'selected' : '' }} value="1">Hiển thị</option>
+                                                <option {{ $new->status === 0 ? 'selected' : '' }} value="0">Ẩn</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
                             </form>
                         </div>

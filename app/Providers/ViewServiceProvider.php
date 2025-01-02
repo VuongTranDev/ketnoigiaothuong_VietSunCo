@@ -36,8 +36,6 @@ class ViewServiceProvider extends ServiceProvider
                 $apiUrlCheckCompanyByUser = env('API_URL') . "checkCompany/" . $userId;
 
                 $response = $client->get($apiUrlCheckCompanyByUser);
-
-
                 $result = (int) trim($response->getBody()->getContents());
                 $checkCompany = $result;
 
