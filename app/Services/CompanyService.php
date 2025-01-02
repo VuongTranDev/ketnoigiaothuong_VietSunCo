@@ -34,8 +34,6 @@ class CompanyService
             'link' => 'nullable|url',
             'user_id' => 'required|exists:users,id',
         ]);
-
-
         if ($validator->fails()) {
             \Log::error('Validation Errors:', $validator->errors()->toArray());
             return [
@@ -43,8 +41,6 @@ class CompanyService
                 'errors' => $validator->errors()
             ];
         }
-
-
         $company = new Companies();
         $company->representative = $request->representative;
         $company->company_name = $request->company_name;
@@ -59,7 +55,6 @@ class CompanyService
         $company->point = $request->point;
         $company->image = $request->image;
         $company->user_id = $request->user_id;
-
         $company->save();
 
         return [
@@ -166,7 +161,8 @@ class CompanyService
             'link' => $companies->link,
             'status' => $companies->status,
             'email' =>$companies->email,
-            'masothue' => $companies->masothue,
+            'tax_code' => $companies->tax_code,
+            'image' => $companies->image,
             'user' => $companies->user,
             'created_at' => $companies->created_at,
             'updated_at' => $companies->updated_at

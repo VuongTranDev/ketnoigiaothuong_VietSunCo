@@ -24,7 +24,7 @@ class HomeController extends BaseController
     public function index()
     {
         try {
-            $companies = $this->fetchDataFromApi("company");
+            $companies = $this->fetchDataFromApi("company?limit=16");
             $news = $this->fetchDataFromApi("new?limit=3");
         } catch (RequestException $e) {
             Log::error('API request failed: ' . $e->getMessage());
@@ -53,5 +53,10 @@ class HomeController extends BaseController
         } else {
             return redirect()->back()->with('error', 'Gửi liên hệ thất bại');
         }
+    }
+
+    public function about()
+    {
+        return view('frontend.home.about');
     }
 }

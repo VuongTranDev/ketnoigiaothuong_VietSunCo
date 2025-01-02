@@ -44,6 +44,32 @@ class NewsController extends BaseController
         }
     }
 
+    public function showByAdmin(Request $request)
+    {
+        try {
+            $limit = $request->input('limit', 12);
+            $page = $request->input('page', 1);
+
+            $news = $this->newsService->showAdmin($page, $limit);
+
+            $formattedData = collect($news->items())->map(function ($item) {
+                return $this->newsService->formatDataSlug($item);
+            })->toArray();
+
+            $formattedPagination = $this->newsService->formatPaginate($news);
+
+            return $this->successWithPagination(
+                $formattedPagination,
+                $formattedData,
+                200,
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->failed('Companies not found', 404);
+        } catch (\Exception $e) {
+            return $this->exception('An error occurred while retrieving companies', $e->getMessage(), 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -82,6 +108,7 @@ class NewsController extends BaseController
 
     public function showBySlug($slug)
     {
+
         $news = $this->newsService->showBySlug($slug);
 
         if (!$news) {
@@ -125,11 +152,11 @@ class NewsController extends BaseController
         }
     }
 
-    public function changeStatus(Request $request,$id)
+    public function changeStatus(Request $request)
     {
         try
         {
-            $company =  $this->newsService->changeStatus($request,$id) ;
+            $company =  $this->newsService->changeStatus($request) ;
             return $this->success($company,"News change status success",200) ;
         }
         catch(Exception $e)
@@ -142,6 +169,13 @@ class NewsController extends BaseController
     public function showAllComments($slug)
     {
         $data = $this->newsService->showAllCommentInnews($slug);
+        return $this->success($data, "Danh sách comment được lấy thành công", 200);
+    }
+
+
+    public function showAllCommentInNewsById($id)
+    {
+        $data = $this->newsService->showAllCommentInNewsById($id);
         return $this->success($data, "Danh sách comment được lấy thành công", 200);
     }
 
@@ -173,7 +207,7 @@ class NewsController extends BaseController
         return $this->success($data,  'news retrieved successfully', 200);
     }
 
-    
+
 
     public function showNewsByCompanyId(Request $request, $id)
     {

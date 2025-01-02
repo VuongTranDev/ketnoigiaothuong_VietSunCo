@@ -27,4 +27,5 @@ class News extends Model
     public function comments(){
         return $this->hasMany(Comments::class,'new_id');
     }
+    
 }

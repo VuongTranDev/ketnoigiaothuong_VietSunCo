@@ -3,14 +3,14 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Manager Company</h1>
+            <h1>Quản lý công ty</h1>
         </div>
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>All companies</h4>
+                            <h4>Tất cả công ty</h4>
                         </div>
                         <div class="card-body">
                             <table id="example" class="display" style="width:100%">
@@ -19,10 +19,10 @@
                                         <th>STT</th>
                                         <th>Tên công ty</th>
                                         <th>Số điện thoại</th>
-                                        <th>Link</th>
+                                        <th>Website</th>
                                         <th>Trạng thái</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày cập nhật</th>
+                                        {{-- <th>Ngày cập nhật</th> --}}
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -75,12 +75,12 @@
                             return moment(data).format('DD-MM-YYYY');
                         }
                     },
-                    {
-                        data: 'updated_at',
-                        render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
-                    },
+                    // {
+                    //     data: 'updated_at',
+                    //     render: function(data, type, row) {
+                    //         return moment(data).format('DD-MM-YYYY');
+                    //     }
+                    // },
                     {
                         data: null,
                         className: "dt-center",

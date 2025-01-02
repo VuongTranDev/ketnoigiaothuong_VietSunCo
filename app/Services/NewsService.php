@@ -27,25 +27,45 @@ class NewsService
             ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
             ->leftJoin('users', 'news.user_id', '=', 'users.id')
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->where('news.status', 1)
             ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
             ->groupBy('news.id')
             ->orderBy('news.id', 'desc')
             ->paginate($limit, ['*'], 'page', $page);
     }
-
+    public function showAdmin($page, $limit)
+    {
+        return News::query()
+            ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
+            ->leftJoin('users', 'news.user_id', '=', 'users.id')
+            ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
+            ->select('news.*', 'categories.name', 'users.email', 'companies.company_name', 'companies.id as company_id')
+            ->groupBy('news.id')
+            ->orderBy('news.id', 'desc')
+            ->paginate($limit, ['*'], 'page', $page);
+    }
     /**
      * Retrieve a specific news item by its ID, including related categories and user data.
      *
      * @param string $slug
      * @return News|null
      */
-    public function showBySlug($slug)
+    public function showBySluga($slug)
     {
         return News::query()
             ->leftJoin('categories', 'news.cate_id', '=', 'categories.id')
             ->leftJoin('users', 'news.user_id', '=', 'users.id')
             ->leftJoin('companies', 'users.id', '=', 'companies.user_id')
             ->select('news.*', 'categories.name', 'users.*', 'companies.company_name')
+            ->where('news.slug', $slug)
+            ->where('news.status', 1)
+            ->orderBy('news.id', 'desc')
+            ->first();
+    }
+    public function showBySlug($slug)
+    {
+        return News::query()
+            ->select('news.*')
             ->where('news.slug', $slug)
             ->where('news.status', 1)
             ->orderBy('news.id', 'desc')
@@ -204,13 +224,24 @@ class NewsService
     public function showAllCommentInnews($slug)
     {
         /// $data = DB::select('CALL proc_selectCommentInNews(?)', [$slug]);
-        $data = News::with('comments.user')->where('slug', $slug)->first();
+        $data =  News::with(['comments.user.company'])
+        ->where('slug', $slug)
+        ->first();
         return $data;
+    }
+
+    public function showAllCommentInNewsById($id)
+    {
+        /// $data = DB::select('CALL proc_selectCommentInNews(?)', [$slug]);
+        $comments = News::with('comments.user')  // Tải các comment và user của comment
+                    ->where('id',$id)  // Lọc theo bài viết
+                    ->firstOrFail()  // Nếu không tìm thấy bài viết, trả về lỗi 404
+                    ->comments;
+        return $comments;
     }
 
     public function show5NewOfUser($user_id)
     {
-        // Thống kê ra 5 bài viết của công ty có nhiều lượt bình luận nhất
         return News::withCount('comments')
             ->where('user_id', $user_id)
             ->orderBy('comments_count', 'desc')
@@ -265,7 +296,6 @@ class NewsService
         $news = News::findOrFail($request->id);
         $news->status = $request->status === 'true' ? 1 : 0;
         $news->save();
-
         return $news;
     }
 }

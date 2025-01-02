@@ -67,7 +67,7 @@ class NewsController extends BaseController
             Log::error('API request failed: ' . $e->getMessage());
             $news = [];
             $moreNews = [];
-            $comments = [];
+            $newComment = [];
         }
         return view('frontend.news.new-detail', compact('news', 'moreNews', 'newComment'));
     }

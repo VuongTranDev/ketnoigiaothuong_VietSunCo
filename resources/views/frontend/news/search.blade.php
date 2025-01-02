@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="col-lg-9" style="color: #777;">
-                @if (count($news) === 0)
+                @if (empty($news))
                     <div class="row">
                         <div class="card">
                             <div class="card-body text-center">
@@ -20,9 +20,10 @@
                         </div>
                     </div>
                 @else
-                    <h4 class="mt-3 mb-3" style="color: #333;">Tìm thấy <b>{{ count($news) }}</b> kết quả</h4>
+                <h4 class="mt-3 mb-3" style="color: #333;">Tìm thấy <b>{{ count($news->data) }}</b> kết quả</h4>
 
-                    @foreach ($news as $item)
+
+                    @foreach ($news->data as $item)
                         <div class="news-group">
                             <a href="{{ route('news.detail', $item->slug) }}"
                                 class="news-item d-flex align-items-start p-3 mb-3">

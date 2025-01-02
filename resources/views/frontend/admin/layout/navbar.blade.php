@@ -11,23 +11,23 @@
                 <img alt="image" style="width: 40px;height: 40px;
         object-fit: cover;"
                     src="{{ asset('frontend/image/icon.png') }}" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block">Hi {{ Auth::id() }} </div>
+                <div class="d-sm-none d-lg-inline-block">Hi {{ Auth::user()->email }} </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="" class="dropdown-item has-icon">
+                {{-- <a href="" class="dropdown-item has-icon">
                     <i class="far fa-user"></i> Profile
                 </a>
 
                 <a href="" class="dropdown-item has-icon">
                     <i class="fas fa-cog"></i> Settings
-                </a>
+                </a> --}}
                 <div class="dropdown-divider"></div>
                 <form method="POST" action="{{ route('auth.logout') }}">
                     @csrf
                     <a onclick="event.preventDefault();
                          this.closest('form').submit();"
                         class="dropdown-item has-icon text-danger">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
                     </a>
                 </form>
             </div>

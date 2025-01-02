@@ -20,7 +20,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-      
+
         return view('frontend.admin.categories.index');
     }
     public function create()
@@ -68,8 +68,8 @@ class CategoriesController extends Controller
         $url = env('API_URL') . "categories/{$id}";
         $response = $this->client->request('GET', $url);
         $responseData = json_decode($response->getBody());
-        $category = $responseData->data;
-        return view('frontend.admin.categories.edit')->with('category', $category);
+        $categories = $responseData->data;
+        return view('frontend.admin.categories.edit')->with('categories', $categories);
     }
 
     /**
