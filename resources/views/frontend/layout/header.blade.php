@@ -180,20 +180,20 @@
                                     {{ session('user')->email }}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"href="
+                                    <li>
                                         @if (session('user')->role_id == '1')
-                                           {{ route('admin.dashboard') }}
+                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                Trang quản trị
+                                            </a>
                                         @else
-                                         {{    route('partner.dashboard')}}
-                                        @endif">
-
-                                        @if (session('user')->role_id == '1')
-                                            Trang quản trị
-                                        @else
-                                            Hồ sơ
+                                            @if (isset($company_id) && $company_id > 0)
+                                                <a class="dropdown-item" href="{{ route('partner.dashboard') }}">
+                                                    Hồ sơ
+                                                </a>
+                                            @endif
                                         @endif
-                                    </a>
-                                </li>
+                                    </li>
+
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">

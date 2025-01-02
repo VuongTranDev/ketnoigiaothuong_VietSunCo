@@ -24,24 +24,23 @@ class CompanyService
     // Tạo mới công ty
     public function store(Request $request)
     {
-        \Log::info('Request Data:', $request->all());
-        $validator = Validator::make($request->all(), [
-            'representative' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255|unique:companies,company_name',
-            'short_name' => 'required|string|max:100',
-            'phone_number' => 'required|string|max:20',
-            'slug' => 'required|string|max:100|unique:companies,slug',
-            'content' => 'nullable|string',
-            'link' => 'nullable|url',
-            'user_id' => 'required|exists:users,id',
-        ]);
-        if ($validator->fails()) {
-            \Log::error('Validation Errors:', $validator->errors()->toArray());
-            return [
-                'status' => false,
-                'errors' => $validator->errors()
-            ];
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'representative' => 'required|string|max:255',
+        //     'company_name' => 'required|string|max:255|unique:companies,company_name',
+        //     'short_name' => 'required|string|max:100',
+        //     'phone_number' => 'required|string|max:20',
+        //     'slug' => 'required|string|max:100|unique:companies,slug',
+        //     'content' => 'nullable|string',
+        //     'link' => 'nullable|url',
+        //     'user_id' => 'required|exists:users,id',
+        // ]);
+        // if ($validator->fails()) {
+        //     \Log::error('Validation Errors:', $validator->errors()->toArray());
+        //     return [
+        //         'status' => false,
+        //         'errors' => $validator->errors()
+        //     ];
+        // }
         $company = new Companies();
         $company->representative = $request->representative;
         $company->company_name = $request->company_name;
@@ -81,7 +80,6 @@ class CompanyService
     public function showByUserId($user_id)
     {
         return Companies::with('user')
-            ->where('status', 1)
             ->where('user_id', $user_id)
             ->orderBy('created_at', 'desc')
             ->first();

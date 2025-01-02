@@ -5,12 +5,13 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Users;
-use Illuminate\Support\Facades\Validator;
+use App\Mail\TransactionCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Events\MessageSent;
 use Carbon\Carbon;
+use Mail;
 
 class MessageController extends Controller
 {
@@ -130,16 +131,22 @@ class MessageController extends Controller
     }
     public function createTransaction(Request $request)
     {
-
         $transaction = new Transaction();
         $transaction->sender_id  = Auth::id();
         $transaction->receiver_id = $request->receiver_id;
-        $transaction->title= $request->title;
+        $transaction->title = $request->title;
         $transaction->content = $request->content;
         $transaction->date_meet = $request->date_meet;
         $transaction->address = $request->address;
+
         try {
             $transaction->save();
+            $receiver = Users::find($request->receiver_id);
+            \Log::info('receiver: ' . $receiver);
+            if ($receiver) {
+                Mail::to($receiver->email)->send(new TransactionCreated($transaction));
+            }
+
             return response()->json([
                 'status' => 'success',
                 'data' => $transaction,
@@ -152,18 +159,33 @@ class MessageController extends Controller
                 'message' => 'An error occurred while saving the transaction.',
             ], 500);
         }
-
-
-
-
     }
     public function getTransaction($receiver_id)
     {
-        $transaction = Transaction::where('sender_id', Auth::id())
-            ->where('receiver_id', $receiver_id)
+        $transaction = Transaction::select(
+            'transaction.*',
+            'companies_sender.representative as company_sender_name',
+            'companies_receiver.representative as company_receiver_name',
+            'companies_sender.company_name as company_sender_company_name',
+            'companies_receiver.company_name as company_receiver_company_name',
+            'sender.id as sender_id',
+            'sender.name as sender_name',
+            'sender.email as sender_email',
+            'receiver.id as receiver_id',
+            'receiver.name as receiver_name',
+            'receiver.email as receiver_email'
+        )
+            ->join('users as sender', 'sender.id', '=', 'transaction.sender_id')
+            ->join('users as receiver', 'receiver.id', '=', 'transaction.receiver_id')
+            ->join('companies as companies_sender', 'companies_sender.user_id', '=', 'transaction.sender_id')
+            ->join('companies as companies_receiver', 'companies_receiver.user_id', '=', 'transaction.receiver_id')
+            ->where('transaction.sender_id', Auth::id())
+            ->where('transaction.receiver_id', $receiver_id)
             ->get();
 
-        if ($transaction) {
+        \Log::info('api ' . $transaction);
+
+        if ($transaction->isNotEmpty()) {
             return response()->json([
                 'status' => 'success',
                 'data' => $transaction,

@@ -212,9 +212,8 @@ class MessageController extends Controller
             $data = json_decode($response->getBody()->getContents());
             return response()->json([
                 'status' => 'success',
-                'data' => $data->data,
+                'data' => $data,
             ]);
-
         }
         catch(\Exception $e){
             \Log::error('Error in checkTransaction: ' . $e->getMessage());
