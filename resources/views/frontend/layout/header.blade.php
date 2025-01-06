@@ -140,14 +140,14 @@
                             <a class="nav-link" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Về chúng tôi</a>
+                            <a class="nav-link" href="{{ route('about') }}">Về chúng tôi</a>
                         </li>
                         <li class="nav-item dropdown dropdown-field">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Lĩnh vực
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-field">
                                 @foreach ($category as $item)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('findCompanyByCate', ['cateId' => $item->id]) }}">{{ $item->name }}</a>

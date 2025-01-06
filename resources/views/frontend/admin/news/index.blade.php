@@ -46,7 +46,7 @@
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 ajax: {
-                    url: '{{ route('api.new') }}',
+                    url: '{{ route('api.newAdmin') }}',
                     dataSrc: 'data'
                 },
                 columns: [{
@@ -87,21 +87,6 @@
                         }
                     },
                     {
-                        data: 'created_at',
-                        render: function(data, type, row) {
-                            let checked = data == 1 ? 'checked' : '';
-                            return `
-                                <label class="custom-switch mt-2">
-                                    <input type="checkbox" ${checked}
-                                        name="custom-switch-checkbox"
-                                        data-id="${row.id}"
-                                        class="custom-switch-input change-status">
-                                    <span class="custom-switch-indicator"></span>
-                                </label>
-                            `;
-                        }
-                    },
-                    {
                         data: 'company_name',
                     },
                     {
@@ -121,14 +106,14 @@
                                 .id);
 
                             return `
-                                <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
-                                    <i class='far fa-edit'></i>
-                                </a>
+                                    <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
+                                        <i class='far fa-edit'></i>
+                                    </a>
 
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
-                                    <i class='far fa-trash-alt'></i>
-                                </button>
-                            `;
+                                    <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
+                                        <i class='far fa-trash-alt'></i>
+                                    </button>
+                                `;
                         }
                     }
                 ]

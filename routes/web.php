@@ -85,3 +85,4 @@ Route::get('/tin-tuc/tim-kiem/search',[NewsController::class, 'search'])->name('
 
 Route::post('/send-contact', [HomeController::class, 'sendContact'])->name('send.contact');
 
+Route::get('/gioi-thieu', [HomeController::class, 'about'])->name('about');

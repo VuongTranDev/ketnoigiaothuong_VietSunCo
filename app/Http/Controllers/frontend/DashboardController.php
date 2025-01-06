@@ -14,25 +14,38 @@ class DashboardController extends Controller
     {
         $this->client = $client;
     }
-    public function index() {
+    public function index()
+    {
 
         return view('frontend.admin.dashboard.index');
     }
 
-    public function partner() {
-        $user = Session::get('user') ;
-        $url = env('API_URL') . "new/countNewsOfUser/{$user->id}";
-        $response= $this->client->request('GET', $url);
-        if(!$response)
-            return back()->with("error","Lỗi hệ thống") ;
-        $totalNews = (json_decode($response->getBody(),false))->data ;
+    private function fetchApiData($endpoint, $errorMessage)
+    {
+        try {
+            $response = $this->client->request('GET', $endpoint);
+            return json_decode($response->getBody(), false)->data ?? null;
+        } catch (\Exception $e) {
+            report($e);
+            return back()->with("error", $errorMessage);
+        }
+    }
 
-        $url = env('API_URL') . "report/countUser";
-        $response = $this->client->request('GET', $url);
-        if(!$response)
-            return back()->with("error","Lỗi hệ thống") ;
-
-        $totalUser = (json_decode($response->getBody(),false))->data ;
-        return view('frontend.partner.index',compact('totalNews','totalUser'));
+    public function partner()
+    {
+        $user = Session::get('user');
+        $baseUrl = env('API_URL');
+        $endpoints = [
+            'totalNews' => "new/countNewsOfUser/{$user->id}",
+            'totalUser' => "report/countUser",
+            'totalTransaction' => "report/countTransactions/{$user->id}",
+            'totalConnect' => "report/countCompaniesConnect/{$user->id}",
+            'totalCategories' => "report/countCategoriesOfCompany/{$user->id}",
+        ];
+        $data = [];
+        foreach ($endpoints as $key => $endpoint) {
+            $data[$key] = $this->fetchApiData("{$baseUrl}{$endpoint}", "Lỗi khi lấy dữ liệu từ {$key}");
+        }
+        return view('frontend.partner.index', $data);
     }
 }

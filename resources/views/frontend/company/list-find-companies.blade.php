@@ -132,17 +132,10 @@
                             <div class="col-6 col-lg-4 col-md-4 company-list" data-average-rating="{{ $item->point }}">
                                 <a href="{{ route('company.detail', $item->slug) }}" class="company-link">
                                     <div class="company-detail" align="center" data-aos="fade-up">
-                                        <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng"
+                                        <img src="{{ asset($item->image) }}" alt="Đà Nẵng"
                                             class="img-company" loading="lazy">
                                         <p class="name-company">{{ $item->company_name }}</p>
-                                        <p class="rating-company" style="display:none">{{ $item->point }} </p>
-                                        <p class="categories" style="display:none">
-                                            @if (!empty($item->category_names))
-                                                {{ implode(', ', $item->category_names) }}
-                                            @else
-                                                Không có danh mục
-                                            @endif
-                                        </p>
+                                        <p class="short-name">{{ $item->short_name }}</p>
                                     </div>
                                 </a>
                             </div>

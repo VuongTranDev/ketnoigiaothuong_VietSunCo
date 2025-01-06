@@ -19,7 +19,6 @@ class AuthService
             'password' => 'required|string|min:6',
             'email' => 'required|email|unique:users,email',
         ]);
-
         if ($validator->fails()) {
             return [
                 'status' => false,
@@ -37,6 +36,7 @@ class AuthService
             'data' => $user
         ];
     }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -115,4 +115,7 @@ class AuthService
             'message' => 'Unable to logout. User not authenticated.'
         ];
     }
+
+
+    
 }

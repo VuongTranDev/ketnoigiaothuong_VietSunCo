@@ -31,7 +31,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Tag</label>
-                                            <input type="text" class="form-control" name="tag_name">
+                                            <input type="text" class="form-control" required name="tag_name">
                                         </div>
                                     </div>
                                 </div>

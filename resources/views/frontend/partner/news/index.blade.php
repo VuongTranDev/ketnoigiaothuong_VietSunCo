@@ -69,7 +69,6 @@
 @push('scripts')
     <script>
         const assetBaseUrl = "{{ asset('') }}";
-
         $(document).ready(function() {
             var table = $('#example').DataTable({
 
@@ -106,7 +105,7 @@
                     {
                         data: 'status',
                         render: function(data, type, row) {
-                            let checked = data == 1 ? 'checked' : '';
+                            let checked = data == 1 ?  'checked' : '';
                             return `
                                 <label class="custom-switch mt-2">
                                     <input type="checkbox" ${checked}
@@ -133,7 +132,9 @@
                             let editUrl = `{{ route('partner.news.edit', ':id') }}`.replace(':id',
                                 row
                                 .id);
-
+                            let listNewsUrl = `{{ route('partner.comment.list.index', ':id') }}`.replace(':id',
+                                row
+                                .id);
                             return `
                                 <a href="${editUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
                                     <i class='far fa-edit'></i>
@@ -141,6 +142,9 @@
                                 <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}" data-url="/api/new/${row.id}">
                                     <i class='far fa-trash-alt'></i>
                                 </button>
+                                <a href="${listNewsUrl}" class="btn btn-primary btn-sm btn-edit" data-id="${row.id}">
+                                    <i class='far fa-eye'></i>
+                                </a>
                             `;
                         }
                     }
@@ -207,7 +211,5 @@
                 });
             });
         });
-
     </script>
-
 @endpush

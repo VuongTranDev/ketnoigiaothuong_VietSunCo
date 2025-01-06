@@ -58,8 +58,12 @@ Route::apiResource('/rating', RatingController::class);
 Route::post('/report/statisticMember', [ReportAPIController::class,'statisticMember']) ;
 Route::get('report/countUser',[ReportAPIController::class,'countUser']);
 Route::post('/report/statisticNews', [ReportAPIController::class,'statisticNews']) ;
-
-
+Route::get('/report/showNewsHot', [ReportAPIController::class,'showNewsHot']) ;
+Route::get('/report/companiesHot', [ReportAPIController::class,'companiesHot']) ;
+Route::get('/report/countTransactions/{user_id}', [ReportAPIController::class,'countTransactions']) ;
+Route::get('/report/countCompaniesConnect/{user_id}', [ReportAPIController::class,'countCompaniesConnect']) ;
+Route::get('/report/countCategoriesOfCompany/{user_id}', [ReportAPIController::class,'countCategoriesOfCompany']) ;
+Route::get('/report/statisticActivity/{user_id}', [ReportAPIController::class,'statisticActivity']) ;
 
 Route::apiResource('/company', CompaniesController::class);
 Route::put('company/status/{id}',[CompaniesController::class,'changeStatus'])->name('company.changeStatus');
@@ -68,6 +72,7 @@ Route::get('company/detail/{id}', [CompaniesController::class, 'showById'])->nam
 Route::get('company/detail/{slug}', [CompaniesController::class, 'showDetailCompany'])->name('company.showDetailCompany');
 
 Route::apiResource('/new', NewsController::class)->names(['index' => 'api.new']);
+Route::get('/news', [NewsController::class, 'showByAdmin'])->name( 'api.newAdmin');
 Route::get('new/slug/{slug}', [NewsController::class, 'showBySlug'])->name('api.new.showBySlug');
 Route::get('new/comment/{slug}',[NewsController::class,'showAllComments'])->name('api.news.showAllComment');
 Route::get('new/show5NewOfUser/{user_id}',[NewsController::class,'show5NewOfUser']);
@@ -75,6 +80,9 @@ Route::get('new/countNewsOfUser/{user_id}',[NewsController::class,'countNewsOfUs
 Route::put('new/status/{id}',[NewsController::class,'changeStatus'])->name('news.changeStatus');
 Route::get('new/user/{user_id}',[NewsController::class,'showNewsByUserId'])->name('api.news.showNewsByUserId');
 Route::get('new/search/search_query={search_query}', [NewsController::class, 'searchNews'])->name('api.news.search');
+Route::get('new/showAllCommentInNewsById/{id}', [NewsController::class, 'showAllCommentInNewsById'])->name('api.new.showAllCommentInNewsById');
+
+
 
 Route::apiResource('/categories', CategoriesController::class)->names(['index' => 'api.categories']);
 Route::get('category/company/{id}', [CompanyCategoryController::class, 'showCategoryByCompanyId'])->name('category.showCategoryByIdCompany');
@@ -83,7 +91,12 @@ Route::apiResource('/company-category', CompanyCategoryController::class);
 
 Route::apiResource('address', AddressController::class);
 Route::apiResource('/comments',CommentAPIController::class);
+
+
+Route::put('comments/status/{id}',[CommentAPIController::class,'changeStatus'])->name('comments.changeStatus');
+
 Route::get('address/company/{id}', [AddressController::class, 'showAddressByIdCompany'])->name('api.address.showAddressByIdCompany');
+
 
 Route::get('ratings/company/{id}', [RatingController::class, 'showRatingByCompanyId'])->name('rating.showRatingByCompanyId');
 
@@ -141,6 +154,7 @@ Route::get('/backup', [BackupController::class, 'showListBackup'])->name('get.ba
 Route::delete('/backup/{id}', [BackupController::class, 'removeschedule'])->name('delete.schedule');
 Route::delete('/backup', [BackupController::class, 'removeAllSchedule'])->name('delete.Allschedule');
 
+Route::post('/restore', [BackupController::class, 'restore'])->name('post.restore');
 
 Route::middleware('web')->get('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl'])->name('loginGoogle');
 Route::middleware('web')->get('/auth/google/callback', [GoogleController::class, 'loginCallback']);

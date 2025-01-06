@@ -201,7 +201,6 @@ class MessageController extends Controller
         }
     }
     public function getTransaction(Request $request) {
-
         try
         {
             $response = $this->client->get($this->url . 'getTransaction/'.$request->receiver_id, [
