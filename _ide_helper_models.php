@@ -13,7 +13,7 @@
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $details
@@ -37,7 +37,32 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * 
  *
+ * @property int $id
+ * @property string $frequency
+ * @property string $backup_time
+ * @property string|null $backup_day
+ * @property int|null $backup_day_of_month
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereBackupDay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereBackupDayOfMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereBackupTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereFrequency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Backup whereUpdatedAt($value)
+ */
+	class Backup extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
  *
  * @property int $id
  * @property string|null $name
@@ -62,7 +87,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $content
@@ -87,22 +112,20 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $representative
  * @property string|null $company_name
  * @property string|null $short_name
- * @property string $email
- * @property string|null $image
  * @property string|null $phone_number
  * @property string|null $slug
- * @property string $email
- * @property int $status
- * @property int $tax_code
- * @property string $image
  * @property string|null $content
  * @property string|null $link
+ * @property string|null $email
+ * @property int|null $status
+ * @property string|null $tax_code
+ * @property string|null $image
  * @property float $point
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -139,7 +162,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $cate_id
@@ -164,7 +187,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $image
@@ -188,7 +211,34 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * 
  *
+ * @property int $id
+ * @property string|null $name
+ * @property string|null $phone
+ * @property string|null $email
+ * @property string|null $message
+ * @property int|null $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contacts whereUpdatedAt($value)
+ */
+	class Contacts extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
  *
  * @property int $id
  * @property int $province_id
@@ -212,7 +262,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $logo
@@ -239,7 +289,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -262,7 +312,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -285,7 +335,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $icon
@@ -310,7 +360,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $footer_grid_two_title
@@ -331,17 +381,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $sender_id
  * @property int $receiver_id
  * @property string $content
- * @property string $type
- * @property string|null $attachment_path
  * @property string $status
+ * @property string|null $type
+ * @property string|null $attachment_path
  * @property string|null $seen_at
- * @property int $is_deleted
+ * @property int|null $is_delete
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Users $receiverUser
@@ -353,7 +403,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereIsDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereIsDelete($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereReceiverId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereSeenAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereSenderId($value)
@@ -366,7 +416,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $title
@@ -374,6 +424,7 @@ namespace App\Models{
  * @property string|null $tag_name
  * @property string|null $content
  * @property string|null $image
+ * @property int $status
  * @property int $cate_id
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -391,6 +442,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|News whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereTagName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|News whereUpdatedAt($value)
@@ -401,7 +453,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -422,7 +474,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $content
@@ -449,7 +501,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property string|null $name
@@ -472,7 +524,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $sender_id
@@ -501,20 +553,21 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
- * @property string|null $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
+ * @property string|null $password
  * @property int|null $status
  * @property int $role_id
+ * @property string|null $google_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Companies> $companies
  * @property-read int|null $companies_count
+ * @property-read \App\Models\Companies|null $company
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ratings> $rating
@@ -528,8 +581,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereRoleId($value)
@@ -541,7 +594,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $district_id
