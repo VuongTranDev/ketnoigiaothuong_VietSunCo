@@ -37,6 +37,7 @@ class MessageController extends Controller
             $messages = json_decode($response->getBody()->getContents());
             return view('frontend.partner.message.index', compact('messages'));
         } catch (\GuzzleHttp\Exception\ClientException $e) {
+            Log::error($e->getMessage());
             return redirect()->back()->withErrors('Không thể lấy danh sách tin nhắn. Vui lòng thử lại.');
         } catch (\Exception $e) {
             Log::error('Unexpected error: ' . $e->getMessage());
@@ -53,8 +54,6 @@ class MessageController extends Controller
                 ]
             ]);
             $messages = json_decode($response->getBody()->getContents());
-            Log::info('Get messages: ' . json_encode($messages));
-
             return response()->json([
                 'status' => 'success',
                 'data' => $messages,

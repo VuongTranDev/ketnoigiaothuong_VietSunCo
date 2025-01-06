@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Users;
+use Illuminate\Support\Facades\Log;
 use App\Mail\TransactionCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,26 +16,33 @@ use Mail;
 
 class MessageController extends Controller
 {
-
     public function getUser($id)
     {
         $messages = Message::with(['senderUser.companies', 'receiverUser.companies'])
-            ->select('sender_id', 'receiver_id')
+            ->select('sender_id', 'receiver_id', 'status')
             ->where(function ($query) use ($id) {
                 $query->where('sender_id', $id)
-                    ->orWhere('receiver_id', $id);
+                      ->orWhere('receiver_id', $id);
             })
             ->get();
 
         $partners = $messages->flatMap(function ($message) use ($id) {
             $partner = $message->sender_id == $id ? $message->receiverUser : $message->senderUser;
+
             if (!$partner || $partner->companies->isEmpty()) {
+                Log::info('Partner skipped due to empty companies or null:', ['message_id' => $message->id]);
                 return [];
             }
+
             $hasSentMessage = Message::where('sender_id', $partner->id)
                 ->where('receiver_id', $id)
                 ->where('status', 'sent')
                 ->exists();
+
+            Log::info('Partner found:', [
+                'partner_id' => $partner->id,
+                'hasSentMessage' => $hasSentMessage,
+            ]);
 
             return $partner->companies->map(function ($company) use ($partner, $hasSentMessage) {
                 return [
@@ -47,12 +55,17 @@ class MessageController extends Controller
             });
         });
 
+        Log::info('Partners retrieved:', $partners->toArray());
+
         $uniquePartners = $partners->unique(function ($item) {
             return $item['id'] . '-' . $item['name'];
         })->values();
 
+        Log::info('Unique partners:', $uniquePartners->toArray());
+
         return response()->json($uniquePartners, 200);
     }
+
     public function sendMessage(Request $request)
     {
         $request->validate([
@@ -169,7 +182,6 @@ class MessageController extends Controller
             'companies_sender.company_name as company_sender_company_name',
             'companies_receiver.company_name as company_receiver_company_name',
             'sender.id as sender_id',
-            'sender.name as sender_name',
             'sender.email as sender_email',
             'receiver.id as receiver_id',
             'receiver.name as receiver_name',
@@ -182,9 +194,6 @@ class MessageController extends Controller
             ->where('transaction.sender_id', Auth::id())
             ->where('transaction.receiver_id', $receiver_id)
             ->get();
-
-        \Log::info('api ' . $transaction);
-
         if ($transaction->isNotEmpty()) {
             return response()->json([
                 'status' => 'success',
