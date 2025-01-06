@@ -43,13 +43,13 @@ class CategoryService {
      * Create a new category record in the database.
      * @return Categories|\Illuminate\Database\Eloquent\Model
      */
-    public function create($request) {
-        $slug = Str::slug($request->name) ;
-        return Categories::create([
-            'name'=> $request->name,
-            'slug'=>$slug
-        ]);
-    }
+        public function create($request) {
+            $slug = Str::slug($request->name) ;
+            return Categories::create([
+                'name'=> $request->name,
+                'slug'=>$slug
+            ]);
+        }
 
     /**
      * Update an existing category record in the database by its ID.
@@ -90,7 +90,7 @@ class CategoryService {
             }
             return response()->json($categories, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);  
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

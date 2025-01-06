@@ -18,8 +18,7 @@ class  CommentsServices
     public function show()
     {
         $com = Comments::with('news', 'users')->get();
-        return $com ;
-
+        return $com;
     }
     /**
      * Undocumented function
@@ -51,7 +50,7 @@ class  CommentsServices
     {
         $validator = Validator::make($request->all(),[
             'content'=>'required|string',
-            'new_id' => 'required|exists:news,id',
+            'new_id' => 'required',
             'user_id' => 'required|exists:users,id',
         ]);
         return $validator ;
@@ -98,7 +97,13 @@ class  CommentsServices
 
     }
 
-
+    public function changeStatus(Request $request,$id)
+    {
+        $company = Comments::findOrFail($id);
+        $company->status = $request->status;
+        $company->save() ;
+        return $company;
+    }
 
 
 

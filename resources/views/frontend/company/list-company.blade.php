@@ -31,12 +31,9 @@
                         <div class="col-6 col-lg-4 col-md-4 d-flex company-list">
                             <a href="{{ route('company.detail', $item->slug) }}" class="company-link">
                                 <div class="company-detail" align="center" data-aos="fade-up">
-                                    <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company"
-                                        loading="lazy">
+                                    <img src="{{ asset($item->image) }}" alt="Đà Nẵng" class="img-company" loading="lazy">
                                     <p class="name-company">{{ $item->company_name }}</p>
-                                    {{-- <div class="d-flex align-items-center justify-content-center">
-                            <span class="me-2" style="font-size: 13px">1231212đ</span>
-                        </div> --}}
+                                    <p class="short-name">{{ $item->short_name }}</p>
                                 </div>
                             </a>
                         </div>
@@ -48,19 +45,24 @@
                     <ul class="pagination justify-content-end">
 
                         <li class="page-item {{ $paginate->current_page == 1 ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $paginate->current_page > 1 ? route('company.list-company', ['page' => $paginate->current_page - 1]) : '#' }}" aria-label="Previous">
+                            <a class="page-link"
+                                href="{{ $paginate->current_page > 1 ? route('company.list-company', ['page' => $paginate->current_page - 1]) : '#' }}"
+                                aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
 
                         @for ($i = 1; $i <= $paginate->total_page; $i++)
                             <li class="page-item {{ $i == $paginate->current_page ? 'active' : '' }}">
-                                <a class="page-link" href="{{ route('company.list-company', ['page' => $i]) }}">{{ $i }}</a>
+                                <a class="page-link"
+                                    href="{{ route('company.list-company', ['page' => $i]) }}">{{ $i }}</a>
                             </li>
                         @endfor
 
                         <li class="page-item {{ $paginate->current_page == $paginate->total_page ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $paginate->current_page < $paginate->total_page ? route('company.list-company', ['page' => $paginate->current_page + 1]) : '#' }}" aria-label="Next">
+                            <a class="page-link"
+                                href="{{ $paginate->current_page < $paginate->total_page ? route('company.list-company', ['page' => $paginate->current_page + 1]) : '#' }}"
+                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

@@ -9,9 +9,10 @@
             <div class="col-6 col-lg-3 col-md-3 d-flex company-list">
                 <a href="{{ route('company.detail', $item->slug) }}" class="company-link">
                     <div class="company-detail" align="center" data-aos="fade-up">
-                        <img src="{{ asset('frontend/image/DaNang.png') }}" alt="Đà Nẵng" class="img-company"
+                        <img src="{{ asset($item->image) }}" alt="{{ $item->company_name }}" class="img-company"
                             loading="lazy">
                         <p class="name-company">{{ $item->company_name }}</p>
+                        <p class="short-name">{{ $item->short_name }}</p>
                     </div>
                 </a>
             </div>

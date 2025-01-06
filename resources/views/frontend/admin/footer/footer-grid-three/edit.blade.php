@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('footer-grid-three.update', $footer->id) }}" method="POST">
+                            <form action="{{ route('admin.footer-grid-three.update', $footer->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">

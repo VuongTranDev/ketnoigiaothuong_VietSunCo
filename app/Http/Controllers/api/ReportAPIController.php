@@ -7,7 +7,8 @@ use App\Models\Users;
 use App\Services\ReportServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use User;
+use Illuminate\Support\Facades\DB ;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class ReportAPIController extends BaseController
@@ -53,9 +54,50 @@ class ReportAPIController extends BaseController
             ]
         );
         if ($validator->fails())
-            return $this->failed("validate error", 422, $validator);
+            return $this->failed("validate error", 400, $validator->getMessageBag());
         $userCount = $this->reportService->statisticNews($request);
-        // Trả về kết quả dưới dạng JSON
         return $this->success($userCount, "Danh sách các bài viết đã tạo trong 1 khoản thời gian", 200);
     }
+
+
+    public function showNewsHot()
+    {
+        $userCount = $this->reportService->showNewsHot();
+        return $this->success($userCount, "Danh sách các bài viết theo xu hướng", 200);
+    }
+
+    public function companiesHot()
+    {
+        $userCount = DB::select('CALL proc_statisticCongTySoiNoi()');
+        return $this->success($userCount, "Danh sách các bài viết theo xu hướng", 200);
+    }
+
+    public function countTransactions($user_id)
+    {
+        $userCount = DB::select('CALL proc_soluongGiaoDich(?)', [$user_id]);
+        $data = $userCount[0]->tong;
+        return $this->success($data, "Số lượng giao dịch", 200);
+    }
+
+    public function countCompaniesConnect($user_id)
+    {
+        $userCount = DB::select('CALL proc_ketnoiDoanhNghiep(?)', [$user_id]);
+        $data = $userCount[0]->tong;
+        return $this->success($data, "Số lượng công ty đã kết nối", 200);
+    }
+
+    public function countCategoriesOfCompany($user_id)
+    {
+        $userCount = DB::select('CALL proc_countCategoriesOfCompany(?)', [$user_id]);
+        $data = $userCount[0]->tong;
+        return $this->success($data, "Tổng số lĩnh vực đang tham gia", 200);
+    }
+
+    public function statisticActivity($user_id)
+    {
+        $userCount = DB::select('CALL proc_statisticActivity(?)', [$user_id]);
+        return $this->success($userCount, "Danh sách công ty thân thiết", 200);
+    }
+
+
 }

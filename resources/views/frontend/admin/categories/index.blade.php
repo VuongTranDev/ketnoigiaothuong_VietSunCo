@@ -3,14 +3,14 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Categories</h1>
+            <h1>Lĩnh vực</h1>
         </div>
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Tất cả tin tức</h4>
+                            <h4>Tất cả lĩnh vực</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('admin.categories.create') }}" class="btn btn-primary"><i
                                         class="fas fa-plus"></i> Tạo mới</a>
@@ -24,7 +24,7 @@
                                         <th>Tiêu đề</th>
                                         <th>Tag</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày cập nhật</th>
+                                        {{-- <th>Ngày cập nhật</th> --}}
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -88,12 +88,12 @@
                             return moment(data).format('DD-MM-YYYY');
                         }
                     },
-                    {
-                        data: 'updated_at',
-                        render: function(data, type, row) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
-                    },
+                    // {
+                    //     data: 'updated_at',
+                    //     render: function(data, type, row) {
+                    //         return moment(data).format('DD-MM-YYYY');
+                    //     }
+                    // },
                     {
                         data: null,
                         className: "dt-center",

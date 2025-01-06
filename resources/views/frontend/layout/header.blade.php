@@ -140,14 +140,14 @@
                             <a class="nav-link" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Về chúng tôi</a>
+                            <a class="nav-link" href="{{ route('about') }}">Về chúng tôi</a>
                         </li>
                         <li class="nav-item dropdown dropdown-field">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Lĩnh vực
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-field">
                                 @foreach ($category as $item)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('findCompanyByCate', ['cateId' => $item->id]) }}">{{ $item->name }}</a>
@@ -180,20 +180,20 @@
                                     {{ session('user')->email }}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"href="
+                                    <li>
                                         @if (session('user')->role_id == '1')
-                                           {{ route('admin.dashboard') }}
+                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                Trang quản trị
+                                            </a>
                                         @else
-                                         {{    route('partner.dashboard')}}
-                                        @endif">
-
-                                        @if (session('user')->role_id == '1')
-                                            Trang quản trị
-                                        @else
-                                            Hồ sơ
+                                            @if (isset($company_id) && $company_id > 0)
+                                                <a class="dropdown-item" href="{{ route('partner.dashboard') }}">
+                                                    Hồ sơ
+                                                </a>
+                                            @endif
                                         @endif
-                                    </a>
-                                </li>
+                                    </li>
+
                                     <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
                                     <li>
                                         <hr class="dropdown-divider">

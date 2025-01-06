@@ -12,48 +12,41 @@
                 <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
                         class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
-            <li class="menu-header">Mamager</li>
-            <li
+            <li class="menu-header">Manager</li>
+            {{-- <li
                 class="dropdown {{ setActive([
-                    'brands.*',
-                    'products.*',
-                    'admin.products-image-gallery.*',
-                    'admin.products-variant.*',
-                    'admin.products-variant-item.*',
-                    'admin.seller-products.*',
-                    'admin.seller-pending-products.*',
+                    'admin.companies.index',
+                    'admin.categories.index',
                 ]) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i>
-                    <span>Manage Companies</span></a>
+                    <span>Quản lý công ty</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setActive(['admin.companies.index']) }}"><a class="nav-link"
-                            href="{{ route('admin.companies.index') }}">Companies</a></li>
-                    <li
-                        class="{{ setActive([
-                            'products.*',
-                            'admin.products-image-gallery.*',
-                            'admin.products-variant.*',
-                            'admin.products-variant-item.*',
-                            'admin.categories.*',
-                            'admin.reviews.*',
-                        ]) }}">
-                        <a class="nav-link" href="">Products</a>
-                    </li>
-                    <li class="{{ setActive(['admin.seller-products.*']) }}"><a class="nav-link" href="">Seller
-                            Products</a></li>
-                    <li class="{{ setActive(['admin.seller-pending-products.*']) }}"><a class="nav-link"
-                            href="">Seller Pending Products</a></li>
+                            href="{{ route('admin.companies.index') }}">Tất cả công ty</a></li>
 
-                    <li class="{{ setActive(['admin.reviews.*']) }}"><a class="nav-link" href="">Product
-                            Reviews</a></li>
-                    <li class="{{ setActive(['admin.categories.*']) }}"><a class="nav-link"
-                            href="{{ route('admin.categories.index') }}">Categories</a></li>
+                    <li class="{{ setActive(['admin.categories.index']) }}"><a class="nav-link"
+                            href="{{ route('admin.categories.index') }}">Lĩnh vực</a></li>
+
                 </ul>
+            </li> --}}
+
+            <li>
+                <a class="nav-link {{ setActive(['admin.companies.index']) }}" href="{{ route('admin.companies.index') }}">
+                    <i class="fas fa-hotel"></i>
+                    <span>Quản lý công ty</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link {{ setActive(['admin.categories.index']) }}" href="{{ route('admin.categories.index') }}">
+                    <i class="fas fa-box"></i>
+                    <span>Lĩnh vực</span>
+                </a>
             </li>
 
 
 
-            <li class="dropdown {{ setActive(['admin.news.*', 'admin.blog-comments.index']) }}">
+            {{-- <li class="dropdown {{ setActive(['admin.news.*', 'admin.blog-comments.index']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fab fa-blogger-b"></i>
                     <span>Quản lý tin tức</span></a>
                 <ul class="dropdown-menu">
@@ -62,12 +55,25 @@
                     <li class="{{ setActive(['admin.blog-comments.index']) }}"><a class="nav-link" href="">Blog
                             Comments</a></li>
                 </ul>
+            </li> --}}
+
+            <li>
+                <a class="nav-link {{ setActive(['admin.news.index']) }}" href="{{ route('admin.news.index') }}">
+                    <i class="fab fa-blogger-b"></i>
+                    <span>Tin tức</span>
+                </a>
             </li>
-            <li><a class="nav-link {{ setActive(['user.messages.index']) }}"  href="{{ route('user.message.index') }}"><i class="fas fa-user"></i>
-                    <span>Messages</span></a></li>
+
+            {{-- <li>
+                <a class="nav-link {{ setActive(['user.messages.index']) }}"
+                    href="{{ route('user.message.index') }}"><i class="fas fa-user"></i>
+                    <span>Messages</span>
+                </a>
+            </li> --}}
 
             <li class="{{ setActive(['admin.send-contact.*']) }}">
-                <a class="nav-link {{ setActive(['admin.send-contact.*']) }}" href="{{ route('admin.send-contact.index') }}">
+                <a class="nav-link {{ setActive(['admin.send-contact.*']) }}"
+                    href="{{ route('admin.send-contact.index') }}">
                     <i class="fas fa-comments"></i>
                     <span>Liên hệ</span>
                 </a>
@@ -109,8 +115,8 @@
                     <span>Subscribers</span></a></li> --}}
             <li><a class="nav-link" href="{{ route('admin.backup.index') }}"><i class="fas fa-wrench"></i>
                     <span>Backup</span></a></li>
-            <li><a class="nav-link" href=""><i class="fas fa-wrench"></i>
-                    <span>Settings</span></a></li>
+            {{-- <li><a class="nav-link" href=""><i class="fas fa-wrench"></i>
+                    <span>Settings</span></a></li> --}}
 
         </ul>
 
